@@ -101,8 +101,10 @@ function tom_shortcode($attr)
 					$option_value = $value[$n['1']];
 				}
 
-				/* print options */
-				$return = $option_value;
+				/* print options 
+				   if SSL enabled use https replace function
+				*/
+				$return = (is_ssl()) ? https_link($option_value) : $option_value;
 
 				break;
 			}
@@ -110,4 +112,20 @@ function tom_shortcode($attr)
 	}
 
 	return $return;
+}
+
+// Replace url to https
+function https_link($url){
+	
+	// Check if output from TOM is URL
+	if(filter_var($url, FILTER_VALIDATE_URL)) {
+		// Parse to get domain from url
+		$parse_base = parse_url(get_site_url());
+		$parse_url = parse_url($url);
+
+		if ($parse_url['host'] == $parse_base['host']) {
+			$url = str_replace('http://', 'https://', $url );
+		}
+	}
+	return $url;
 }
