@@ -112,7 +112,7 @@
 		}
 	</style>
 	
-	<form method="post" id="post" action="<?php echo '?page=tonjoo-tom/admin.php&data='.$show_key.'&noheader=true' ?>">	
+	<form method="post" id="post" action="<?php echo '?page=tonjoo-tom/admin.php&data='.$show_key.'' ?>">	
 	<table class="form-table" style="margin-bottom:20px;">
 
 <?php
@@ -160,6 +160,37 @@
 		        break;
 
 		    case 'Select':		    	
+		    	$arr_select = json_decode($n['3'], true);
+		    	
+		    	if(is_array($arr_select))
+		    	{
+		    		echo "<tr>
+		        	  	  <th scope='row'>{$n['0']} $label</th>
+		        	  	  <td>
+		    			  <select name='{$n['1']}' >";
+
+		    		foreach ($arr_select as $key => $value_select)
+					{
+						if($option_value == $value_select[1])
+						{
+							$selected = "selected";
+						}
+						else
+						{
+							$selected = "";
+						}
+
+						echo "<option value='{$value_select[1]}' $selected >{$value_select[0]}</option>";
+					}
+
+		    		echo "</select>
+		    			  <br><label>{$n['4']}</label>
+		        	  	  </td>		        	  
+		        	  	  </tr>";
+		    	}
+		        break;
+
+		    case 'Image Select':		    	
 		    	$arr_select = json_decode($n['3'], true);
 		    	
 		    	if(is_array($arr_select))

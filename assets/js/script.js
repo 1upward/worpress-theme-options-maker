@@ -33,6 +33,18 @@ jQuery(document).ready(function($){
         iniFormsCount: 2
     });
 
+	var sheepItFormImage = $('#sheepItFormImage').sheepIt({
+		controlsSelector: '#addImageControls',
+        separator: '',
+        allowRemoveLast: true,
+        allowRemoveCurrent: true,
+        allowRemoveAll: false,
+        allowAdd: true,
+        allowAddN: true,
+        maxFormsCount: 10,
+        minFormsCount: 1,
+        iniFormsCount: 2
+    });
 
 	$('#insert_table').click(function(){		
 		add_sheepit();

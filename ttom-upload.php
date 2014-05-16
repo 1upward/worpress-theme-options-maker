@@ -37,26 +37,26 @@ class TtomUploader {
 
     public function TtomMediaUpload()
     {
-        global $post_type;
+        // global $post_type;
 
-        $init = $this->init;
+        // $init = $this->init;
 
         //check if want to hook other than post type
-        if(isset($init['page_type']))
-        {
-            $page = isset($init['page']) ? $init['page'] : '';
-
-            if (isset($_GET["{$init['page_type']}"]) && $_GET["{$init['page_type']}"] == "{$page}")
-            {
-             
-                $this->add_hook();
-            }
-        }
-        //hook post_type
-    	elseif (is_admin()&&$post_type==$init['post_type']) 
-        {
+        // if(isset($init['page_type']))
+        // {
+        //     $page = isset($init['page']) ? $init['page'] : '';
+ 
+        //     if (isset($_GET["{$init['page_type']}"]) && $_GET["{$init['page_type']}"] == "{$page}")
+        //     {
+        //      
+        //         $this->add_hook();
+        //     }
+        // }
+        // hook post_type
+    	// elseif (is_admin()&&$post_type==$init['post_type']) 
+        // {
 	       $this->add_hook();
-    	}
+    	// }
     }
 
     private function add_hook()

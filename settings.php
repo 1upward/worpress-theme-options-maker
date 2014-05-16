@@ -57,7 +57,7 @@
 	<a class="nav-tab nav-tab-active" href="<?php echo admin_url("admin.php?page=tonjoo-tom/settings.php")."&new_group=true" ?>">+ New</a>
 </h2>
 
-<form method="post" action="" id="form-new-group" action="?page=tonjoo-tom/settings.php&noheader=true">
+<form method="post" id="form-new-group" action="?page=tonjoo-tom/settings.php&noheader=true">
 	<table class="form-table" style="margin-bottom:20px;">
 	    <tr valign="top">
 	    	<th scope="row">Group Name</th>
@@ -262,13 +262,16 @@
 	});
 
 	jQuery("#type_val").live('change',function(){
-		if(jQuery(this).val() == 'Select')
-		{
-			jQuery('#select_form').show('slow');
-		}
-		else
-		{
-			jQuery('#select_form').hide('slow');
+		// Check if selected option has class repeatable
+		if (jQuery("select option:selected").hasClass('repeatable')) {
+			// get data-form attributes from selected option
+       		var form = jQuery("select option:selected").data('form');
+       		// clear repeatable form
+       		jQuery('.form-repeatable').hide('slow');
+       		// show current repeatable form
+			jQuery('#'+form).show('slow');
+		} else {
+			jQuery('.form-repeatable').hide('slow');
 		}
 	});
 </script>
@@ -289,7 +292,8 @@
 		    			<select id="<?php echo $col_name[$i] ?>_val" style="width:300px;">
 		    				<option value="Header">Header</option>
 		    				<option value="Input Text">Input Text</option>
-		    				<option value="Select">Select</option>
+		    				<option class="repeatable" data-form="r_select" value="Select">Select</option>
+		    				<option class="repeatable" data-form="r_img_select" value="Image Select">Image Select</option>
 		    				<option value="Text Area">Text Area</option>
 		    				<option value="Image">Image</option>
 		    			</select>
@@ -297,7 +301,7 @@
     			</tr>
 
     		<?php elseif($col_name[$i] == 'select_type'): ?>
-    			<tr valign="top" id="select_form" style="display:none;">
+    			<tr valign="top" id="r_select" class="form-repeatable" style="display:none;">
 		    		<th scope="row"><?php echo $col_title[$i] ?></th>
 			    	<td>
 		    			<!-- sheepIt Form -->
@@ -334,6 +338,42 @@
 						<!-- /sheepIt Form -->
 
 						<textarea style="display:none;" id="select_type_val"></textarea>
+					</td>
+    			</tr>
+
+    			<!-- Repeatable select image -->
+    			<tr valign="top" id="r_img_select" class="form-repeatable" style="display:none;">
+		    		<th scope="row"><?php echo $col_title[$i] ?></th>
+			    	<td>
+						<!-- sheepIt Form -->
+						<div id="sheepItFormImage">
+						 
+						  <!-- Form template-->
+						  <div id="sheepItFormImage_template">
+						    <label for="sheepItFormImage_#index#__optionname">Option <span id="sheepItFormImage_label"></span></label>
+						    <input class="type_select" id="sheepItFormImage_#index#_optionname" name="optionname_#index#" type="text" size="20" maxlength="100" placeholder="Option Name" />
+						    <input class="type_select" id="sheepItFormImage_#index#_optionval" name="optionval_#index#" mediaUploadText type='hidden' style='display:none;' name='' value=''>
+					      	<input id="sheepItFormImage_#index#_optionbut" name="optionbut_#index#" type='button' class='button' mediaUploadButton value='Set image'>
+							
+						    <a id="sheepItFormImage_remove_current">
+						      <img class="delete" src="<?php echo plugins_url() ?>/tonjoo-tom/assets/img/cross.png" width="16" height="16" border="0">
+						    </a>
+						  </div>
+						  <!-- /Form template-->
+						   
+						  <!-- No forms template -->
+						  <div id="sheepItFormImage_noforms_template">No Option</div>
+						  <!-- /No forms template-->
+						   
+						  <!-- Controls -->
+						  <div id="addImageControls" style="margin-top: 10px;">
+						    <div id="sheepItFormImage_add" style="display:inline;"><a class="button"><span>Add Option</span></a></div>
+						    <div id="sheepItFormImage_remove_last" style="display:inline;"><a class="button"><span>Remove</span></a></div>
+						  </div>
+						  <!-- /Controls -->
+						   
+						</div>
+						<!-- /sheepIt Form -->
 					</td>
     			</tr>
     		<?php else: ?>
