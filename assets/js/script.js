@@ -1,4 +1,6 @@
 jQuery(document).ready(function($){	
+
+	// Datatable init
 	var oTable;
 	var col_num = header.split(',').length;
 
@@ -19,7 +21,7 @@ jQuery(document).ready(function($){
 
 	
 	/** 
-	 * Sheep It Form
+	 * Sheep It Form input select
 	 */
 	var sheepItForm = jQuery('#sheepItForm').sheepIt({
         separator: '',
@@ -33,6 +35,7 @@ jQuery(document).ready(function($){
         iniFormsCount: 2
     });
 
+	// Sheepit input image select
 	var sheepItFormImage = $('#sheepItFormImage').sheepIt({
 		controlsSelector: '#addImageControls',
         separator: '',
@@ -46,18 +49,120 @@ jQuery(document).ready(function($){
         iniFormsCount: 2
     });
 
-	$('#insert_table').click(function(){		
-		add_sheepit();
-
-		if($(this).html() == "Add")
-		{
-			insert_table(0);
+	$('#insert_table').click(function(){	
+		var type = $('#type_val').val();
+		// Copy sheepit value into hidden textarea 
+		if(type == "Select") {
+			add_sheepit('sheepItForm');
+		} else if (type == "Image Select") {
+			add_sheepit('sheepItFormImage');
 		}
-		else
-		{
+
+		if($(this).html() == "Add") {
+			// alert('add');
+			insert_table(0);
+		} else {
+			// alert('edit');
 			edit_table();
 		}
 	});
+
+
+	// Add sheepit value into hidden textarea 
+	function add_sheepit(id) {
+		var old_data = $("#output_sheepit").val();
+
+		var sData = $('.input_'+id).serializeArray();
+		var arr_data = serialize_to_array(sData,2);
+		var stringify = window.JSON.stringify(arr_data);
+
+		stringify = stringify.replace(/\'/g,"&#39;");
+
+		if(old_data != stringify)
+		{
+			$("#select_type_val").val(stringify);
+		}
+
+		$('input.input_'+id).val("");
+		// var d = $("#select_type_val").val();
+		// alert(d);
+		
+		// sheepit_reset_form(2);
+	}
+
+	function insert_table(selected_num)
+	{
+		var arr_data = [];
+
+		data = header.split(',');
+		// alert(data[0]);
+
+		for (var i = 0, l = data.length; i < l; i++)
+		{
+			var this_val = $('#' + data[i] + '_val').val();
+
+			this_val = this_val.replace(/\'/g,"&#39;");
+
+			if(i == 2)
+			{
+				arr_data[i] = "<input type='hidden' style='display:none;' name='" + data[i] + "' value='" + this_val + "' />" + this_val;
+
+				/* kolom select_val (kolom 3) dipindah ke kolom 2, lalu kolom 3 di hide */
+				var j = i + 1;
+				var sheepit_val = $('#' + data[j] + '_val').val();
+				sheepit_val = sheepit_val.replace(/\'/g,"&#39;");
+
+				arr_data[i] = arr_data[i] + "<input type='hidden' style='display:none;' name='" + data[j] + "' value='" + sheepit_val + "' />";
+
+				if(this_val == "Select")
+				{
+					arr_data[i] = arr_data[i] + "<br>" + sheepit_val;
+				}
+				if(this_val == "Image Select")
+				{
+					arr_data[i] = arr_data[i] + "<br>" + sheepit_val;
+				}
+			}
+			else
+			{
+				arr_data[i] = "<input type='hidden' style='display:none;' name='" + data[i] + "' value='" + this_val + "' />" + this_val;
+			}			
+		}
+
+		/* order number */		
+		if(selected_num > 0)
+		{
+			arr_data.unshift(selected_num);
+		}
+		else
+		{
+			arr_data.unshift(oTable.fnGetData().length + 1);
+		}
+
+		$('#datatables').dataTable().fnAddData(arr_data);
+
+		$(".col_val").val("");
+
+		print_last_number();
+	}
+
+	function sheepit_reset_form(first_form_count)
+	{
+		//count displayed data
+		var form_count = sheepItForm.getFormsCount();
+
+		// remove unnecessary last form
+    	if(form_count > first_form_count)
+    	{
+    		var count_min_form = form_count - first_form_count;
+
+    		for (var i = 0; i < count_min_form; i++) 
+    		{
+    			sheepItForm.removeLastForm();
+    		}
+    	}
+    	$('input#sheepItForm_add_n_input').val("");
+	}
 
 	$('#form-datatables').submit(function(){
 		var old_data = $("#table_data").val();
@@ -171,6 +276,10 @@ jQuery(document).ready(function($){
 						{
 							return_arr_data[i][j] = return_arr_data[i][j] + "<br>" + arr_data[i][n];
 						}
+						if(this_value == 'Image Select') 
+						{
+							return_arr_data[i][j] = return_arr_data[i][j] + "<br>" + arr_data[i][n];
+						}
 					}
 					else
 					{
@@ -213,56 +322,7 @@ jQuery(document).ready(function($){
 		return arr_data;
 	}
 
-	function insert_table(selected_num)
-	{
-		var arr_data = [];
 
-		data = header.split(',');
-
-		for (var i = 0, l = data.length; i < l; i++)
-		{
-			var this_val = $('#' + data[i] + '_val').val();
-
-			this_val = this_val.replace(/\'/g,"&#39;");
-
-			if(i == 2)
-			{
-				arr_data[i] = "<input type='hidden' style='display:none;' name='" + data[i] + "' value='" + this_val + "' />" + this_val;
-
-				/* kolom select_val (kolom 3) dipindah ke kolom 2, lalu kolom 3 di hide */
-				var j = i + 1;
-				var sheepit_val = $('#' + data[j] + '_val').val();
-				sheepit_val = sheepit_val.replace(/\'/g,"&#39;");
-
-				arr_data[i] = arr_data[i] + "<input type='hidden' style='display:none;' name='" + data[j] + "' value='" + sheepit_val + "' />";
-
-				if(this_val == "Select")
-				{
-					arr_data[i] = arr_data[i] + "<br>" + sheepit_val;
-				}
-			}
-			else
-			{
-				arr_data[i] = "<input type='hidden' style='display:none;' name='" + data[i] + "' value='" + this_val + "' />" + this_val;
-			}			
-		}
-
-		/* order number */		
-		if(selected_num > 0)
-		{
-			arr_data.unshift(selected_num);
-		}
-		else
-		{
-			arr_data.unshift(oTable.fnGetData().length + 1);
-		}
-
-		$('#datatables').dataTable().fnAddData(arr_data);
-
-		$(".col_val").val("");
-
-		print_last_number();
-	}
 
 	function edit_table()
 	{
@@ -290,13 +350,17 @@ jQuery(document).ready(function($){
 
         		$("input[id=" + data[i] + "_val]").val($(this).val());
 
-        		/* for select */
+        		/* for type */
         		$("select[id=" + data[i] + "_val]").val($(this).val());
         		
         		/* sheepit */
         		if(i == 3)
         		{            		
-        			sheepit_load_data($(this).val());
+        			if($("select[id=" + data[2] + "_val]").val() == 'Select'){
+        				sheepit_load_data($(this).val(),sheepItForm);
+        			} else if ($("select[id=" + data[2] + "_val]").val() == 'Image Select') {
+        				sheepit_load_data($(this).val(),sheepItFormImage);
+        			}
         		}
 
         		i++;
@@ -355,27 +419,6 @@ jQuery(document).ready(function($){
 	}
 
 
-	/**
-	 * SheepIt input
-	 */
-
-	function add_sheepit()
-	{
-		var old_data = $("#output_sheepit").val();
-		var sData = $('.type_select').serializeArray();
-		// var arr_data = serialize_to_array_sheepit(sData);
-		var arr_data = serialize_to_array(sData,2);
-		var stringify = window.JSON.stringify(arr_data);
-
-		stringify = stringify.replace(/\'/g,"&#39;");
-
-		if(old_data != stringify)
-		{
-			$("#select_type_val").val(stringify);
-		}
-
-		sheepit_reset_form(2);
-	}
 
 	function json_to_object(arr_data, optionname, optionval)
 	{
@@ -410,7 +453,7 @@ jQuery(document).ready(function($){
 		return arr_data;
 	}
 
-	function sheepit_load_data(inject_data)
+	function sheepit_load_data(inject_data,idSheepit)
 	{
 		//count displayed data
 		var form_count = sheepItForm.getFormsCount();
@@ -426,7 +469,7 @@ jQuery(document).ready(function($){
 		}
 
 		//inject data
-    	sheepItForm.inject(arr_data);
+    	idSheepit.inject(arr_data);
 
     	// remove unnecessary last form
     	if(form_count > data_count)
@@ -440,23 +483,5 @@ jQuery(document).ready(function($){
     	}
 	}
 
-	function sheepit_reset_form(first_form_count)
-	{
-		//count displayed data
-		var form_count = sheepItForm.getFormsCount();
-
-		// remove unnecessary last form
-    	if(form_count > first_form_count)
-    	{
-    		var count_min_form = form_count - first_form_count;
-
-    		for (var i = 0; i < count_min_form; i++) 
-    		{
-    			sheepItForm.removeLastForm();
-    		}
-    	}
-
-    	$('input.type_select').val("");
-    	$('input#sheepItForm_add_n_input').val("");
-	}
+	
 });

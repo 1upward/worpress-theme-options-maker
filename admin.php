@@ -1,5 +1,4 @@
 <div class="wrap">
-
 <?php
 	$tonjoo_tom = get_option('tonjoo_tom');
 	$show_key = 0;
@@ -39,6 +38,7 @@
 	/* Insert Data */
 	if($_POST)
 	{
+		// print_r($_POST); exit();
 		foreach ($_POST as $key => $value) {
 			$value = stripslashes($value);
 
@@ -50,7 +50,9 @@
 		
 		update_option("tonjoo_tom_data_$show_key",serialize($data_insert));
 
-		wp_redirect(admin_url("admin.php?page=tonjoo-tom/admin.php") . '&data=' . $show_key . '&updated=true');
+		echo '<div class="updated"><p><strong>Updated!</strong> Your changes has been saved!</p></div>';
+		// wp_redirect(admin_url("admin.php?page=tonjoo-tom/admin.php") . '&data=' . $show_key . '&updated=true');
+		// die();
 	}
 
 	/* flash-message */
@@ -110,6 +112,51 @@
 		td {
 			vertical-align: top !important;
 		}
+		
+		.img-select {
+			width: 100px;
+			height: 70px;
+		}
+		.cc-selector input{
+			display: none;
+		    margin:0;padding:0;
+		    -webkit-appearance:none;
+		       -moz-appearance:none;
+		            appearance:none;
+		}
+		/*.visa{background-image:url(http://i.imgur.com/lXzJ1eB.png);}
+		.mastercard{background-image:url(http://i.imgur.com/SJbRQF7.png);}*/
+		 
+		.cc-selector input:active +.drinkcard-cc{opacity: .9;}
+		.cc-selector input:checked +.drinkcard-cc{
+		    -webkit-filter: none;
+		       -moz-filter: none;
+		            filter: none;
+		}
+		.drinkcard-cc{
+			margin-right: 10px;
+		    cursor:pointer;
+		    background-size:contain;
+		    background-repeat:no-repeat;
+		    display:inline-block;
+		    width:100px;height:70px;
+		    -webkit-transition: all 100ms ease-in;
+		       -moz-transition: all 100ms ease-in;
+		            transition: all 100ms ease-in;
+		    -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+		       -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+		            filter: brightness(1.8) grayscale(1) opacity(.7);
+		}
+		.drinkcard-cc:hover{
+		    -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+		       -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+		            filter: brightness(1.2) grayscale(.5) opacity(.9);
+		}
+		 
+		/* Extras */
+		a:visited{color:#888}
+		a{color:#444;text-decoration:none;}
+		p{margin-bottom:.3em;}
 	</style>
 	
 	<form method="post" id="post" action="<?php echo '?page=tonjoo-tom/admin.php&data='.$show_key.'' ?>">	
@@ -191,32 +238,32 @@
 		        break;
 
 		    case 'Image Select':		    	
-		    	$arr_select = json_decode($n['3'], true);
+		    	$arr_img_select = json_decode($n['3'], true);
 		    	
-		    	if(is_array($arr_select))
+		    	if(is_array($arr_img_select))
 		    	{
 		    		echo "<tr>
 		        	  	  <th scope='row'>{$n['0']} $label</th>
-		        	  	  <td>
-		    			  <select name='{$n['1']}' >";
+		        	  	  <td>";
 
-		    		foreach ($arr_select as $key => $value_select)
+		        	echo "<div class='cc-selector'>";
+		    		foreach ($arr_img_select as $key => $value_select)
 					{
-						if($option_value == $value_select[1])
+						if($option_value == $value_select[0])
 						{
-							$selected = "selected";
+							$selected = "checked";
 						}
 						else
 						{
 							$selected = "";
 						}
 
-						echo "<option value='{$value_select[1]}' $selected >{$value_select[0]}</option>";
+						echo "<input id='{$value_select[0]}' type='radio' name='{$n['1']}' value='{$value_select[0]}' $selected ><label class='drinkcard-cc' for='{$value_select[0]}'><img class='img-select' src='{$value_select[1]}'></label>";
+						
 					}
 
-		    		echo "</select>
-		    			  <br><label>{$n['4']}</label>
-		        	  	  </td>		        	  
+		    		echo "</div>
+		    			  </td>		        	  
 		        	  	  </tr>";
 		    	}
 		        break;

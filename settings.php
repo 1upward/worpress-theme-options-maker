@@ -310,8 +310,8 @@
 						<div id="sheepItForm_template" style="margin-bottom:10px;">
 							<label for="sheepItForm_#index#_option">Option <span id="sheepItForm_label"></span> :</label>
 							<br>
-							<input class="type_select" id="sheepItForm_#index#_optionname" name="optionname_#index#" type="text" size="20" maxlength="100" placeholder="Option Name" />
-							<input class="type_select" id="sheepItForm_#index#_optionval" name="optionval_#index#" type="text" size="20" maxlength="100" placeholder="Option Value" />
+							<input class="input_sheepItForm" id="sheepItForm_#index#_optionname" name="optionname_#index#" type="text" size="20" maxlength="100" placeholder="Option Name" />
+							<input class="input_sheepItForm" id="sheepItForm_#index#_optionval" name="optionval_#index#" type="text" size="20" maxlength="100" placeholder="Option Value" />
 							<a id="sheepItForm_remove_current">
 							<img class="delete" src="<?php echo plugins_url() ?>/tonjoo-tom/assets/img/cross.png" width="16" height="20" border="0">
 							</a>
@@ -336,8 +336,6 @@
 
 						</div>
 						<!-- /sheepIt Form -->
-
-						<textarea style="display:none;" id="select_type_val"></textarea>
 					</td>
     			</tr>
 
@@ -351,10 +349,11 @@
 						  <!-- Form template-->
 						  <div id="sheepItFormImage_template">
 						    <label for="sheepItFormImage_#index#__optionname">Option <span id="sheepItFormImage_label"></span></label>
-						    <input class="type_select" id="sheepItFormImage_#index#_optionname" name="optionname_#index#" type="text" size="20" maxlength="100" placeholder="Option Name" />
-						    <input class="type_select" id="sheepItFormImage_#index#_optionval" name="optionval_#index#" mediaUploadText type='hidden' style='display:none;' name='' value=''>
+						    <input class="input_sheepItFormImage" id="sheepItFormImage_#index#_optionname" name="optionname_#index#" type="text" size="20" maxlength="100" placeholder="Option Name" />
+						    <span mediauploader>
+						    <input class="input_sheepItFormImage" id="sheepItFormImage_#index#_optionval" name="optionval_#index#" mediaUploadText type='hidden' style='display:none;'>
 					      	<input id="sheepItFormImage_#index#_optionbut" name="optionbut_#index#" type='button' class='button' mediaUploadButton value='Set image'>
-							
+							</span>
 						    <a id="sheepItFormImage_remove_current">
 						      <img class="delete" src="<?php echo plugins_url() ?>/tonjoo-tom/assets/img/cross.png" width="16" height="16" border="0">
 						    </a>
@@ -374,13 +373,15 @@
 						   
 						</div>
 						<!-- /sheepIt Form -->
+						
 					</td>
     			</tr>
+				<textarea style="display:none;" id="select_type_val" class="sheepit_val"></textarea>
     		<?php else: ?>
     			<tr valign="top">
 		    		<th scope="row"><?php echo $col_title[$i] ?></th>
 			    	<td>
-	    				<input type="text" id="<?php echo $col_name[$i] ?>_val" class="col_val" style="width:300px;">
+	    				<input type="text" id="<?php echo $col_name[$i] ?>_val" class="col_val" style="width:300px;" value="">
 	    			</td>
     			</tr>
 	    	<?php endif ?>
