@@ -1,11 +1,23 @@
 <div class="wrap">
 <?php
-	$tonjoo_tom = get_option('tonjoo_tom');
+	
+	if ( file_exists( get_template_directory() . "/tonjoo_options.php" ) ) {
+	    require_once( get_template_directory() . "/tonjoo_options.php" );
+	} 
+
+	if ( function_exists( 'tonjoo_tom_options' ) ) {
+		$tonjoo_tom = tonjoo_tom_options();
+
+	} else {
+
+		$tonjoo_tom = get_option("tonjoo_tom");
+		$tonjoo_tom = unserialize($tonjoo_tom);
+	}
+
 	$show_key = 0;
 
-	if($tonjoo_tom && count(unserialize($tonjoo_tom)) > 0)
+	if($tonjoo_tom && count($tonjoo_tom) > 0)
 	{
-		$tonjoo_tom = unserialize($tonjoo_tom);
 
 		if(isset($_GET['data']))
 		{
@@ -72,8 +84,10 @@
 	$option_header_title = $config['header_title'];
 
 	/* get key data */
-	$tonjoo_tom = get_option("tonjoo_tom");
-	$tonjoo_tom = unserialize($tonjoo_tom);
+	// echo get_template_directory() . "/tonjoo_options.php";
+	// $optionsfile = get_template_directory() . "/tonjoo_options.php";
+
+	
 	$option_data = $tonjoo_tom[$show_key]['data'];
 
 	/* get value data */
@@ -81,6 +95,10 @@
 	$value = $value ? unserialize($value) : false;
 
 	$arr_data = json_decode(stripslashes($option_data), true);
+
+	// echo "<pre>";
+	// print_r($arr_data); 
+	// echo "</pre>";
 
 	if(is_array($arr_data)):
 	?>

@@ -42,6 +42,8 @@ function register_tonjoo_tom_menu()
 
 function register_tonjoo_tom_menu_settings()
 {
+	register_setting( 'tonjoo_tom', 'tonjoo_tom');
+	
 	$option_group = 'ttom_admin_setting';
 
 	$option_data = get_option("tonjoo_tom_data");
