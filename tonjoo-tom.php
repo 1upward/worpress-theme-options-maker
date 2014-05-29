@@ -8,126 +8,42 @@
  *	Author URI: 
  */
 
-require  plugin_dir_path( __FILE__ ) .'ttom-upload.php';
+function tonjoo_tom_init() {
 
-$plugin = plugin_basename(__FILE__); 
-add_filter("plugin_action_links_$plugin", 'tonjoo_tom_settings_link');
+	//  permission
+	if ( !current_user_can( 'edit_theme_options' ) )
+		return;
 
-add_action('admin_menu', 'register_tonjoo_tom_menu');
-add_action('admin_init', 'register_tonjoo_tom_menu_settings');
-add_action('admin_init', 'tonjoo_tom_enqueue_script', 100);
+	// Load other resource
+	require plugin_dir_path( __FILE__ ) . 'includes/class.tom-options.php';
+	require plugin_dir_path( __FILE__ ) . 'includes/class.tom-generate.php';
+	require plugin_dir_path( __FILE__ ) . 'includes/class.tom-upload.php';
 
-function tonjoo_tom_settings_link($links)
-{ 
-    $links[] = '<a href="admin.php?page=tonjoo-tom/settings.php&noheader=true">Settings</a>'; 
+	// Instantiate the main plugin class.
+	$tom = new tomOptions;
+	$tom->init();
 
-    return $links; 
+	// Instantiate the media uploader class
+	$tom_media_uploader = new tomUpload;
+	$tom_media_uploader->init();
+
 }
+add_action( 'init', 'tonjoo_tom_init', 20 );
 
-function register_tonjoo_tom_menu()
-{
-	$config = array('name'=>'DataTables','header'=>'');
 
-	if(get_option('tonjoo_tom_config') != "")
-	{
-		$config = unserialize(get_option('tonjoo_tom_config'));
-	}
+function filter_by_value ($array, $index, $value){ 
+    if(is_array($array) && count($array)>0)  
+    { 
+        foreach(array_keys($array) as $key){ 
+            $temp[$key] = $array[$key][$index]; 
+             
+            if ($temp[$key] == $value){ 
+                $newarray[$key] = $array[$key]; 
+            } 
+        } 
+      } 
+  return $newarray; 
+} 
 
-	new TtomUploader(array('page' => 'tonjoo-tom/admin.php', 'page_type' => 'page'));
-	
-    add_menu_page('Theme Options', 'Theme Options', 'manage_options', 'tonjoo-tom/admin.php', '', /*plugins_url( 'myplugin/images/icon.png' )*/"", '50.31');
-    add_submenu_page('tonjoo-tom/admin.php','Settings', 'Settings', 'manage_options', 'tonjoo-tom/settings.php');
-    // add_submenu_page('tonjoo-tom/admin.php','Export & Import', 'Export & Import', 'manage_options', 'tonjoo-tom/backup.php');
-}
 
-function register_tonjoo_tom_menu_settings()
-{
-	register_setting( 'tonjoo_tom', 'tonjoo_tom');
-	
-	$option_group = 'ttom_admin_setting';
-
-	$option_data = get_option("tonjoo_tom_data");
-	$arr_data = json_decode(stripslashes($option_data), true);
-
-	if(is_array($arr_data))
-	{
-		foreach ($arr_data as $n) 
-		{
-			register_setting($option_group, $n['1']);
-		}
-	}	
-}
-
-function tonjoo_tom_enqueue_script()
-{
-	if(isset($_GET['page']) &&$_GET['page'] == 'tonjoo-tom/settings.php')
-	{
-		$path = plugins_url();
-
-		wp_enqueue_style('tonjoo-tom-css', $path.'/tonjoo-tom/assets/css/style.css');
-		
-		wp_enqueue_script('tonjoo-tom-datatables-js', $path.'/tonjoo-tom/assets/js/jquery.dataTables.js');
-		wp_enqueue_script('tonjoo-tom-jquery-ui-js', $path.'/tonjoo-tom/assets/js/jquery-ui-1.10.4.custom.min.js');
-		wp_enqueue_script('tonjoo-tom-reordering-js', $path.'/tonjoo-tom/assets/js/jquery.dataTables.rowReordering.js');
-		wp_enqueue_script('tonjoo-tom-sheepit-js', $path.'/tonjoo-tom/assets/js/jquery.sheepItPlugin.js');
-		wp_enqueue_script('tonjoo-tom-script-js', $path.'/tonjoo-tom/assets/js/script.js');
-	}	
-}
-
-add_shortcode('tonjoo_tom', 'tom_shortcode');
-
-function tom_shortcode($attr)
-{
-	$return = "";
-
-	/* get group data */
-	$tonjoo_tom = unserialize(get_option("tonjoo_tom"));
-
-	if(array_key_exists($attr['group'], $tonjoo_tom))
-	{
-		$tonjoo_tom = $tonjoo_tom[$attr['group']]['data'];
-
-		$arr_data = json_decode(stripslashes($tonjoo_tom), true);
-
-		foreach ($arr_data as $n) 
-		{
-			if($n['1'] == $attr['name'])
-			{
-				$value = get_option("tonjoo_tom_data_{$attr['group']}");
-				$value = $value ? unserialize($value) : false;
-
-				$option_value = "";
-
-				if($value && isset($value[$n['1']]))
-				{
-					$option_value = $value[$n['1']];
-				}
-
-				/* print options 
-				   if SSL enabled use https replace function
-				*/
-				$return = (is_ssl()) ? https_link($option_value) : $option_value;
-
-				break;
-			}
-		}
-	}
-
-	return $return;
-}
-
-// Replace url to https
-function https_link($url){
-	
-	// Check if output from TOM is URL
-	if(filter_var($url, FILTER_VALIDATE_URL)) {
-		// Parse to get domain from url
-		$parse_base = parse_url(get_site_url());
-		$parse_url = parse_url($url);
-
-		if ($parse_url['host'] == $parse_base['host']) {
-			$url = str_replace('http://', 'https://', $url );
-		}
-	}
-	return $url;
-}
+?>
