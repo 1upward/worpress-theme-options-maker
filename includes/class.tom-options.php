@@ -49,13 +49,13 @@ class tomOptions {
 
 	function enqueue_admin_styles() {
 
-		wp_enqueue_style( 'optionsframework', plugin_dir_url( dirname(__FILE__) ) . 'css/style.css', array() );
+		wp_enqueue_style( 'tonjoo-tom', plugin_dir_url( dirname(__FILE__) ) . 'css/style.css', array() );
 		wp_enqueue_style( 'wp-color-picker' );
 	}
 	
 	function enqueue_admin_scripts() {
 		// Enqueue custom option panel JS
-		wp_enqueue_script( 'options-custom', plugin_dir_url( dirname(__FILE__) ) . 'js/options-custom.js', array( 'jquery','wp-color-picker' ) );
+		wp_enqueue_script( 'tonjoo-script', plugin_dir_url( dirname(__FILE__) ) . 'js/script.js', array( 'jquery','wp-color-picker' ) );
 
 		// wp_enqueue_script('tonjoo-tom-datatables-js', plugin_dir_url( dirname(__FILE__) ) . 'js/jquery.dataTables.js');
 		// wp_enqueue_script('tonjoo-tom-jquery-ui-js', plugin_dir_url( dirname(__FILE__) ) . 'js/jquery-ui-1.10.4.custom.min.js');
