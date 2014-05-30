@@ -46,5 +46,4 @@ function filter_by_value ($array, $index, $value){
   return $newarray; 
 } 
 
-
 ?>

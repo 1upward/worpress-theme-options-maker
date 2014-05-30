@@ -15,7 +15,7 @@ class tomOptions {
 		// Add the required scripts and styles
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
-
+		
 		add_action( 'admin_menu', array( $this, 'add_custom_options_page' ) );
 
 	}
@@ -55,8 +55,9 @@ class tomOptions {
 	
 	function enqueue_admin_scripts() {
 		// Enqueue custom option panel JS
+		wp_enqueue_script( 'nestable', plugin_dir_url( dirname(__FILE__) ) . 'js/jquery.nestable.js', array('jquery'));
 		wp_enqueue_script( 'tonjoo-script', plugin_dir_url( dirname(__FILE__) ) . 'js/script.js', array( 'jquery','wp-color-picker' ) );
-
+		
 		// wp_enqueue_script('tonjoo-tom-datatables-js', plugin_dir_url( dirname(__FILE__) ) . 'js/jquery.dataTables.js');
 		// wp_enqueue_script('tonjoo-tom-jquery-ui-js', plugin_dir_url( dirname(__FILE__) ) . 'js/jquery-ui-1.10.4.custom.min.js');
 		// wp_enqueue_script('tonjoo-tom-reordering-js', plugin_dir_url( dirname(__FILE__) ) . 'js/jquery.dataTables.rowReordering.js');
@@ -64,7 +65,7 @@ class tomOptions {
 		// wp_enqueue_script('tonjoo-tom-script-js', plugin_dir_url( dirname(__FILE__) ) . 'js/script.js');
 	}
 
-
+	
 	// Menu
 	static function tom_menu_settings() {
 
@@ -74,6 +75,7 @@ class tomOptions {
             'mode' => 'create_enabled',
 
             'page_title' => 'Theme Options',
+            'page_desc' => "Customize your theme options!, you can add, edit, or delete easily here. Don't forget to save your changes or you will lose it",
 			'menu_title' => 'Theme Options',
 			'capability' => 'edit_theme_options',
 			'menu_slug' => 'tonjoo-tom',
@@ -82,7 +84,8 @@ class tomOptions {
 
             // for sub menu
             'parent_slug' => 'tonjoo-tom',
-            'sub_page_title' => 'Create Options',
+            'sub_page_title' => 'Theme Options Maker (TOM) Settings',
+            'sub_page_desc' => "Customize your theme options!, you can add, edit, or delete easily here. Don't forget to save your changes or you will lose it",
 			'sub_menu_title' => 'Create Options',
 			'sub_capability' => 'manage_options',
 			'sub_menu_slug' => 'create-options',
@@ -125,6 +128,7 @@ class tomOptions {
 
 		<?php $menu = $this->tom_menu_settings(); ?>
 		<h2><?php echo esc_html( $menu['page_title'] ); ?></h2>
+		<p><?php echo esc_html( $menu['page_desc'] ); ?></p>
 
 	    <h2 class="nav-tab-wrapper">
 	        <?php echo tomGenerate::tom_tabs(); ?>
@@ -132,12 +136,12 @@ class tomOptions {
 
 	    <?php settings_errors( 'tonjoo-tom' ); ?>
 
-	    <div id="optionsframework-metabox" class="metabox-holder">
-		    <div id="optionsframework" class="postbox">
+	    <div id="tonjoo-tom-metabox" class="metabox-holder">
+		    <div id="tonjoo-tom" class="postbox">
 				<form action="options.php" method="post">
 				<?php settings_fields( 'tonjoo-tom' ); ?>
 				<?php tomGenerate::generate_options_fields(); /* Settings */ ?>
-				<div id="optionsframework-submit">
+				<div id="tonjoo-tom-submit">
 					<input type="submit" class="button-primary" name="update" value="Save" />
 					<input type="submit" class="reset-button button-secondary" name="reset" value="Reset" onclick="return confirm( '<?php print esc_js('Click OK to reset. Any theme settings will be lost!'); ?>' );" />
 					<div class="clear"></div>
@@ -151,10 +155,11 @@ class tomOptions {
 	}
 
 	function create_options_page() { ?>
-		<div id="optionsframework-wrap" class="wrap">
+		<div id="tonjoo-tom-wrap" class="wrap">
 
 		<?php $menu = $this->tom_menu_settings(); ?>
-		<h2><?php echo esc_html( $menu['page_title'] ); ?></h2>
+		<h2><?php echo esc_html( $menu['sub_page_title'] ); ?></h2>
+		<p><?php echo esc_html( $menu['sub_page_desc'] ); ?></p>
 
 	    <h2 class="nav-tab-wrapper">
 	        <?php echo tomGenerate::create_tom_tabs(); ?>
@@ -162,12 +167,12 @@ class tomOptions {
 
 	    <?php settings_errors( 'tonjoo-tom' ); ?>
 
-	    <div id="optionsframework-metabox" class="metabox-holder">
-		    <div id="optionsframework" class="postbox">
+	    <div id="tonjoo-tom-metabox" class="metabox-holder">
+		    <div id="tonjoo-tom" class="postbox">
 				<form action="options.php" method="post">
-				<?php settings_fields( 'optionsframework_create_options' ); ?>
+				<?php settings_fields( 'tom_options' ); ?>
 				<?php tomGenerate::generate_create_options_fields(); /* Settings */ ?>
-				<div id="optionsframework-submit">
+				<div id="tonjoo-tom-submit">
 					<input type="submit" class="button-primary" name="update" value="Save" />
 					<input type="submit" class="reset-button button-secondary" name="reset" value="Reset" onclick="return confirm( '<?php print esc_js('Click OK to reset. Any theme settings will be lost!'); ?>' );" />
 					<div class="clear"></div>
@@ -245,7 +250,7 @@ class tomOptions {
 		}
 
 		// Hook to run after validation
-		do_action( 'optionsframework_after_validate', $clean );
+		do_action( 'tonjoo-tom_after_validate', $clean );
 
 		return $clean;
 	}

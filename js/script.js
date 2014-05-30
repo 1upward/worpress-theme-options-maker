@@ -6,24 +6,24 @@
 jQuery(document).ready(function($) {
 
 	// Loads the color pickers
-	$('.of-color').wpColorPicker();
+	$('.tom-color').wpColorPicker();
 
 	// Image Options
-	$('.of-radio-img-img').click(function(){
-		$(this).parent().parent().find('.of-radio-img-img').removeClass('of-radio-img-selected');
-		$(this).addClass('of-radio-img-selected');
+	$('.tom-radio-img-img').click(function(){
+		$(this).parent().parent().find('.tom-radio-img-img').removeClass('tom-radio-img-selected');
+		$(this).addClass('tom-radio-img-selected');
 	});
 
-	$('.of-radio-img-label').hide();
-	$('.of-radio-img-img').show();
-	$('.of-radio-img-radio').hide();
+	$('.tom-radio-img-label').hide();
+	$('.tom-radio-img-img').show();
+	$('.tom-radio-img-radio').hide();
 
 	// Loads tabbed sections if they exist
 	if ( $('.nav-tab-wrapper').length > 0 ) {
-		options_framework_tabs();
+		tom_tabs();
 	}
 
-	function options_framework_tabs() {
+	function tom_tabs() {
 
 		var $group = $('.group'),
 			$navtabs = $('.nav-tab-wrapper a'),
@@ -68,4 +68,5 @@ jQuery(document).ready(function($) {
 		});
 	}
 
+	$('#nestable').nestable();
 });

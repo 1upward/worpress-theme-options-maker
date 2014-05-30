@@ -19,10 +19,10 @@ class tomUpload {
 
 	static function tom_uploader( $_id, $_value, $_desc = '', $_name = '' ) {
 
-		$optionsframework_settings = get_option( 'optionsframework' );
+		$tom_settings = get_option( 'optionsframework' );
 
 		// Gets the unique option id
-		$option_name = $optionsframework_settings['id'];
+		$option_name = 'optionsframework';
 
 		$output = '';
 		$id = '';
@@ -60,7 +60,7 @@ class tomUpload {
 		}
 
 		if ( $_desc != '' ) {
-			$output .= '<span class="of-metabox-desc">' . $_desc . '</span>' . "\n";
+			$output .= '<span class="tom-metabox-desc">' . $_desc . '</span>' . "\n";
 		}
 
 		$output .= '<div class="screenshot" id="' . $id . '-image">' . "\n";
@@ -96,9 +96,9 @@ class tomUpload {
 		if ( function_exists( 'wp_enqueue_media' ) )
 			wp_enqueue_media();
 
-		wp_register_script( 'of-media-uploader', plugin_dir_url( dirname(__FILE__) ) .'js/media-uploader.js', array( 'jquery' ) );
-		wp_enqueue_script( 'of-media-uploader' );
-		wp_localize_script( 'of-media-uploader', 'optionsframework_l10n', array(
+		wp_register_script( 'tom-media-uploader', plugin_dir_url( dirname(__FILE__) ) .'js/media-uploader.js', array( 'jquery' ) );
+		wp_enqueue_script( 'tom-media-uploader' );
+		wp_localize_script( 'tom-media-uploader', 'optionsframework_l10n', array(
 			'upload' => __( 'Upload', 'options-framework' ),
 			'remove' => __( 'Remove', 'options-framework' )
 		) );
