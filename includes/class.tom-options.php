@@ -24,7 +24,7 @@ class tomOptions {
 
 		// Registers the settings fields and callback
 		// to save option value
-		register_setting( 'tonjoo-tom', 'tom_data' );
+		register_setting( 'tonjoo-tom', 'tom_data',  array ( $this, 'validate_options' ) );
 
 		// To save option name
 		register_setting( 'tom_options', 'tom_options' );
@@ -196,6 +196,66 @@ class tomOptions {
 			}
 		}
 		return $output;
+	}
+
+	function validate_options( $input ) {
+
+		if ( isset( $_POST['reset'] ) ) {
+			add_settings_error( 'tonjoo-tom', 'restore_defaults', 'Default options restored.', 'updated fade' );
+			return $this->get_default_values();
+		}
+
+		/*
+		 * Update Settings
+		 *
+		 * This used to check for $_POST['update'], but has been updated
+		 * to be compatible with the theme customizer introduced in WordPress 3.4
+		 */
+
+		$clean = array();
+		$options = $this->tom_options_fields();
+		foreach ( $options as $option ) {
+
+			if ( ! isset( $option['id'] ) ) {
+				continue;
+			}
+
+			if ( ! isset( $option['type'] ) ) {
+				continue;
+			}
+
+			$id = preg_replace( '/[^a-zA-Z0-9._\-]/', '', strtolower( $option['id'] ) );
+
+			// Set checkbox to false if it wasn't sent in the $_POST
+			if ( 'checkbox' == $option['type'] && ! isset( $input[$id] ) ) {
+				$input[$id] = false;
+			}
+
+			// Set each item in the multicheck to false if it wasn't sent in the $_POST
+			if ( 'multicheck' == $option['type'] && ! isset( $input[$id] ) ) {
+				foreach ( $option['options'] as $key => $value ) {
+					$input[$id][$key] = false;
+				}
+			}
+
+			// For a value to be submitted to database it must pass through a sanitization filter
+			if ( has_filter( 'of_sanitize_' . $option['type'] ) ) {
+				$clean[$id] = apply_filters( 'of_sanitize_' . $option['type'], $input[$id], $option );
+			}
+		}
+
+		// Hook to run after validation
+		do_action( 'optionsframework_after_validate', $clean );
+
+		return $clean;
+	}
+
+	/**
+	 * Display message when options have been saved
+	 */
+
+	function save_options_notice() {
+		add_settings_error( 'options-framework', 'save_options', 'Options saved.', 'updated fade' );
 	}
 
 }

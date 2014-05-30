@@ -18,6 +18,7 @@ function tonjoo_tom_init() {
 	require plugin_dir_path( __FILE__ ) . 'includes/class.tom-options.php';
 	require plugin_dir_path( __FILE__ ) . 'includes/class.tom-generate.php';
 	require plugin_dir_path( __FILE__ ) . 'includes/class.tom-upload.php';
+	require plugin_dir_path( __FILE__ ) . 'includes/class.tom-sanitization.php';
 
 	// Instantiate the main plugin class.
 	$tom = new tomOptions;
