@@ -68,5 +68,9 @@ jQuery(document).ready(function($) {
 		});
 	}
 
-	$('#nestable').nestable();
+	$('#nestable').nestable({
+		'maxDepth' : '1',
+		// 'listNodeName' : '<div>',
+		// 'itemNodeName' : '<div>'
+	});
 });
