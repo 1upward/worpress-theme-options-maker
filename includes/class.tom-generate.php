@@ -438,7 +438,7 @@ class tomGenerate {
 		
 		global $allowedtags;
 
-		$option_name = 'tom_data';
+		$option_name = 'tom_options';
 
 		$settings = get_option($option_name);
 		$options = tomOptions::tom_options_fields();

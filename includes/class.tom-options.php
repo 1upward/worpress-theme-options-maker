@@ -35,13 +35,20 @@ class tomOptions {
 	static function tom_options_fields() {
 
 		if ( file_exists( get_template_directory() . "/tonjoo_options.php" ) ) {
+			
 		    require_once( get_template_directory() . "/tonjoo_options.php" );
 		} 
 
 		if ( function_exists( 'tonjoo_tom_options' ) ) {
 			$options = tonjoo_tom_options();
+			// debug
+			echo "dari file";
 
-		} else {} // Ambil dari db
+		} else { // Ambil dari db
+			$options = unserialize(get_option( 'tom_options' ));
+			// debug
+			echo "dari database";
+		} 
 
 		return $options;
 	}
@@ -172,6 +179,7 @@ class tomOptions {
 				<form action="options.php" method="post">
 				<?php settings_fields( 'tom_options' ); ?>
 				<?php tomGenerate::generate_create_options_fields(); /* Settings */ ?>
+				<textarea id="nestable-output" col="10" rows="10"></textarea>
 				<div id="tonjoo-tom-submit">
 					<input type="submit" class="button-primary" name="update" value="Save" />
 					<input type="submit" class="reset-button button-secondary" name="reset" value="Reset" onclick="return confirm( '<?php print esc_js('Click OK to reset. Any theme settings will be lost!'); ?>' );" />
