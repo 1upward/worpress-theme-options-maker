@@ -20,6 +20,20 @@ function tonjoo_tom_init() {
 	require plugin_dir_path( __FILE__ ) . 'includes/class.tom-upload.php';
 	require plugin_dir_path( __FILE__ ) . 'includes/class.tom-sanitization.php';
 
+	/* if file config exist */
+	if ( file_exists( get_template_directory() . "/tonjoo_options.php" ) ) {
+	    require_once( get_template_directory() . "/tonjoo_options.php" );
+	
+		if ( function_exists('tonjoo_tom_config') ) {
+			add_filter( 'tom_config', 'tonjoo_tom_config');
+		}
+
+		if ( function_exists( 'tonjoo_tom_options' ) ) {
+			add_filter( 'tom_options', 'tonjoo_tom_options');
+		}
+	} 
+
+
 	// Instantiate the main plugin class.
 	$tom = new tomOptions;
 	$tom->init();

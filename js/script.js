@@ -68,52 +68,30 @@ jQuery(document).ready(function($) {
 		});
 	}
 
-	// $('#nestable').nestable({
-		// 'maxDepth' : '1',
-		// 'listNodeName' : '<div>',
-		// 'itemNodeName' : '<div>'
-	// });
 
-	var updateOutput = function(e)
-    {
-        var list   = e.length ? e : $(e.target),
-            output = list.data('output');
-        if (window.JSON) {
-            output.val(window.JSON.stringify(list.nestable('serialize')));//, null, 2));
-        } else {
-            output.val('JSON browser support required for this demo.');
-        }
-    };
+	// var updateOutput = function(e)
+ //    {
+ //        var list   = e.length ? e : $(e.target),
+ //            output = list.data('output');
+ //        if (window.JSON) {
+ //            output.val(window.JSON.stringify(list.nestable('serialize')));//, null, 2));
+ //        } else {
+ //            output.val('JSON browser support required for this demo.');
+ //        }
+ //    };
 
     // activate Nestable for list 1
-    $('#nestable').nestable({
-        group: 1
-    })
-    .on('change', updateOutput);
+    $('#nestable-1').nestable({'maxDepth':'1'});
+    $('#nestable-2').nestable({'maxDepth':'1'});
+    $('#nestable-3').nestable({'maxDepth':'1'});
+    $('#nestable-4').nestable({'maxDepth':'1'});
     
-    // activate Nestable for list 2
-    $('#nestable2').nestable({
-        group: 1
-    })
-    .on('change', updateOutput);
 
     // output initial serialised data
-    updateOutput($('#nestable').data('output', $('#nestable-output')));
-    updateOutput($('#nestable2').data('output', $('#nestable2-output')));
+    // updateOutput($('#nestable-1').data('output', $('#nestable-1-output')));
+    // updateOutput($('#nestable-2').data('output', $('#nestable-2-output')));
+    // updateOutput($('#nestable-3').data('output', $('#nestable-3-output')));
+    // updateOutput($('#nestable-4').data('output', $('#nestable-4-output')));
 
-    $('#nestable-menu').on('click', function(e)
-    {
-        var target = $(e.target),
-            action = target.data('action');
-        if (action === 'expand-all') {
-            $('.dd').nestable('expandAll');
-        }
-        if (action === 'collapse-all') {
-            $('.dd').nestable('collapseAll');
-        }
-    });
 
-    $('#nestable3').nestable();
-
-    
 });

@@ -50,6 +50,10 @@ class tomGenerate {
 		$option_name = 'tom_data';
 
 		$settings = get_option($option_name);
+		
+		// echo "<pre>";
+		// print_r($settings); exit();
+		// echo "</pre>";
 		$options = tomOptions::tom_options_fields();
 
 		// if (!empty($_GET['group'])) {
@@ -427,8 +431,6 @@ class tomGenerate {
 
 			echo $output;
 		}
-
-		// Outputs closing div if there tabs
 		if ( tomGenerate::tom_tabs() != '' ) {
 			echo '</div>';
 		}
@@ -451,7 +453,7 @@ class tomGenerate {
 		// print_r($options);
 		// echo "</pre>";
 		// exit();
-		echo '<div class="dd" id="nestable">';
+		// echo '<div class="dd" id="nestable">';
 		foreach ( $options as $value ) {
 
 			$val = '';
@@ -466,57 +468,63 @@ class tomGenerate {
 
 				$id = 'section-' . $value['id'];
 
-				$class = 'section';
-				if ( isset( $value['type'] ) ) {
-					$class .= ' section-' . $value['type'];
-				}
-				if ( isset( $value['class'] ) ) {
-					$class .= ' ' . $value['class'];
-				}
+				// $class = 'section';
+				// if ( isset( $value['type'] ) ) {
+				// 	$class .= ' section-' . $value['type'];
+				// }
+				// if ( isset( $value['class'] ) ) {
+				// 	$class .= ' ' . $value['class'];
+				// }
 
 				// $output .= '<span id="' . esc_attr( $id ) .'" class="' . esc_attr( $class ) . '">'."\n";
 				$output .= '<li class="dd-item" data-id="'.esc_attr( $dataid ).'"><div class="dd-handle">'."\n";
+				$output .= $value['name'];
+				$output .= '</div></li>'."\n";
 			}
 
 			// Set value from database to $val
-			if ( isset( $value['std'] ) ) {
-				$val = $value['std'];
-			}
+			// if ( isset( $value['std'] ) ) {
+			// 	$val = $value['std'];
+			// }
 
 			// If the option is already saved, override $val
-			if ( ( $value['type'] != 'heading' ) && ( $value['type'] != 'info') ) {
-				if ( isset( $settings[($value['id'])]) ) {
-					$val = $settings[($value['id'])];
-					// Striping slashes of non-array options
-					if ( !is_array($val) ) {
-						$val = stripslashes( $val );
-					}
-				}
-			}
+			// if ( ( $value['type'] != 'heading' ) && ( $value['type'] != 'info') ) {
+			// 	if ( isset( $settings[($value['id'])]) ) {
+			// 		$val = $settings[($value['id'])];
+			// 		// Striping slashes of non-array options
+			// 		if ( !is_array($val) ) {
+			// 			$val = stripslashes( $val );
+			// 		}
+			// 	}
+			// }
 
 			// If there is a description save it for labels
-			$explain_value = '';
-			if ( isset( $value['desc'] ) ) {
-				$explain_value = $value['desc'];
-			}
+			// $explain_value = '';
+			// if ( isset( $value['desc'] ) ) {
+			// 	$explain_value = $value['desc'];
+			// }
 
 			// Heading for Navigation
 			if ($value['type'] == "heading") {
 				$counter++;
 				if ( $counter >= 2 ) {
-					$output .= '</ol></div>'."\n";
+					$output .= '</ol></div></div>'."\n";
 				}
 				$class = '';
 				$class = ! empty( $value['id'] ) ? $value['id'] : $value['name'];
 				$class = preg_replace('/[^a-zA-Z0-9._\-]/', '', strtolower($class) );
 				$output .= '<div id="options-group-' . $counter . '" class="group ' . $class . '">';
-				$output .= '<h3>' . esc_html( $value['name'] ) . '</h3><ol class="dd-list">' . "\n";
+				$output .= '<h3>' . esc_html( $value['name'] ) . '</h3>' . "\n";
+				// debug
+				// $output .= '<textarea id="nestable-output"></textarea>';
+				$output .= '<div class="dd" id="nestable-' . $counter . '">' . "\n";
+				$output .= '<ol class="dd-list">' . "\n";
 			} 
 
-			if ( ( $value['type'] != "heading" ) && ( $value['type'] != "info" ) ) {
-				$output .= $value['name'];
-				$output .= '</div></li>'."\n";
-			}
+			// if ( ( $value['type'] != "heading" ) && ( $value['type'] != "info" ) ) {
+			// 	$output .= $value['name'];
+			// 	$output .= '</div></li>'."\n";
+			// }
 
 			echo $output;
 			$dataid++;

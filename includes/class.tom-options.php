@@ -2,9 +2,6 @@
 
 class tomOptions {
 
-	protected $options_screen = null;
-    protected $create_options_screen = null;
-
 	public function init() {
 
 		$this->tom_options_fields();
@@ -15,41 +12,61 @@ class tomOptions {
 		// Add the required scripts and styles
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
-		
+
 		add_action( 'admin_menu', array( $this, 'add_custom_options_page' ) );
 
 	}
 
 	function tom_settings_init() {
 
-		// Registers the settings fields and callback
-		// to save option value
+		/* Register setting untuk menyimpan data */
 		register_setting( 'tonjoo-tom', 'tom_data',  array ( $this, 'validate_options' ) );
 
-		// To save option name
+		/* Register setting untuk menyimpan options / create options */
 		register_setting( 'tom_options', 'tom_options' );
+
+		/* Jika ada file config di folder theme */
+		// if ( file_exists( get_template_directory() . "/tonjoo_options.php" ) ) {
+		//     require_once( get_template_directory() . "/tonjoo_options.php" );
+		// } 
+
+		/* masukkan config ke dalam filter jika ada */
+		// if ( function_exists('tonjoo_tom_config') ) {
+		// 	add_filter( 'tom_config', 'tonjoo_tom_config');
+		// }
+
 
     }
 
-	// Ambil option field dari file atau dari db
+
+	/* get all option from file or from database */
 	static function tom_options_fields() {
 
-		if ( file_exists( get_template_directory() . "/tonjoo_options.php" ) ) {
+		// if ( file_exists( get_template_directory() . "/tonjoo_options.php" ) ) {
 			
-		    require_once( get_template_directory() . "/tonjoo_options.php" );
-		} 
+		//     require_once( get_template_directory() . "/tonjoo_options.php" );
+		// } 
 
-		if ( function_exists( 'tonjoo_tom_options' ) ) {
-			$options = tonjoo_tom_options();
-			// debug
-			echo "dari file";
+		
 
-		} else { // Ambil dari db
-			$options = unserialize(get_option( 'tom_options' ));
-			// debug
-			echo "dari database";
-		} 
+		// if ( function_exists( 'tonjoo_tom_options' ) ) {
+		// 	$options = tonjoo_tom_options();
+		// 	// debug
+		// 	// echo "dari file";
 
+		// } else { // Ambil dari db
+		// 	$options = unserialize(get_option( 'tom_options' ));
+		// 	// debug
+		// 	// echo "dari database";
+		// } 
+		$options_from_db = unserialize(get_option( 'tom_options' ));
+		$options_from_file = apply_filters( 'tom_options', array() );
+
+		$options = array_merge($options_from_db, $options_from_file);
+		
+		// echo "<pre>";
+		// print_r($options); exit();
+		// echo "</pre>";
 		return $options;
 	}
 
@@ -74,22 +91,22 @@ class tomOptions {
 
 	
 	// Menu
-	static function tom_menu_settings() {
+	static function tom_configs() {
 
-		$menu = array(
+		$config_default = array(
 
-			// Modes: submenu, menu
-            'mode' => 'create_enabled',
+			/* Default cofigurations */
+            'mode' => 'full',
 
             'page_title' => 'Theme Options',
             'page_desc' => "Customize your theme options!, you can add, edit, or delete easily here. Don't forget to save your changes or you will lose it",
 			'menu_title' => 'Theme Options',
 			'capability' => 'edit_theme_options',
 			'menu_slug' => 'tonjoo-tom',
-            'icon_url' => 'dashicons-admin-generic',
+            'icon_url' => 'dashicons-editor-paste-text',
             'position' => '61',
 
-            // for sub menu
+            /* for sub menu */
             'parent_slug' => 'tonjoo-tom',
             'sub_page_title' => 'Theme Options Maker (TOM) Settings',
             'sub_page_desc' => "Customize your theme options!, you can add, edit, or delete easily here. Don't forget to save your changes or you will lose it",
@@ -99,30 +116,36 @@ class tomOptions {
 
 		);
 
-		return $menu;
+		/* ambil dari filter barangkali ada custom config dari file */
+		$config_from_file = apply_filters( 'tom_config', $config_default );
+		$configs = array_merge($config_default, $config_from_file);
+		
+		return $configs;
 	}
 
 	function add_custom_options_page() {
 
-		$menu = $this->tom_menu_settings();
-
-        $this->options_screen = add_menu_page(
-        	$menu['page_title'],
-        	$menu['menu_title'],
-        	$menu['capability'],
-        	$menu['menu_slug'],
+		$config = $this->tom_configs();
+		// echo "<pre>";
+		// print_r($config); exit();
+		// echo "</pre>";
+        add_menu_page(
+        	$config['page_title'],
+        	$config['menu_title'],
+        	$config['capability'],
+        	$config['menu_slug'],
         	array( $this, 'options_page' ),
-        	$menu['icon_url'],
-        	$menu['position']
+        	$config['icon_url'],
+        	$config['position']
         );
 
-        if (@$menu['mode'] == 'create_enabled') {
-        	$this->create_options_screen = add_submenu_page(
-		    	$menu['parent_slug'],
-		    	$menu['sub_page_title'],
-		    	$menu['sub_menu_title'],
-		    	$menu['sub_capability'],
-		    	$menu['sub_menu_slug'],
+        if ($config['mode'] == 'full') {
+        	add_submenu_page(
+		    	$config['parent_slug'],
+		    	$config['sub_page_title'],
+		    	$config['sub_menu_title'],
+		    	$config['sub_capability'],
+		    	$config['sub_menu_slug'],
 		    	array( $this, 'create_options_page' ) );
         }
 	}
@@ -133,9 +156,9 @@ class tomOptions {
 
 		<div class="wrap">
 
-		<?php $menu = $this->tom_menu_settings(); ?>
-		<h2><?php echo esc_html( $menu['page_title'] ); ?></h2>
-		<p><?php echo esc_html( $menu['page_desc'] ); ?></p>
+		<?php $config = $this->tom_configs(); ?>
+		<h2><?php echo esc_html( $config['page_title'] ); ?></h2>
+		<p><?php echo esc_html( $config['page_desc'] ); ?></p>
 
 	    <h2 class="nav-tab-wrapper">
 	        <?php echo tomGenerate::tom_tabs(); ?>
@@ -164,9 +187,9 @@ class tomOptions {
 	function create_options_page() { ?>
 		<div id="tonjoo-tom-wrap" class="wrap">
 
-		<?php $menu = $this->tom_menu_settings(); ?>
-		<h2><?php echo esc_html( $menu['sub_page_title'] ); ?></h2>
-		<p><?php echo esc_html( $menu['sub_page_desc'] ); ?></p>
+		<?php $config = $this->tom_configs(); ?>
+		<h2><?php echo esc_html( $config['sub_page_title'] ); ?></h2>
+		<p><?php echo esc_html( $config['sub_page_desc'] ); ?></p>
 
 	    <h2 class="nav-tab-wrapper">
 	        <?php echo tomGenerate::create_tom_tabs(); ?>
@@ -179,7 +202,6 @@ class tomOptions {
 				<form action="options.php" method="post">
 				<?php settings_fields( 'tom_options' ); ?>
 				<?php tomGenerate::generate_create_options_fields(); /* Settings */ ?>
-				<textarea id="nestable-output" col="10" rows="10"></textarea>
 				<div id="tonjoo-tom-submit">
 					<input type="submit" class="button-primary" name="update" value="Save" />
 					<input type="submit" class="reset-button button-secondary" name="reset" value="Reset" onclick="return confirm( '<?php print esc_js('Click OK to reset. Any theme settings will be lost!'); ?>' );" />
@@ -208,6 +230,10 @@ class tomOptions {
 				continue;
 			}
 		}
+
+		// echo "<pre>";
+		// print_r($config); exit();
+		// echo "</pre>";
 		return $output;
 	}
 
