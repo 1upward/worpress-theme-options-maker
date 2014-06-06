@@ -32,11 +32,6 @@ jQuery(document).ready(function($) {
 		// Hides all the .group sections to start
 		$group.hide();
 
-		// Find if a selected tab is saved in localStorage
-		if ( typeof(localStorage) != 'undefined' ) {
-			active_tab = localStorage.getItem('active_tab');
-		}
-
 		// If active tab is saved and exists, load it's .group
 		if ( active_tab != '' && $(active_tab).length ) {
 			$(active_tab).fadeIn();
