@@ -576,3 +576,13 @@ border-bottom: 1px solid #ddd;
 .dd-dragel>.dd-item>.dd2-handle .normal-icon {
     display: none;
 }
+.dd-handle > span.tom-action-buttons {
+    float: right;
+}
+.dd-handle > span.tom-action-buttons a {
+    text-decoration: none;
+}
+.dd-handle > span.tom-action-buttons a.red {
+    color: #dd362d;
+}
+

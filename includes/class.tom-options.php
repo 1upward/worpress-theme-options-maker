@@ -209,6 +209,7 @@ class tomOptions {
 				</div>
 				</form>
 			</div> <!-- / #container -->
+			<div>ssadsdsdsdsdsd</div>
 		</div>
 		</div> <!-- / .wrap -->
 	<?php
@@ -223,7 +224,7 @@ class tomOptions {
 			if ( ! isset( $option['id'] ) ) {
 				continue;
 			}
-			if ( ! isset( $option['std'] ) ) {
+			if ( ! isset( $option['default'] ) ) {
 				continue;
 			}
 			if ( ! isset( $option['type'] ) ) {

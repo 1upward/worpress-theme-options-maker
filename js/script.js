@@ -68,6 +68,9 @@ jQuery(document).ready(function($) {
 		});
 	}
 
+	$('#edit-nestable').click(function(){
+		return;
+	})
 
 	// var updateOutput = function(e)
  //    {
@@ -81,10 +84,10 @@ jQuery(document).ready(function($) {
  //    };
 
     // activate Nestable for list 1
-    $('#nestable-1').nestable({'maxDepth':'1'});
-    $('#nestable-2').nestable({'maxDepth':'1'});
-    $('#nestable-3').nestable({'maxDepth':'1'});
-    $('#nestable-4').nestable({'maxDepth':'1'});
+    // $('#nestable-1').nestable({'maxDepth':'1'});
+    // $('#nestable-2').nestable({'maxDepth':'1'});
+    // $('#nestable-3').nestable({'maxDepth':'1'});
+    // $('#nestable-4').nestable({'maxDepth':'1'});
     
 
     // output initial serialised data
