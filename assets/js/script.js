@@ -74,9 +74,21 @@ jQuery(document).ready(function($) {
 	    return false;
 	});
 
-	$(".dd a").on("click", function(event) { // click event
+	$(".dd a#delete-nestable").on("click", function(event) { // click event
 	    event.preventDefault();
-	    window.location = $(this).attr("href");
+	    if (confirm("Are you sure to delete option?")) {
+		  alert("sure banget ya..");
+		 }
+
+	    return false;
+	});
+
+	$(".dd a#edit-nestable").on("click", function(event) { // click event
+	    event.preventDefault();
+	    if (confirm("Are you sure to delete option?")) {
+		  alert("sure banget ya..");
+		 }
+
 	    return false;
 	});
 
