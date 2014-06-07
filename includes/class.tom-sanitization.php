@@ -1,37 +1,37 @@
 <?php
 /* Text */
 
-add_filter( 'of_sanitize_text', 'sanitize_text_field' );
+add_filter( 'tom_sanitize_text', 'sanitize_text_field' );
 
 /* Password */
 
-add_filter( 'of_sanitize_password', 'sanitize_text_field' );
+add_filter( 'tom_sanitize_password', 'sanitize_text_field' );
 
 /* Textarea */
 
-function of_sanitize_textarea(  $input) {
+function tom_sanitize_textarea(  $input) {
 	global $allowedposttags;
 	$output = wp_kses( $input, $allowedposttags);
 	return $output;
 }
 
-add_filter( 'of_sanitize_textarea', 'of_sanitize_textarea' );
+add_filter( 'tom_sanitize_textarea', 'tom_sanitize_textarea' );
 
 /* Select */
 
-add_filter( 'of_sanitize_select', 'of_sanitize_enum', 10, 2 );
+add_filter( 'tom_sanitize_select', 'tom_sanitize_enum', 10, 2 );
 
 /* Radio */
 
-add_filter( 'of_sanitize_radio', 'of_sanitize_enum', 10, 2 );
+add_filter( 'tom_sanitize_radio', 'tom_sanitize_enum', 10, 2 );
 
 /* Images */
 
-add_filter( 'of_sanitize_images', 'of_sanitize_enum', 10, 2 );
+add_filter( 'tom_sanitize_images', 'tom_sanitize_enum', 10, 2 );
 
 /* Checkbox */
 
-function of_sanitize_checkbox( $input ) {
+function tom_sanitize_checkbox( $input ) {
 	if ( $input ) {
 		$output = '1';
 	} else {
@@ -39,11 +39,11 @@ function of_sanitize_checkbox( $input ) {
 	}
 	return $output;
 }
-add_filter( 'of_sanitize_checkbox', 'of_sanitize_checkbox' );
+add_filter( 'tom_sanitize_checkbox', 'tom_sanitize_checkbox' );
 
 /* Multicheck */
 
-function of_sanitize_multicheck( $input, $option ) {
+function tom_sanitize_multicheck( $input, $option ) {
 	$output = '';
 	if ( is_array( $input ) ) {
 		foreach( $option['options'] as $key => $value ) {
@@ -57,15 +57,15 @@ function of_sanitize_multicheck( $input, $option ) {
 	}
 	return $output;
 }
-add_filter( 'of_sanitize_multicheck', 'of_sanitize_multicheck', 10, 2 );
+add_filter( 'tom_sanitize_multicheck', 'tom_sanitize_multicheck', 10, 2 );
 
 /* Color Picker */
 
-add_filter( 'of_sanitize_color', 'of_sanitize_hex' );
+add_filter( 'tom_sanitize_color', 'tom_sanitize_hex' );
 
 /* Uploader */
 
-function of_sanitize_upload( $input ) {
+function tom_sanitize_upload( $input ) {
 	$output = '';
 	$filetype = wp_check_filetype( $input );
 	if ( $filetype["ext"] ) {
@@ -73,11 +73,11 @@ function of_sanitize_upload( $input ) {
 	}
 	return $output;
 }
-add_filter( 'of_sanitize_upload', 'of_sanitize_upload' );
+add_filter( 'tom_sanitize_upload', 'tom_sanitize_upload' );
 
 /* Editor */
 
-function of_sanitize_editor( $input ) {
+function tom_sanitize_editor( $input ) {
 	if ( current_user_can( 'unfiltered_html' ) ) {
 		$output = $input;
 	}
@@ -87,11 +87,11 @@ function of_sanitize_editor( $input ) {
 	}
 	return $output;
 }
-add_filter( 'of_sanitize_editor', 'of_sanitize_editor' );
+add_filter( 'tom_sanitize_editor', 'tom_sanitize_editor' );
 
 /* Allowed Tags */
 
-function of_sanitize_allowedtags( $input ) {
+function tom_sanitize_allowedtags( $input ) {
 	global $allowedtags;
 	$output = wpautop( wp_kses( $input, $allowedtags ) );
 	return $output;
@@ -99,16 +99,16 @@ function of_sanitize_allowedtags( $input ) {
 
 /* Allowed Post Tags */
 
-function of_sanitize_allowedposttags( $input ) {
+function tom_sanitize_allowedposttags( $input ) {
 	global $allowedposttags;
 	$output = wpautop( wp_kses( $input, $allowedposttags) );
 	return $output;
 }
-add_filter( 'of_sanitize_info', 'of_sanitize_allowedposttags' );
+add_filter( 'tom_sanitize_info', 'tom_sanitize_allowedposttags' );
 
 /* Check that the key value sent is valid */
 
-function of_sanitize_enum( $input, $option ) {
+function tom_sanitize_enum( $input, $option ) {
 	$output = '';
 	if ( array_key_exists( $input, $option['options'] ) ) {
 		$output = $input;
@@ -118,7 +118,7 @@ function of_sanitize_enum( $input, $option ) {
 
 /* Background */
 
-function of_sanitize_background( $input ) {
+function tom_sanitize_background( $input ) {
 	$output = wp_parse_args( $input, array(
 		'color' => '',
 		'image'  => '',
@@ -127,47 +127,47 @@ function of_sanitize_background( $input ) {
 		'attachment' => 'scroll'
 	) );
 
-	$output['color'] = apply_filters( 'of_sanitize_hex', $input['color'] );
-	$output['image'] = apply_filters( 'of_sanitize_upload', $input['image'] );
-	$output['repeat'] = apply_filters( 'of_background_repeat', $input['repeat'] );
-	$output['position'] = apply_filters( 'of_background_position', $input['position'] );
-	$output['attachment'] = apply_filters( 'of_background_attachment', $input['attachment'] );
+	$output['color'] = apply_filters( 'tom_sanitize_hex', $input['color'] );
+	$output['image'] = apply_filters( 'tom_sanitize_upload', $input['image'] );
+	$output['repeat'] = apply_filters( 'tom_background_repeat', $input['repeat'] );
+	$output['position'] = apply_filters( 'tom_background_position', $input['position'] );
+	$output['attachment'] = apply_filters( 'tom_background_attachment', $input['attachment'] );
 
 	return $output;
 }
-add_filter( 'of_sanitize_background', 'of_sanitize_background' );
+add_filter( 'tom_sanitize_background', 'tom_sanitize_background' );
 
-function of_sanitize_background_repeat( $value ) {
-	$recognized = of_recognized_background_repeat();
+function tom_sanitize_background_repeat( $value ) {
+	$recognized = tom_recognized_background_repeat();
 	if ( array_key_exists( $value, $recognized ) ) {
 		return $value;
 	}
-	return apply_filters( 'of_default_background_repeat', current( $recognized ) );
+	return apply_filters( 'tom_default_background_repeat', current( $recognized ) );
 }
-add_filter( 'of_background_repeat', 'of_sanitize_background_repeat' );
+add_filter( 'tom_background_repeat', 'tom_sanitize_background_repeat' );
 
-function of_sanitize_background_position( $value ) {
-	$recognized = of_recognized_background_position();
+function tom_sanitize_background_position( $value ) {
+	$recognized = tom_recognized_background_position();
 	if ( array_key_exists( $value, $recognized ) ) {
 		return $value;
 	}
-	return apply_filters( 'of_default_background_position', current( $recognized ) );
+	return apply_filters( 'tom_default_background_position', current( $recognized ) );
 }
-add_filter( 'of_background_position', 'of_sanitize_background_position' );
+add_filter( 'tom_background_position', 'tom_sanitize_background_position' );
 
-function of_sanitize_background_attachment( $value ) {
-	$recognized = of_recognized_background_attachment();
+function tom_sanitize_background_attachment( $value ) {
+	$recognized = tom_recognized_background_attachment();
 	if ( array_key_exists( $value, $recognized ) ) {
 		return $value;
 	}
-	return apply_filters( 'of_default_background_attachment', current( $recognized ) );
+	return apply_filters( 'tom_default_background_attachment', current( $recognized ) );
 }
-add_filter( 'of_background_attachment', 'of_sanitize_background_attachment' );
+add_filter( 'tom_background_attachment', 'tom_sanitize_background_attachment' );
 
 
 /* Typography */
 
-function of_sanitize_typography( $input, $option ) {
+function tom_sanitize_typography( $input, $option ) {
 
 	$output = wp_parse_args( $input, array(
 		'size'  => '',
@@ -182,122 +182,108 @@ function of_sanitize_typography( $input, $option ) {
 		}
 	}
 	else {
-		$output['face']  = apply_filters( 'of_font_face', $output['face'] );
+		$output['face']  = apply_filters( 'tom_font_face', $output['face'] );
 	}
 
-	$output['size']  = apply_filters( 'of_font_size', $output['size'] );
-	$output['style'] = apply_filters( 'of_font_style', $output['style'] );
-	$output['color'] = apply_filters( 'of_sanitize_color', $output['color'] );
+	$output['size']  = apply_filters( 'tom_font_size', $output['size'] );
+	$output['style'] = apply_filters( 'tom_font_style', $output['style'] );
+	$output['color'] = apply_filters( 'tom_sanitize_color', $output['color'] );
 	return $output;
 }
-add_filter( 'of_sanitize_typography', 'of_sanitize_typography', 10, 2 );
+add_filter( 'tom_sanitize_typography', 'tom_sanitize_typography', 10, 2 );
 
-function of_sanitize_font_size( $value ) {
-	$recognized = of_recognized_font_sizes();
+function tom_sanitize_font_size( $value ) {
+	$recognized = tom_recognized_font_sizes();
 	$value_check = preg_replace('/px/','', $value);
 	if ( in_array( (int) $value_check, $recognized ) ) {
 		return $value;
 	}
-	return apply_filters( 'of_default_font_size', $recognized );
+	return apply_filters( 'tom_default_font_size', $recognized );
 }
-add_filter( 'of_font_size', 'of_sanitize_font_size' );
+add_filter( 'tom_font_size', 'tom_sanitize_font_size' );
 
 
-function of_sanitize_font_style( $value ) {
-	$recognized = of_recognized_font_styles();
+function tom_sanitize_font_style( $value ) {
+	$recognized = tom_recognized_font_styles();
 	if ( array_key_exists( $value, $recognized ) ) {
 		return $value;
 	}
-	return apply_filters( 'of_default_font_style', current( $recognized ) );
+	return apply_filters( 'tom_default_font_style', current( $recognized ) );
 }
-add_filter( 'of_font_style', 'of_sanitize_font_style' );
+add_filter( 'tom_font_style', 'tom_sanitize_font_style' );
 
 
-function of_sanitize_font_face( $value ) {
-	$recognized = of_recognized_font_faces();
+function tom_sanitize_font_face( $value ) {
+	$recognized = tom_recognized_font_faces();
 	if ( array_key_exists( $value, $recognized ) ) {
 		return $value;
 	}
-	return apply_filters( 'of_default_font_face', current( $recognized ) );
+	return apply_filters( 'tom_default_font_face', current( $recognized ) );
 }
-add_filter( 'of_font_face', 'of_sanitize_font_face' );
+add_filter( 'tom_font_face', 'tom_sanitize_font_face' );
 
-/**
- * Get recognized background repeat settings
- *
- * @return   array
- *
+/*
+ Get recognized background repeat settings
  */
-function of_recognized_background_repeat() {
+function tom_recognized_background_repeat() {
 	$default = array(
-		'no-repeat' => __( 'No Repeat', 'options-framework' ),
-		'repeat-x'  => __( 'Repeat Horizontally', 'options-framework' ),
-		'repeat-y'  => __( 'Repeat Vertically', 'options-framework' ),
-		'repeat'    => __( 'Repeat All', 'options-framework' ),
+		'no-repeat' => 'No Repeat',
+		'repeat-x'  => 'Repeat Horizontally',
+		'repeat-y'  => 'Repeat Vertically',
+		'repeat'    => 'Repeat All',
 		);
-	return apply_filters( 'of_recognized_background_repeat', $default );
+	return apply_filters( 'tom_recognized_background_repeat', $default );
 }
 
-/**
- * Get recognized background positions
- *
- * @return   array
- *
+/*
+Get recognized background positions 
  */
-function of_recognized_background_position() {
+function tom_recognized_background_position() {
 	$default = array(
-		'top left'      => __( 'Top Left', 'options-framework' ),
-		'top center'    => __( 'Top Center', 'options-framework' ),
-		'top right'     => __( 'Top Right', 'options-framework' ),
-		'center left'   => __( 'Middle Left', 'options-framework' ),
-		'center center' => __( 'Middle Center', 'options-framework' ),
-		'center right'  => __( 'Middle Right', 'options-framework' ),
-		'bottom left'   => __( 'Bottom Left', 'options-framework' ),
-		'bottom center' => __( 'Bottom Center', 'options-framework' ),
-		'bottom right'  => __( 'Bottom Right', 'options-framework')
+		'top left'      => 'Top Left',
+		'top center'    => 'Top Center',
+		'top right'     => 'Top Right',
+		'center left'   => 'Middle Left',
+		'center center' => 'Middle Center',
+		'center right'  => 'Middle Right',
+		'bottom left'   => 'Bottom Left',
+		'bottom center' => 'Bottom Center',
+		'bottom right'  => 'Bottom Right'
 		);
-	return apply_filters( 'of_recognized_background_position', $default );
+	return apply_filters( 'tom_recognized_background_position', $default );
 }
 
-/**
- * Get recognized background attachment
- *
- * @return   array
- *
+/* 
+Get recognized background attachment
  */
-function of_recognized_background_attachment() {
+function tom_recognized_background_attachment() {
 	$default = array(
-		'scroll' => __( 'Scroll Normally', 'options-framework' ),
-		'fixed'  => __( 'Fixed in Place', 'options-framework')
+		'scroll' => 'Scroll Normally',
+		'fixed'  => 'Fixed in Place'
 		);
-	return apply_filters( 'of_recognized_background_attachment', $default );
+	return apply_filters( 'tom_recognized_background_attachment', $default );
 }
 
 /**
  * Sanitize a color represented in hexidecimal notation.
- *
- * @param    string    Color in hexidecimal notation. "#" may or may not be prepended to the string.
- * @param    string    The value that this function should return if it cannot be recognized as a color.
- * @return   string
- *
  */
 
-function of_sanitize_hex( $hex, $default = '' ) {
-	if ( of_validate_hex( $hex ) ) {
+function tom_sanitize_hex( $hex, $default = '' ) {
+	if ( tom_validate_hex( $hex ) ) {
 		return $hex;
 	}
 	return $default;
 }
 
 
-function of_recognized_font_sizes() {
+function tom_recognized_font_sizes() {
 	$sizes = range( 9, 71 );
-	$sizes = apply_filters( 'of_recognized_font_sizes', $sizes );
+	$sizes = apply_filters( 'tom_recognized_font_sizes', $sizes );
 	$sizes = array_map( 'absint', $sizes );
 	return $sizes;
 }
 
-function of_recognized_font_faces() {
+function tom_recognized_font_faces() {
 	$default = array(
 		'arial'     => 'Arial',
 		'verdana'   => 'Verdana, Geneva',
@@ -308,21 +294,21 @@ function of_recognized_font_faces() {
 		'palatino'  => 'Palatino',
 		'helvetica' => 'Helvetica*'
 		);
-	return apply_filters( 'of_recognized_font_faces', $default );
+	return apply_filters( 'tom_recognized_font_faces', $default );
 }
 
-function of_recognized_font_styles() {
+function tom_recognized_font_styles() {
 	$default = array(
-		'normal'      => __( 'Normal', 'options-framework' ),
-		'italic'      => __( 'Italic', 'options-framework' ),
-		'bold'        => __( 'Bold', 'options-framework' ),
-		'bold italic' => __( 'Bold Italic', 'options-framework' )
+		'normal'      => 'Normal',
+		'italic'      => 'Italic',
+		'bold'        => 'Bold',
+		'bold italic' => 'Bold Italic'
 		);
-	return apply_filters( 'of_recognized_font_styles', $default );
+	return apply_filters( 'tom_recognized_font_styles', $default );
 }
 
 
-function of_validate_hex( $hex ) {
+function tom_validate_hex( $hex ) {
 	$hex = trim( $hex );
 	/* Strip recognized prefixes. */
 	if ( 0 === strpos( $hex, '#' ) ) {
