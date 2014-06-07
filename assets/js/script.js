@@ -74,7 +74,7 @@ jQuery(document).ready(function($) {
 	    return false;
 	});
 
-	$(".dd a#delete-nestable").on("click", function(event) { // click event
+	$(".dd a.delete-nestable").on("click", function(event) { // click event
 	    event.preventDefault();
 	    if (confirm("Are you sure to delete option?")) {
 		  alert("sure banget ya..");
@@ -83,11 +83,11 @@ jQuery(document).ready(function($) {
 	    return false;
 	});
 
-	$(".dd a#edit-nestable").on("click", function(event) { // click event
+	$(".dd a.edit-nestable").on("click", function(event) { // click event
 	    event.preventDefault();
-	    if (confirm("Are you sure to delete option?")) {
-		  alert("sure banget ya..");
-		 }
+	    var id = $(this).closest( "li" ).attr("data-id");
+	   	// alert(id);
+	   	$('.nestable-input#'+id).slideToggle('fast');
 
 	    return false;
 	});

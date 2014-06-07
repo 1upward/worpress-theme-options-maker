@@ -438,15 +438,15 @@ class tomGenerate {
 					$output .= '<div class="dd-handle">' . $key['name'] ."\n";
 					/* button action */
 					$output .= '<span class="tom-action-buttons">
-									<a class="blue" id="edit-nestable" href="javascript:tom-edit();">
+									<a class="blue edit-nestable" href="#">
 										<i class="dashicons dashicons-edit"></i>
 									</a>
-									<a class="red" id="delete-nestable" href="#">
+									<a class="red delete-nestable" href="#">
 										<i class="dashicons dashicons-trash"></i>
 									</a>
 								</span>';
 					$output .= '</div>'."\n";
-					$output .= '<div style="display:none;">'."\n";
+					$output .= '<div class="nestable-input" id="'.esc_attr( $obj_key ).'" style="display:none;">'."\n";
 					$output .= 		'<p>
 									<label class="tomLabel" for="">
 											<span>URL</span><br>
