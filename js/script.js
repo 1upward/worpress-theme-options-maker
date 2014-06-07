@@ -63,9 +63,17 @@ jQuery(document).ready(function($) {
 		});
 	}
 
-	$('#edit-nestable').click(function(){
-		return;
-	})
+	/* Prevent drag on action button */
+	$(".dd a").on("mousedown", function(event) { // mousedown prevent nestable click
+	    event.preventDefault();
+	    return false;
+	});
+
+	$(".dd a").on("click", function(event) { // click event
+	    event.preventDefault();
+	    window.location = $(this).attr("href");
+	    return false;
+	});
 
 	// var updateOutput = function(e)
  //    {
