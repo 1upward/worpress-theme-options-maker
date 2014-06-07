@@ -20,7 +20,7 @@ class tomOptions {
 	function tom_settings_init() {
 
 		/* Register setting untuk menyimpan data */
-		register_setting( 'tonjoo-tom', 'tom_data',  array ( $this, 'validate_options' ) );
+		register_setting( 'tonjoo-tom', 'tom_data', array ( $this, 'validate_options' ) );
 
 		/* Register setting untuk menyimpan options / create options */
 		register_setting( 'tom_options', 'tom_options' );
@@ -245,13 +245,6 @@ class tomOptions {
 			return $this->get_default_values();
 		}
 
-		/*
-		 * Update Settings
-		 *
-		 * This used to check for $_POST['update'], but has been updated
-		 * to be compatible with the theme customizer introduced in WordPress 3.4
-		 */
-
 		$clean = array();
 		$options = $this->tom_options_fields();
 		foreach ( $options as $option ) {
@@ -278,24 +271,15 @@ class tomOptions {
 				}
 			}
 
-			// For a value to be submitted to database it must pass through a sanitization filter
-			if ( has_filter( 'of_sanitize_' . $option['type'] ) ) {
-				$clean[$id] = apply_filters( 'of_sanitize_' . $option['type'], $input[$id], $option );
+			if ( has_filter( 'tom_sanitize_' . $option['type'] ) ) {
+				$clean[$id] = apply_filters( 'tom_sanitize_' . $option['type'], $input[$id], $option );
 			}
+
 		}
 
-		// Hook to run after validation
-		do_action( 'tonjoo-tom_after_validate', $clean );
+		add_settings_error( 'tonjoo-tom', 'save_options', 'Options saved.', 'updated fade' );
 
 		return $clean;
-	}
-
-	/**
-	 * Display message when options have been saved
-	 */
-
-	function save_options_notice() {
-		add_settings_error( 'options-framework', 'save_options', 'Options saved.', 'updated fade' );
 	}
 
 }

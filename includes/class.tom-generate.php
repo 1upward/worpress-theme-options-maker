@@ -252,9 +252,9 @@ class tomGenerate {
 				$typography_stored = wp_parse_args( $val, $typography_defaults );
 
 				$typography_options = array(
-					'sizes' => of_recognized_font_sizes(),
-					'faces' => of_recognized_font_faces(),
-					'styles' => of_recognized_font_styles(),
+					'sizes' => tom_recognized_font_sizes(),
+					'faces' => tom_recognized_font_faces(),
+					'styles' => tom_recognized_font_styles(),
 					'color' => true
 				);
 
@@ -305,7 +305,7 @@ class tomGenerate {
 
 				// Allow modification/injection of typography fields
 				$typography_fields = compact( 'font_size', 'font_face', 'font_style', 'font_color' );
-				$typography_fields = apply_filters( 'of_typography_fields', $typography_fields, $typography_stored, $option_name, $key );
+				$typography_fields = apply_filters( 'tom_typography_fields', $typography_fields, $typography_stored, $option_name, $key );
 				$output .= implode( '', $typography_fields );
 
 				break;
@@ -338,7 +338,7 @@ class tomGenerate {
 
 				// Background Repeat
 				$output .= '<select class="tom-background tom-background-repeat" name="' . esc_attr( $option_name . '[' . $key['id'] . '][repeat]'  ) . '" id="' . esc_attr( $key['id'] . '_repeat' ) . '">';
-				$repeats = of_recognized_background_repeat();
+				$repeats = tom_recognized_background_repeat();
 
 				foreach ($repeats as $key => $repeat) {
 					$output .= '<option value="' . esc_attr( $key ) . '" ' . selected( $background['repeat'], $key, false ) . '>'. esc_html( $repeat ) . '</option>';
@@ -347,7 +347,7 @@ class tomGenerate {
 
 				// Background Position
 				$output .= '<select class="tom-background tom-background-position" name="' . esc_attr( $option_name . '[' . $key['id'] . '][position]' ) . '" id="' . esc_attr( $key['id'] . '_position' ) . '">';
-				$positions = of_recognized_background_position();
+				$positions = tom_recognized_background_position();
 
 				foreach ($positions as $key=>$position) {
 					$output .= '<option value="' . esc_attr( $key ) . '" ' . selected( $background['position'], $key, false ) . '>'. esc_html( $position ) . '</option>';
@@ -356,7 +356,7 @@ class tomGenerate {
 
 				// Background Attachment
 				$output .= '<select class="tom-background tom-background-attachment" name="' . esc_attr( $option_name . '[' . $key['id'] . '][attachment]' ) . '" id="' . esc_attr( $key['id'] . '_attachment' ) . '">';
-				$attachments = of_recognized_background_attachment();
+				$attachments = tom_recognized_background_attachment();
 
 				foreach ($attachments as $key => $attachment) {
 					$output .= '<option value="' . esc_attr( $key ) . '" ' . selected( $background['attachment'], $key, false ) . '>' . esc_html( $attachment ) . '</option>';
