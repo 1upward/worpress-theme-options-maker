@@ -598,4 +598,9 @@ border-bottom: 1px solid #ddd;
 .dd-handle > span.tom-action-buttons a.red {
     color: #dd362d;
 }
-
+#add-tom-options {
+    padding: 10px;
+}
+#add-tom-options .input {
+    width: 100%;
+}

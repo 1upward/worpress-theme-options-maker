@@ -23,7 +23,8 @@ class tomOptions {
 		register_setting( 'tonjoo-tom', 'tom_data', array ( $this, 'validate_options' ) );
 
 		/* Register setting untuk menyimpan options / create options */
-		register_setting( 'tom_options', 'tom_options' );
+		register_setting( 'tom_options', 'tom_options', array ( $this, 'validate_create_options' ) );
+		// add_settings_section( '', $title, $callback, $page );
 
 		/* Jika ada file config di folder theme */
 		// if ( file_exists( get_template_directory() . "/tonjoo_options.php" ) ) {
@@ -38,6 +39,20 @@ class tomOptions {
 
     }
 
+    public function validate_create_options( $input ) {
+  //   	echo "<pre>";
+  //   	print_r($input);
+  //   	echo "</pre>";
+		// exit();
+
+		// if ( ! isset( $input['reset_theme'] ) ) {
+			
+			
+		// 	return $input;
+		// }
+		return $input;
+		
+	}
 
 	/* get all option from file or from database */
 	static function tom_options_fields() {
@@ -59,8 +74,12 @@ class tomOptions {
 		// 	// debug
 		// 	// echo "dari database";
 		// } 
-		$options_from_db = unserialize(get_option( 'tom_options' ));
-		$options_from_file = apply_filters( 'tom_options', array() );
+		if (!empty(get_option( 'tom_options' ))) {
+			$options_from_db = get_option( 'tom_options' );
+		} else {
+			$options_from_db = array();
+		}
+		$options_from_file = apply_filters( 'tom_options', $options_from_db );
 
 		$options = array_merge($options_from_db, $options_from_file);
 		
@@ -113,6 +132,10 @@ class tomOptions {
 			'sub_menu_title' => 'Create Options',
 			'sub_capability' => 'manage_options',
 			'sub_menu_slug' => 'create-options',
+			'type-options' => array(
+								'text' => 'Text',
+								'select' => 'Select'
+								)
 
 		);
 
@@ -197,7 +220,7 @@ class tomOptions {
 
 	    <?php settings_errors( 'tonjoo-tom' ); ?>
 
-	    <div id="tonjoo-tom-metabox" class="metabox-holder">
+	    <div id="tonjoo-tom-metabox" class="metabox-holder metabox-main">
 		    <div id="tonjoo-tom" class="postbox">
 				<form action="options.php" method="post">
 				<?php settings_fields( 'tom_options' ); ?>
@@ -209,9 +232,48 @@ class tomOptions {
 				</div>
 				</form>
 			</div> <!-- / #container -->
-			<div>ssadsdsdsdsdsd</div>
 		</div>
-		</div> <!-- / .wrap -->
+		<div class="metabox-holder metabox-side">
+		  <div class="form-wrap postbox">
+		    <h3>
+		      Add New Option
+		    </h3>
+		    <form id="add-tom-options">
+		      	<label for="tom-name">
+		          Option Name :
+		        </label>
+		        <input class="input" name="test['name']" id="tom-name" type="text" value="">
+		        <p>
+		          The name of option.
+		        </p>
+		        <label for="tom-desc">
+		          Desription :
+		        </label>
+		        <textarea class="input" name="test['desc']" id="tom-desc"></textarea>
+		        <p>
+		          Short description of option.
+		        </p>
+		        <label for="tom-type">
+		          Type
+		        </label>
+		        <?php $config = $this->tom_configs(); ?>
+		        <select class="input" name="tag-select" id="tag-type">
+	        	<?php  
+	        		foreach ($config['type-options'] as $value => $name) {
+	        			echo '<option value="'.$value.'">'.$name.'</option>';
+	        		}
+	        	?>
+		        </select>
+		        <p>
+		          Type of option.
+		        </p>
+		      
+		      <p class="">
+		        <a id="tom-add-options" class="button button-primary">Add Option</a>
+		      </p>
+		    </form>
+		  </div>
+		</div>
 	<?php
 	}
 
@@ -239,47 +301,51 @@ class tomOptions {
 	}
 
 	function validate_options( $input ) {
+		// echo "<pre>";
+		// print_r($input); 
+		// echo "</pre>";
+		// exit();
 
 		if ( isset( $_POST['reset'] ) ) {
 			add_settings_error( 'tonjoo-tom', 'restore_defaults', 'Default options restored.', 'updated fade' );
 			return $this->get_default_values();
 		}
 
-		$clean = array();
-		$options = $this->tom_options_fields();
-		foreach ( $options as $option ) {
+		// $clean = array();
+		// $options = $this->tom_options_fields();
+		// foreach ( $options as $option ) {
 
-			if ( ! isset( $option['id'] ) ) {
-				continue;
-			}
+		// 	if ( ! isset( $option['id'] ) ) {
+		// 		continue;
+		// 	}
 
-			if ( ! isset( $option['type'] ) ) {
-				continue;
-			}
+		// 	if ( ! isset( $option['type'] ) ) {
+		// 		continue;
+		// 	}
 
-			$id = preg_replace( '/[^a-zA-Z0-9._\-]/', '', strtolower( $option['id'] ) );
+		// 	$id = preg_replace( '/[^a-zA-Z0-9._\-]/', '', strtolower( $option['id'] ) );
 
-			// Set checkbox to false if it wasn't sent in the $_POST
-			if ( 'checkbox' == $option['type'] && ! isset( $input[$id] ) ) {
-				$input[$id] = false;
-			}
+		// 	// Set checkbox to false if it wasn't sent in the $_POST
+		// 	if ( 'checkbox' == $option['type'] && ! isset( $input[$id] ) ) {
+		// 		$input[$id] = false;
+		// 	}
 
-			// Set each item in the multicheck to false if it wasn't sent in the $_POST
-			if ( 'multicheck' == $option['type'] && ! isset( $input[$id] ) ) {
-				foreach ( $option['options'] as $key => $value ) {
-					$input[$id][$key] = false;
-				}
-			}
+		// 	// Set each item in the multicheck to false if it wasn't sent in the $_POST
+		// 	if ( 'multicheck' == $option['type'] && ! isset( $input[$id] ) ) {
+		// 		foreach ( $option['options'] as $key => $value ) {
+		// 			$input[$id][$key] = false;
+		// 		}
+		// 	}
 
-			if ( has_filter( 'tom_sanitize_' . $option['type'] ) ) {
-				$clean[$id] = apply_filters( 'tom_sanitize_' . $option['type'], $input[$id], $option );
-			}
+		// 	if ( has_filter( 'tom_sanitize_' . $option['type'] ) ) {
+		// 		$clean[$id] = apply_filters( 'tom_sanitize_' . $option['type'], $input[$id], $option );
+		// 	}
 
-		}
+		// }
 
 		add_settings_error( 'tonjoo-tom', 'save_options', 'Options saved.', 'updated fade' );
 
-		return $clean;
+		return $input;
 	}
 
 }

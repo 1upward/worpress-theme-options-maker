@@ -7,12 +7,12 @@ class tomGenerate {
 		$options = tomOptions::tom_options_fields();
 		$menu = '';
 
-		foreach ( $options as $key ) {
+		foreach ( $options as $obj_key =>$key ) {
 			// Heading for Navigation
 			if ( $key['type'] == "heading" ) {
 				$counter++;
 				$class = '';
-				$class = ! empty( $key['id'] ) ? $key['id'] : $key['name'];
+				$class = ! empty( $obj_key ) ? $obj_key : $key['name'];
 				$class = preg_replace( '/[^a-zA-Z0-9._\-]/', '', strtolower($class) ) . '-tab';
 				$menu .= '<a id="options-group-'.  $counter . '-tab" class="nav-tab ' . $class .'" title="' . esc_attr( $key['name'] ) . '" href="' . esc_attr( '#options-group-'.  $counter ) . '">' . esc_html( $key['name'] ) . '</a>';
 			}
@@ -26,12 +26,12 @@ class tomGenerate {
 		$options = tomOptions::tom_options_fields();
 		$menu = '';
 
-		foreach ( $options as $key ) {
+		foreach ( $options as $obj_key =>$key ) {
 			// Heading for Navigation
 			if ( $key['type'] == "heading" ) {
 				$counter++;
 				$class = '';
-				$class = ! empty( $key['id'] ) ? $key['id'] : $key['name'];
+				$class = ! empty( $obj_key ) ? $obj_key : $key['name'];
 				$class = preg_replace( '/[^a-zA-Z0-9._\-]/', '', strtolower($class) ) . '-tab';
 				$menu .= '<a id="options-group-'.  $counter . '-tab" class="nav-tab ' . $class .'" title="' . esc_attr( $key['name'] ) . '" href="' . esc_attr( '#options-group-'.  $counter ) . '">' . esc_html( $key['name'] ) . '</a>';
 			}
@@ -74,8 +74,8 @@ class tomGenerate {
 		// exit();
 
 
-		foreach ( $options as $key ) {
-
+		foreach ( $options as $obj_key =>$key ) {
+			// print_r($key);
 			$val = '';
 			$select_value = '';
 			$output = '';
@@ -84,9 +84,9 @@ class tomGenerate {
 			if ( $key['type'] != "heading" ) {
 
 				// Keep all ids lowercase with no spaces
-				$key['id'] = preg_replace('/[^a-zA-Z0-9._\-]/', '', strtolower($key['id']) );
+				$obj_key = preg_replace('/[^a-zA-Z0-9._\-]/', '', strtolower($obj_key) );
 
-				$id = 'section-' . $key['id'];
+				$id = 'section-' . $obj_key;
 
 				$class = 'section';
 				if ( isset( $key['type'] ) ) {
@@ -115,8 +115,8 @@ class tomGenerate {
 
 			// If the option is already saved, override $val
 			if ( $key['type'] != 'heading' ) {
-				if ( isset( $settings[($key['id'])]) ) {
-					$val = $settings[($key['id'])];
+				if ( isset( $settings[($obj_key)]) ) {
+					$val = $settings[($obj_key)];
 					// Striping slashes of non-array options
 					if ( !is_array($val) ) {
 						$val = stripslashes( $val );
@@ -139,12 +139,12 @@ class tomGenerate {
 
 			// Basic text input
 			case 'text':
-				$output .= '<input id="' . esc_attr( $key['id'] ) . '" class="tom-input" name="' . esc_attr( $option_name . '[' . $key['id'] . ']' ) . '" type="text" value="' . esc_attr( $val ) . '" />';
+				$output .= '<input id="' . esc_attr( $obj_key ) . '" class="tom-input" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" type="text" value="' . esc_attr( $val ) . '" />';
 				break;
 
 			// Password input
 			case 'password':
-				$output .= '<input id="' . esc_attr( $key['id'] ) . '" class="tom-input" name="' . esc_attr( $option_name . '[' . $key['id'] . ']' ) . '" type="password" value="' . esc_attr( $val ) . '" />';
+				$output .= '<input id="' . esc_attr( $obj_key ) . '" class="tom-input" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" type="password" value="' . esc_attr( $val ) . '" />';
 				break;
 
 			// Textarea
@@ -159,12 +159,12 @@ class tomGenerate {
 				}
 
 				$val = stripslashes( $val );
-				$output .= '<textarea id="' . esc_attr( $key['id'] ) . '" class="tom-input" name="' . esc_attr( $option_name . '[' . $key['id'] . ']' ) . '" rows="' . $rows . '">' . esc_textarea( $val ) . '</textarea>';
+				$output .= '<textarea id="' . esc_attr( $obj_key ) . '" class="tom-input" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" rows="' . $rows . '">' . esc_textarea( $val ) . '</textarea>';
 				break;
 
 			// Select Box
 			case 'select':
-				$output .= '<select class="tom-input" name="' . esc_attr( $option_name . '[' . $key['id'] . ']' ) . '" id="' . esc_attr( $key['id'] ) . '">';
+				$output .= '<select class="tom-input" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" id="' . esc_attr( $obj_key ) . '">';
 
 				foreach ($key['options'] as $key => $option ) {
 					$output .= '<option'. selected( $val, $key, false ) .' value="' . esc_attr( $key ) . '">' . esc_html( $option ) . '</option>';
@@ -175,31 +175,31 @@ class tomGenerate {
 
 			// Radio Box
 			case "radio":
-				$name = $option_name .'['. $key['id'] .']';
+				$name = $option_name .'['. $obj_key .']';
 				foreach ($key['options'] as $key => $option) {
-					$id = $option_name . '-' . $key['id'] .'-'. $key;
+					$id = $option_name . '-' . $obj_key .'-'. $key;
 					$output .= '<input class="tom-input tom-radio" type="radio" name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '" value="'. esc_attr( $key ) . '" '. checked( $val, $key, false) .' /><label for="' . esc_attr( $id ) . '">' . esc_html( $option ) . '</label>';
 				}
 				break;
 
 			// Image Selectors
 			case "images":
-				$name = $option_name .'['. $key['id'] .']';
+				$name = $option_name .'['. $obj_key .']';
 				foreach ( $key['options'] as $key => $option ) {
 					$selected = '';
 					if ( $val != '' && ($val == $key) ) {
 						$selected = ' tom-radio-img-selected';
 					}
-					$output .= '<input type="radio" id="' . esc_attr( $key['id'] .'_'. $key) . '" class="tom-radio-img-radio" value="' . esc_attr( $key ) . '" name="' . esc_attr( $name ) . '" '. checked( $val, $key, false ) .' />';
+					$output .= '<input type="radio" id="' . esc_attr( $obj_key .'_'. $key) . '" class="tom-radio-img-radio" value="' . esc_attr( $key ) . '" name="' . esc_attr( $name ) . '" '. checked( $val, $key, false ) .' />';
 					$output .= '<div class="tom-radio-img-label">' . esc_html( $key ) . '</div>';
-					$output .= '<img src="' . esc_url( $option ) . '" alt="' . $option .'" class="tom-radio-img-img' . $selected .'" onclick="document.getElementById(\''. esc_attr($key['id'] .'_'. $key) .'\').checked=true;" />';
+					$output .= '<img src="' . esc_url( $option ) . '" alt="' . $option .'" class="tom-radio-img-img' . $selected .'" onclick="document.getElementById(\''. esc_attr($obj_key .'_'. $key) .'\').checked=true;" />';
 				}
 				break;
 
 			// Checkbox
 			case "checkbox":
-				$output .= '<input id="' . esc_attr( $key['id'] ) . '" class="checkbox tom-input" type="checkbox" name="' . esc_attr( $option_name . '[' . $key['id'] . ']' ) . '" '. checked( $val, 1, false) .' />';
-				$output .= '<label class="explain" for="' . esc_attr( $key['id'] ) . '">' . wp_kses( $explain_value, $allowedtags) . '</label>';
+				$output .= '<input id="' . esc_attr( $obj_key ) . '" class="checkbox tom-input" type="checkbox" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" '. checked( $val, 1, false) .' />';
+				$output .= '<label class="explain" for="' . esc_attr( $obj_key ) . '">' . wp_kses( $explain_value, $allowedtags) . '</label>';
 				break;
 
 			// Multicheck
@@ -209,8 +209,8 @@ class tomGenerate {
 					$label = $option;
 					$option = preg_replace('/[^a-zA-Z0-9._\-]/', '', strtolower($key));
 
-					$id = $option_name . '-' . $key['id'] . '-'. $option;
-					$name = $option_name . '[' . $key['id'] . '][' . $option .']';
+					$id = $option_name . '-' . $obj_key . '-'. $option;
+					$name = $option_name . '[' . $obj_key . '][' . $option .']';
 
 					if ( isset($val[$option]) ) {
 						$checked = checked($val[$option], 1, false);
@@ -227,13 +227,13 @@ class tomGenerate {
 					if ( $val !=  $key['default'] )
 						$default_color = ' data-default-color="' .$key['default'] . '" ';
 				}
-				$output .= '<input name="' . esc_attr( $option_name . '[' . $key['id'] . ']' ) . '" id="' . esc_attr( $key['id'] ) . '" class="tom-color"  type="text" value="' . esc_attr( $val ) . '"' . $default_color .' />';
+				$output .= '<input name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" id="' . esc_attr( $obj_key ) . '" class="tom-color"  type="text" value="' . esc_attr( $val ) . '"' . $default_color .' />';
 
 				break;
 
 			// Uploader
 			case "upload":
-				$output .= tomUpload::tom_uploader( $key['id'], $val, null );
+				$output .= tomUpload::tom_uploader( $obj_key, $val, null );
 
 				break;
 
@@ -264,7 +264,7 @@ class tomGenerate {
 
 				// Font Size
 				if ( $typography_options['sizes'] ) {
-					$font_size = '<select class="tom-typography tom-typography-size" name="' . esc_attr( $option_name . '[' . $key['id'] . '][size]' ) . '" id="' . esc_attr( $key['id'] . '_size' ) . '">';
+					$font_size = '<select class="tom-typography tom-typography-size" name="' . esc_attr( $option_name . '[' . $obj_key . '][size]' ) . '" id="' . esc_attr( $obj_key . '_size' ) . '">';
 					$sizes = $typography_options['sizes'];
 					foreach ( $sizes as $i ) {
 						$size = $i . 'px';
@@ -275,7 +275,7 @@ class tomGenerate {
 
 				// Font Face
 				if ( $typography_options['faces'] ) {
-					$font_face = '<select class="tom-typography tom-typography-face" name="' . esc_attr( $option_name . '[' . $key['id'] . '][face]' ) . '" id="' . esc_attr( $key['id'] . '_face' ) . '">';
+					$font_face = '<select class="tom-typography tom-typography-face" name="' . esc_attr( $option_name . '[' . $obj_key . '][face]' ) . '" id="' . esc_attr( $obj_key . '_face' ) . '">';
 					$faces = $typography_options['faces'];
 					foreach ( $faces as $key => $face ) {
 						$font_face .= '<option value="' . esc_attr( $key ) . '" ' . selected( $typography_stored['face'], $key, false ) . '>' . esc_html( $face ) . '</option>';
@@ -285,7 +285,7 @@ class tomGenerate {
 
 				// Font Styles
 				if ( $typography_options['styles'] ) {
-					$font_style = '<select class="tom-typography tom-typography-style" name="'.$option_name.'['.$key['id'].'][style]" id="'. $key['id'].'_style">';
+					$font_style = '<select class="tom-typography tom-typography-style" name="'.$option_name.'['.$obj_key.'][style]" id="'. $obj_key.'_style">';
 					$styles = $typography_options['styles'];
 					foreach ( $styles as $key => $style ) {
 						$font_style .= '<option value="' . esc_attr( $key ) . '" ' . selected( $typography_stored['style'], $key, false ) . '>'. $style .'</option>';
@@ -300,7 +300,7 @@ class tomGenerate {
 						if ( $val !=  $key['default']['color'] )
 							$default_color = ' data-default-color="' .$key['default']['color'] . '" ';
 					}
-					$font_color = '<input name="' . esc_attr( $option_name . '[' . $key['id'] . '][color]' ) . '" id="' . esc_attr( $key['id'] . '_color' ) . '" class="tom-color tom-typography-color  type="text" value="' . esc_attr( $typography_stored['color'] ) . '"' . $default_color .' />';
+					$font_color = '<input name="' . esc_attr( $option_name . '[' . $obj_key . '][color]' ) . '" id="' . esc_attr( $obj_key . '_color' ) . '" class="tom-color tom-typography-color  type="text" value="' . esc_attr( $typography_stored['color'] ) . '"' . $default_color .' />';
 				}
 
 				// Allow modification/injection of typography fields
@@ -321,14 +321,14 @@ class tomGenerate {
 					if ( $val !=  $key['default']['color'] )
 						$default_color = ' data-default-color="' .$key['default']['color'] . '" ';
 				}
-				$output .= '<input name="' . esc_attr( $option_name . '[' . $key['id'] . '][color]' ) . '" id="' . esc_attr( $key['id'] . '_color' ) . '" class="tom-color tom-background-color"  type="text" value="' . esc_attr( $background['color'] ) . '"' . $default_color .' />';
+				$output .= '<input name="' . esc_attr( $option_name . '[' . $obj_key . '][color]' ) . '" id="' . esc_attr( $obj_key . '_color' ) . '" class="tom-color tom-background-color"  type="text" value="' . esc_attr( $background['color'] ) . '"' . $default_color .' />';
 
 				// Background Image
 				if ( !isset($background['image']) ) {
 					$background['image'] = '';
 				}
 
-				$output .= tomUpload::tom_uploader( $key['id'], $background['image'], null, esc_attr( $option_name . '[' . $key['id'] . '][image]' ) );
+				$output .= tomUpload::tom_uploader( $obj_key, $background['image'], null, esc_attr( $option_name . '[' . $obj_key . '][image]' ) );
 
 				$class = 'tom-background-properties';
 				if ( '' == $background['image'] ) {
@@ -337,7 +337,7 @@ class tomGenerate {
 				$output .= '<div class="' . esc_attr( $class ) . '">';
 
 				// Background Repeat
-				$output .= '<select class="tom-background tom-background-repeat" name="' . esc_attr( $option_name . '[' . $key['id'] . '][repeat]'  ) . '" id="' . esc_attr( $key['id'] . '_repeat' ) . '">';
+				$output .= '<select class="tom-background tom-background-repeat" name="' . esc_attr( $option_name . '[' . $obj_key . '][repeat]'  ) . '" id="' . esc_attr( $obj_key . '_repeat' ) . '">';
 				$repeats = tom_recognized_background_repeat();
 
 				foreach ($repeats as $key => $repeat) {
@@ -346,7 +346,7 @@ class tomGenerate {
 				$output .= '</select>';
 
 				// Background Position
-				$output .= '<select class="tom-background tom-background-position" name="' . esc_attr( $option_name . '[' . $key['id'] . '][position]' ) . '" id="' . esc_attr( $key['id'] . '_position' ) . '">';
+				$output .= '<select class="tom-background tom-background-position" name="' . esc_attr( $option_name . '[' . $obj_key . '][position]' ) . '" id="' . esc_attr( $obj_key . '_position' ) . '">';
 				$positions = tom_recognized_background_position();
 
 				foreach ($positions as $key=>$position) {
@@ -355,7 +355,7 @@ class tomGenerate {
 				$output .= '</select>';
 
 				// Background Attachment
-				$output .= '<select class="tom-background tom-background-attachment" name="' . esc_attr( $option_name . '[' . $key['id'] . '][attachment]' ) . '" id="' . esc_attr( $key['id'] . '_attachment' ) . '">';
+				$output .= '<select class="tom-background tom-background-attachment" name="' . esc_attr( $option_name . '[' . $obj_key . '][attachment]' ) . '" id="' . esc_attr( $obj_key . '_attachment' ) . '">';
 				$attachments = tom_recognized_background_attachment();
 
 				foreach ($attachments as $key => $attachment) {
@@ -370,7 +370,7 @@ class tomGenerate {
 			case 'editor':
 				$output .= '<div class="explain">' . wp_kses( $explain_value, $allowedtags ) . '</div>'."\n";
 				echo $output;
-				$textarea_name = esc_attr( $option_name . '[' . $key['id'] . ']' );
+				$textarea_name = esc_attr( $option_name . '[' . $obj_key . ']' );
 				$default_editor_settings = array(
 					'textarea_name' => $textarea_name,
 					'media_buttons' => false,
@@ -381,7 +381,7 @@ class tomGenerate {
 					$editor_settings = $key['settings'];
 				}
 				$editor_settings = array_merge( $default_editor_settings, $editor_settings );
-				wp_editor( $val, $key['id'], $editor_settings );
+				wp_editor( $val, $obj_key, $editor_settings );
 				$output = '';
 				break;
 
@@ -392,7 +392,7 @@ class tomGenerate {
 					$output .= '</div>'."\n";
 				}
 				$class = '';
-				$class = ! empty( $key['id'] ) ? $key['id'] : $key['name'];
+				$class = ! empty( $obj_key ) ? $obj_key : $key['name'];
 				$class = preg_replace('/[^a-zA-Z0-9._\-]/', '', strtolower($class) );
 				$output .= '<div id="options-group-' . $counter . '" class="group ' . $class . '">';
 				$output .= '<h3>' . esc_html( $key['name'] ) . '</h3>' . "\n";
@@ -415,7 +415,8 @@ class tomGenerate {
 	}
 
 	static function generate_create_options_fields() {
-		
+		// global $allowedtags;
+
 		$options = tomOptions::tom_options_fields();
 
 		$counter = 0;
@@ -449,8 +450,9 @@ class tomGenerate {
 					$output .= '<div class="nestable-input" id="'.esc_attr( $obj_key ).'" style="display:none;">'."\n";
 					$output .= 		'<p>
 									<label class="tomLabel" for="">
-											<span>URL</span><br>
-											<input name="" type="text" class="" value="" />
+											<span>Name</span><br>
+											<input name="tom_options['.esc_attr( $obj_key ).'][name]" type="text" class="" value="' . $key['name'] .'" />
+											<input name="tom_options['.esc_attr( $obj_key ).'][type]" type="text" class="" value="' . $key['type'] .'" />
 									</label>
 									</p>'."\n";
 					$output .= '</div>'."\n";
@@ -472,6 +474,10 @@ class tomGenerate {
 				$class = preg_replace('/[^a-zA-Z0-9._\-]/', '', strtolower($class) );
 				$output .= '<div id="options-group-' . $counter . '" class="group ' . $class . '">';
 				$output .= '<h3>' . esc_html( $key['name'] ) . '</h3>' . "\n";
+
+				/* output heading ke hidden input biar tetep kesimpen jadi array */
+				$output .= '<input name="tom_options['.esc_attr( $obj_key ).'][name]" type="hidden" class="" value="' . $key['name'] .'" />
+							<input name="tom_options['.esc_attr( $obj_key ).'][type]" type="hidden" class="" value="' . $key['type'] .'" />';
 				// debug
 				// $output .= '<textarea id="nestable-output"></textarea>';
 				$output .= '<div class="dd" id="nestable-' . $counter . '">' . "\n";

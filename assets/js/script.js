@@ -1,8 +1,3 @@
-/**
- * Custom scripts needed for the colorpicker, image button selectors,
- * and navigation tabs.
- */
-
 jQuery(document).ready(function($) {
 
 	// Loads the color pickers
@@ -90,6 +85,13 @@ jQuery(document).ready(function($) {
 	   	$('.nestable-input#'+id).slideToggle('fast');
 
 	    return false;
+	});
+
+	$("#tom-add-options").on("click", function(event) {
+		var tab = $(".nav-tab").hasClass('nav-tab-active');
+		var id = $(tab).attr('href');
+		var newOption = $("#add-tom-options").serialize();
+		alert(id);
 	});
 
 	// var updateOutput = function(e)
