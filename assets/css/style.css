@@ -1,10 +1,11 @@
-/* Options Framework Admin Styles */
-
+#tonjoo-tom-metabox {
+    margin-bottom: 80px!important;
+}
 #tonjoo-tom {
-    max-width:840px;
+    max-width:767px;
     background:#fff;
 }
-#tonjoo-tom h3 {
+.metabox-holder .postbox h3 {
 	cursor: default;
 	background-color: #f1f1f1;
 	border-bottom: 1px solid #ddd;
@@ -15,6 +16,18 @@
 }
 #tonjoo-tom .section {
 	padding:10px 10px 0;
+}
+#tonjoo-tom-wrap .metabox-holder {
+    float: left;
+    height: 100px;
+    margin: 1em;
+}
+
+#tonjoo-tom-wrap .metabox-holder.metabox-main {
+    width: 767px;
+}
+#tonjoo-tom-wrap .metabox-holder.metabox-side {
+    width: 257px;
 }
 #tonjoo-tom .group {
 	padding-bottom:40px;
