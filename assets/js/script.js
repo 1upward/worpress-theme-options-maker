@@ -59,17 +59,17 @@ jQuery(document).ready(function($) {
 
 			$group.hide();
 			$(selected).fadeIn();
-
 		});
 	}
 
-	/* Prevent drag on action button */
-	$(".dd a").on("mousedown", function(event) { // mousedown prevent nestable click
+	/* Prevent drag on action button */ 
+	/* Change to .delegate @http://stackoverflow.com/questions/4442694/jquery-click-on-appended-elements */
+	$(".dd").delegate("a", "mousedown", function(event) { // mousedown prevent nestable click
 	    event.preventDefault();
 	    return false;
 	});
 
-	$(".dd a.delete-nestable").on("click", function(event) { // click event
+	$(".dd").delegate( "a.delete-nestable", "click", function(event) { // click event
 	    event.preventDefault();
 	    if (confirm("Are you sure to delete option?")) {
 		  alert("sure banget ya..");
@@ -78,7 +78,7 @@ jQuery(document).ready(function($) {
 	    return false;
 	});
 
-	$(".dd a.edit-nestable").on("click", function(event) { // click event
+	$(".dd").delegate( "a.edit-nestable", "click", function(event) { // click event
 	    event.preventDefault();
 	    var id = $(this).closest( "li" ).attr("data-id");
 	   	// alert(id);
@@ -88,10 +88,10 @@ jQuery(document).ready(function($) {
 	});
 
 	$("#tom-add-options").on("click", function(event) {
-		var tab = $(".nav-tab").hasClass('nav-tab-active');
-		var id = $(tab).attr('href');
-		var newOption = $("#add-tom-options").serialize();
-		alert(id);
+		var id = "xxx";
+		var template = '<li class="dd-item" data-id="'+id+'"><div class="dd-handle">Input Text<span class="tom-action-buttons"><a class="blue edit-nestable" href="#"><i class="dashicons dashicons-edit"></i></a><a class="red delete-nestable" href="#"><i class="dashicons dashicons-trash"></i></a></span></div><div class="nestable-input" id="'+id+'" style="display:none;"><p><label class="tomLabel" for=""><span>Name</span><br><input name="tom_options['+id+'][name]" type="text" class="" value="Input Text"><input name="tom_options['+id+'][type]" type="text" class="" value="text"></label></p></div></li>';
+		var activeDiv = $('.nav-tab-active').attr('href');
+		$(activeDiv).find('ol.dd-list').append(template);
 	});
 
 	// var updateOutput = function(e)
