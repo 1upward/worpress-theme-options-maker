@@ -74,7 +74,7 @@ class tomOptions {
 		// 	// debug
 		// 	// echo "dari database";
 		// } 
-		if (!empty(get_option( 'tom_options' ))) {
+		if ( !empty( get_option( 'tom_options' ))) {
 			$options_from_db = get_option( 'tom_options' );
 		} else {
 			$options_from_db = array();
@@ -84,7 +84,7 @@ class tomOptions {
 		$options = array_merge($options_from_db, $options_from_file);
 		
 		// echo "<pre>";
-		// print_r($options); exit();
+		// print_r($options_from_db); exit();
 		// echo "</pre>";
 		return $options;
 	}
@@ -134,7 +134,15 @@ class tomOptions {
 			'sub_menu_slug' => 'create-options',
 			'type-options' => array(
 								'text' => 'Text',
-								'select' => 'Select'
+								'textarea' => 'Textarea',
+								'select' => 'Select',
+								'radio' => 'Radio',
+								'checkbox' => 'Checkbox',
+								'multicheck' => 'Multicheck',
+								'upload' => 'Image Upload',
+								'select-image' => 'Image Select',
+								'color' => 'Color Picker',
+								'editor' => 'Text Editor',
 								)
 
 		);
@@ -227,7 +235,7 @@ class tomOptions {
 				<?php tomGenerate::generate_create_options_fields(); /* Settings */ ?>
 				<div id="tonjoo-tom-submit">
 					<input type="submit" class="button-primary" name="update" value="Save" />
-					<input type="submit" class="reset-button button-secondary" name="reset" value="Reset" onclick="return confirm( '<?php print esc_js('Click OK to reset. Any theme settings will be lost!'); ?>' );" />
+					<a class="reset-button button-secondary" onclick="return confirm( '<?php print esc_js('Are you sure to delete option group?'); ?>' );">Delete Group</a>
 					<div class="clear"></div>
 				</div>
 				</form>
@@ -239,17 +247,24 @@ class tomOptions {
 		      Add New Option
 		    </h3>
 		    <form id="add-tom-options">
+		    	<label for="tom-id">
+		          Option ID :
+		        </label>
+		        <input class="input" id="tom-id" type="text" value="">
+		        <p>
+		          Option ID (use for key and shortcode).
+		        </p>
 		      	<label for="tom-name">
 		          Option Name :
 		        </label>
-		        <input class="input" name="test['name']" id="tom-name" type="text" value="">
+		        <input class="input" name="name" id="tom-name" type="text" value="">
 		        <p>
 		          The name of option.
 		        </p>
 		        <label for="tom-desc">
 		          Desription :
 		        </label>
-		        <textarea class="input" name="test['desc']" id="tom-desc"></textarea>
+		        <textarea class="input" name="desciption" id="tom-desc"></textarea>
 		        <p>
 		          Short description of option.
 		        </p>
@@ -257,7 +272,7 @@ class tomOptions {
 		          Type
 		        </label>
 		        <?php $config = $this->tom_configs(); ?>
-		        <select class="input" name="tag-select" id="tag-type">
+		        <select class="input" name="type" id="tag-type">
 	        	<?php  
 	        		foreach ($config['type-options'] as $value => $name) {
 	        			echo '<option value="'.$value.'">'.$name.'</option>';
@@ -272,6 +287,9 @@ class tomOptions {
 		        <a id="tom-add-options" class="button button-primary">Add Option</a>
 		      </p>
 		    </form>
+		    <div id="values">
+		    	
+		    </div>
 		  </div>
 		</div>
 	<?php

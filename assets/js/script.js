@@ -63,7 +63,6 @@ jQuery(document).ready(function($) {
 	}
 
 	/* Prevent drag on action button */ 
-	/* Change to .delegate @http://stackoverflow.com/questions/4442694/jquery-click-on-appended-elements */
 	$(".dd").delegate("a", "mousedown", function(event) { // mousedown prevent nestable click
 	    event.preventDefault();
 	    return false;
@@ -71,8 +70,9 @@ jQuery(document).ready(function($) {
 
 	$(".dd").delegate( "a.delete-nestable", "click", function(event) { // click event
 	    event.preventDefault();
-	    if (confirm("Are you sure to delete option?")) {
-		  alert("sure banget ya..");
+	    if (confirm("Are you sure to delete option ?")) {
+		  // alert("sure banget ya..");
+		  $(this).closest( "li" ).fadeOut(500, function() { $(this).remove(); });
 		 }
 
 	    return false;
@@ -88,10 +88,30 @@ jQuery(document).ready(function($) {
 	});
 
 	$("#tom-add-options").on("click", function(event) {
-		var id = "xxx";
-		var template = '<li class="dd-item" data-id="'+id+'"><div class="dd-handle">Input Text<span class="tom-action-buttons"><a class="blue edit-nestable" href="#"><i class="dashicons dashicons-edit"></i></a><a class="red delete-nestable" href="#"><i class="dashicons dashicons-trash"></i></a></span></div><div class="nestable-input" id="'+id+'" style="display:none;"><p><label class="tomLabel" for=""><span>Name</span><br><input name="tom_options['+id+'][name]" type="text" class="" value="Input Text"><input name="tom_options['+id+'][type]" type="text" class="" value="text"></label></p></div></li>';
+        var id = $("#add-tom-options input[id=tom-id]").val();
+        var name = $("#add-tom-options input[name=name]").val();
+		var values = $('#add-tom-options').serializeArray();
 		var activeDiv = $('.nav-tab-active').attr('href');
+    	
+    	// alert(name);
+
+	    // For testing
+	    event.preventDefault();
+	    var template = '<li class="dd-item" data-id="'+id+'"><div class="dd-handle">'+name+'<span class="tom-action-buttons"><a class="blue edit-nestable" href="#"><i class="dashicons dashicons-edit"></i></a><a class="red delete-nestable" href="#"><i class="dashicons dashicons-trash"></i></a></span></div><div class="nestable-input" id="'+id+'" style="display:none;">';
+	    $.each(values, function() {
+	        // output.children("[data-key='" + this.name + "']").text(this.value);
+	    	template += '<p><label class="tomLabel" for=""><span>'+this.name+'</span><br><input name="tom_options['+id+']['+this.name+']" type="text" class="" value="'+this.value+'">';
+	    });
+
+	    template += '</div></li>';
+
+		// var id = $("#add-tom-options input[name=id]").val();
+		// var id = "xxx";
+		// var template = '<p><label class="tomLabel" for=""><span>Name</span><br><input name="tom_options['+id+'][name]" type="text" class="" value="Input Text"><input name="tom_options['+id+'][type]" type="text" class="" value="text"></label></p>';
 		$(activeDiv).find('ol.dd-list').append(template);
+		
+		/* Clear form */
+		$('#add-tom-options')[0].reset();
 	});
 
 	// var updateOutput = function(e)
