@@ -604,3 +604,20 @@ border-bottom: 1px solid #ddd;
 #add-tom-options .input {
     width: 100%;
 }
+.dd-item .nestable-input {
+    padding: 10px;
+    background: rgb(247, 247, 247);
+    margin-top: -5px;
+    border: dashed 2px rgb(201, 198, 198);
+    border-radius: 0 0 5px 5px;
+    border-top: 0;
+}
+.form-table.tom-options {
+    margin: 0px 20px;
+}
+.form-table.tom-options td {
+    padding-right: 30px;
+}
+.tom-input {
+    width: 80%;
+}
