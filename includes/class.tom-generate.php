@@ -399,7 +399,7 @@ class tomGenerate {
 				break;
 			}
 
-			if ( $key['type'] != "heading" ) {
+			if ( is_array($key) && $key['type'] != "heading" ) {
 				$output .= '</div>';
 				if ( ( $key['type'] != "checkbox" ) && ( $key['type'] != "editor" ) ) {
 					$output .= '<div class="explain">' . wp_kses( $explain_value, $allowedtags) . '</div>'."\n";
