@@ -185,7 +185,7 @@ class tomOptions {
 	// Halaman tonjoo tom
 	function options_page() { ?>
 
-		<div class="wrap">
+		<div  class="wrap">
 
 		<?php $config = $this->tom_configs(); ?>
 		<h2><?php echo esc_html( $config['page_title'] ); ?></h2>
@@ -197,7 +197,7 @@ class tomOptions {
 
 	    <?php settings_errors( 'tonjoo-tom' ); ?>
 
-	    <div id="tonjoo-tom-metabox" class="metabox-holder">
+	    <div id="tonjoo-tom-metabox" class="metabox-holder metabox-main">
 		    <div id="tonjoo-tom" class="postbox">
 				<form action="options.php" method="post">
 				<?php settings_fields( 'tonjoo-tom' ); ?>
@@ -209,6 +209,14 @@ class tomOptions {
 				</div>
 				</form>
 			</div> <!-- / #container -->
+		</div>
+		<div class="metabox-holder metabox-side">
+		  <div class="form-wrap postbox">
+		    <h3>
+		      Add New Option
+		    </h3>
+		 	
+		  </div>
 		</div>
 		</div> <!-- / .wrap -->
 
@@ -291,6 +299,7 @@ class tomOptions {
 		    	
 		    </div>
 		  </div>
+		</div>
 		</div>
 	<?php
 	}
