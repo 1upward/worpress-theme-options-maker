@@ -224,7 +224,7 @@ class tomOptions {
 	}
 
 	function create_options_page() { ?>
-		<div id="tonjoo-tom-wrap" class="wrap">
+	<div id="tonjoo-tom-wrap" class="wrap">
 
 		<?php $config = $this->tom_configs(); ?>
 		<h2><?php echo esc_html( $config['sub_page_title'] ); ?></h2>
@@ -250,57 +250,84 @@ class tomOptions {
 			</div> <!-- / #container -->
 		</div>
 		<div class="metabox-holder metabox-side">
-		  <div class="form-wrap postbox">
-		    <h3>
-		      Add New Option
-		    </h3>
-		    <form id="add-tom-options">
-		    	<label for="tom-id">
-		          Option ID :
-		        </label>
-		        <input class="input" id="tom-id" type="text" value="">
-		        <p>
-		          Option ID (use for key and shortcode).
-		        </p>
-		      	<label for="tom-name">
-		          Option Name :
-		        </label>
-		        <input class="input" name="name" id="tom-name" type="text" value="">
-		        <p>
-		          The name of option.
-		        </p>
-		        <label for="tom-desc">
-		          Desription :
-		        </label>
-		        <textarea class="input" name="desciption" id="tom-desc"></textarea>
-		        <p>
-		          Short description of option.
-		        </p>
-		        <label for="tom-type">
-		          Type
-		        </label>
-		        <?php $config = $this->tom_configs(); ?>
-		        <select class="input" name="type" id="tag-type">
-	        	<?php  
-	        		foreach ($config['type-options'] as $value => $name) {
-	        			echo '<option value="'.$value.'">'.$name.'</option>';
-	        		}
-	        	?>
-		        </select>
-		        <p>
-		          Type of option.
-		        </p>
-		      
-		      <p class="">
-		        <a id="tom-add-options" class="button button-primary">Add Option</a>
-		      </p>
-		    </form>
-		    <div id="values">
-		    	
-		    </div>
-		  </div>
-		</div>
-		</div>
+		  	<div class="form-wrap postbox">
+			    <h3>
+			      Add New Option
+			    </h3>
+			    <div id="add-tom-options">
+			    	<label for="tom-id">
+			          Option ID :
+			        </label>
+			        <div class="input">
+				        <input id="tom-id" type="text" value="">
+				        <p>
+				          Option ID (use for key and shortcode).
+				        </p>
+			        </div>
+			      	<label for="tom-name">
+			          Name :
+			        </label>
+			        <div class="input">
+			        <input name="name" id="tom-name" type="text" value="">
+			        <div class="input">
+				        <p>
+				          The name of option.
+				        </p>
+			        </div>
+			        <label for="tom-desc">
+			          Desription :
+			        </label>
+			        <div class="input">
+				        <textarea name="desc" id="tom-desc"></textarea>
+				        <p>
+				          Short description of option.
+				        </p>
+			        </div>
+			        <label for="tom-type">
+			          Type :
+			        </label>
+			        <div class="input">
+			        <?php $config = $this->tom_configs(); ?>
+				        <select name="type" id="tom-type">
+			        	<?php  
+			        		foreach ($config['type-options'] as $value => $name) {
+			        			echo '<option value="'.$value.'">'.$name.'</option>';
+			        		}
+			        	?>
+				        </select>
+				        <p>
+				          Type of option.
+				        </p>
+			        </div>
+			        <div id="options-container" style="display:none;">
+			        	<label for="tom-options">
+				          Options :
+				        </label>
+				        <form id="repeatable-form">
+					        <div id="tom-options" class="input-options">
+						        <p id="tom-input-repeatable-0"><input id="key-1" class="input-key" name="rep_key_0" type="text" value=""> => <input id="val-1" class="input-val" name="rep_value_0" type="text" value=""></p>
+					        </div>
+				        </form>
+				        <p><a id="new-repeatable" href="#">Add New Field</a></p>
+			        </div>
+			      	<label for="tom-default">
+			          Default :
+			        </label>
+			        <div class="input">
+				        <input name="default" id="tom-default" type="text" value="">
+				        <p>
+				          Default value.
+				        </p>
+			        </div>
+			    </div>
+		  	</div>
+		<!-- </div> -->
+			<div id="tonjoo-tom-submit">
+				<a id="tom-add-options" class="button-primary">Add Option</a>
+				<div class="clear"></div>
+			</div>
+	</div>
+	</div>
 	<?php
 	}
 

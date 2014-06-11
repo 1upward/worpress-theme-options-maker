@@ -96,7 +96,7 @@ class tomUpload {
 		if ( function_exists( 'wp_enqueue_media' ) )
 			wp_enqueue_media();
 
-		wp_register_script( 'tom-media-uploader', plugin_dir_url( dirname(__FILE__) ) .'assets/js/media-uploader.js', array( 'jquery' ) );
+		wp_register_script( 'tom-media-uploader', plugin_dir_url( dirname(__FILE__) ) .'assets/js/TtomMediaUpload.js', array( 'jquery' ) );
 		wp_enqueue_script( 'tom-media-uploader' );
 		wp_localize_script( 'tom-media-uploader', 'optionsframework_l10n', array(
 			'upload' => __( 'Upload', 'options-framework' ),

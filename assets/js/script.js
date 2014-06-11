@@ -87,32 +87,148 @@ jQuery(document).ready(function($) {
 	    return false;
 	});
 
+	/* if select type change */
+	$('#tom-type').change(function(){
+		var val = $(this).val();
+	    // alert(val);
+	    if (val == 'select') {
+	    	$('#options-container').fadeIn(500);
+	    }
+	});
+
+	var newId = 1;
+	$("#options-container").delegate( "a#new-repeatable", "click", function(event) { // click event
+	    event.preventDefault();
+	    // alert('ok');
+	    var cloneInput = $( "#tom-input-repeatable-0" ).clone();
+	    cloneInput.attr('id', 'tom-input-repeatable-'+newId);
+	    cloneInput.find('input.input-key').attr('name', 'rep_key_'+newId).val('');
+	    cloneInput.find('input.input-val').attr('name', 'rep_val_'+newId).val('');
+	    cloneInput.appendTo( "#tom-options" );
+
+	    newId++;
+	    return false;
+	});
+
+	/* function to clone selected type to nestable */
+	function kelon(id) {
+		var $orginal = $('#tom-type');
+		var $cloned = $orginal.clone();
+
+		//get original selects into a jq object
+		var $originalSelects = $orginal;
+		$cloned.each(function(index, item) {
+		     //set new select to value of old select
+		     $(item).val( $originalSelects.eq(index).val() );
+
+		});
+		$cloned.appendTo('#select_'+id);
+		// alert($cloned);
+	}
+
 	$("#tom-add-options").on("click", function(event) {
         var id = $("#add-tom-options input[id=tom-id]").val();
-        var name = $("#add-tom-options input[name=name]").val();
-		var values = $('#add-tom-options').serializeArray();
+        if (id.length){
+        var id = id.replace(/\s+/g, '');
+    	} else {
+    		alert('kosong');
+    		return;
+    	}
+        var name = $("#add-tom-options input[id=tom-name]").val();
+        var desc = $("#add-tom-options textarea#tom-desc").val();
+        var type = $("#add-tom-options select#tom-type").val();
+        var defaultValue = $("#add-tom-options input[id=tom-default]").val();
+		var arrayName = 'tom_options['+id+']';
+
 		var activeDiv = $('.nav-tab-active').attr('href');
     	
-    	// alert(name);
+    	var values = $('#repeatable-form').serializeArray();
 
 	    // For testing
 	    event.preventDefault();
-	    var template = '<li class="dd-item" data-id="'+id+'"><div class="dd-handle">'+name+'<span class="tom-action-buttons"><a class="blue edit-nestable" href="#"><i class="dashicons dashicons-edit"></i></a><a class="red delete-nestable" href="#"><i class="dashicons dashicons-trash"></i></a></span></div><div class="nestable-input" id="'+id+'" style="display:none;">';
+	    // var template = $("#tom-type").clone();
+	    // template.attr("id","newid");
+	    // var template = '<li class="dd-item" data-id="'+id+'"><div class="dd-handle">'+name+'<span class="tom-action-buttons"><a class="blue edit-nestable" href="#"><i class="dashicons dashicons-edit"></i></a><a class="red delete-nestable" href="#"><i class="dashicons dashicons-trash"></i></a></span></div><div class="nestable-input" id="'+id+'" style="display:none;">';
 	    $.each(values, function() {
 	        // output.children("[data-key='" + this.name + "']").text(this.value);
-	    	template += '<p><label class="tomLabel" for=""><span>'+this.name+'</span><br><input name="tom_options['+id+']['+this.name+']" type="text" class="" value="'+this.value+'">';
+	    	// template += '<p><label class="tomLabel" for=""><span>'+this.name+'</span><br><input name="tom_options['+id+']['+this.name+']" type="text" class="" value="'+this.value+'">';
+	    	alert(this.value)
 	    });
 
-	    template += '</div></li>';
+		template ='<li class="dd-item" data-id="'+id+'">';
+		template +='  <div class="dd-handle">'+name+'';
+		template +='    <span class="tom-action-buttons">';
+		template +='      <a class="blue edit-nestable" href="#">';
+		template +='        <i class="dashicons dashicons-edit"></i>';
+		template +='      </a>';
+		template +='      <a class="red delete-nestable" href="#">';
+		template +='        <i class="dashicons dashicons-trash"></i>';
+		template +='      </a>';
+		template +='    </span>';
+		template +='  </div>';
+		template +='  <div class="nestable-input" id="'+id+'" style="display:none;">';
+		template +='    <table class="widefat"><tbody><tr class="inline-edit-row inline-edit-row-page inline-edit-page quick-edit-row quick-edit-row-page inline-edit-page alternate inline-editor"><td colspan="5" class="colspanchange" style="padding-bottom:10px;">';
+		template +='        <fieldset class="inline-edit-col-left">';
+		template +='          <div class="inline-edit-col">';
+		template +='            <h4>Edit Option : '+id+'</h4>';
+		template +='            <label>';
+		template +='              <span class="title">Name</span>';
+		template +='              <span class="input-text-wrap">';
+		template +='                <input type="text" name="'+arrayName+'[name]" value="'+name+'">';
+		template +='              </span>';
+		template +='            </label>';
+		template +='            <label>';
+		template +='              <span class="title">Description</span>';
+		template +='              <span class="input-text-wrap">';
+		template +='                <textarea name="'+arrayName+'[desc]">'+desc+'</textarea>';
+		template +='              </span>';
+		template +='            </label>';
+		template +='          </div>';
+		template +='        </div>';
+		template +='      </fieldset>';
+		template +='        <fieldset class="inline-edit-col-right">';
+		template +='          <div class="inline-edit-col">';
+		template +='            <label>';
+		template +='              <span class="title">Type</span>';
+		template +='              <span id="select_'+id+'" class="input-text-wrap">';
+		// template += select;
+		// template +='                <select name="'+arrayName+'[type]">';
+		// template +='                  <option value="0">Main Page (no parent)</option>';
+		// template +='                  <option class="level-0" value="2">Sample Page</option>';
+		// template +='                </select>';
+		template +='              </span>';
+		template +='            </label>';
+		template +='            <label>';
+		template +='              <span class="title">Default</span>';
+		template +='              <span class="input-text-wrap">';
+		template +='                <input type="text" name="'+arrayName+'[default]" value="'+defaultValue+'">';
+		template +='              </span>';
+		template +='            </label>';
+		template +='          </div>';
+		template +='        </fieldset>';
+		template +='      </tbody>';
+		template +='    </table>';
+		template +='  </div>';
+		template +='</li>';
+
+
+
+	    // template += '</div></li>';
 
 		// var id = $("#add-tom-options input[name=id]").val();
 		// var id = "xxx";
 		// var template = '<p><label class="tomLabel" for=""><span>Name</span><br><input name="tom_options['+id+'][name]" type="text" class="" value="Input Text"><input name="tom_options['+id+'][type]" type="text" class="" value="text"></label></p>';
 		$(activeDiv).find('ol.dd-list').append(template);
-		
+		kelon(id);
 		/* Clear form */
 		$('#add-tom-options')[0].reset();
 	});
+	
+
+
+
+
+
 
 	// var updateOutput = function(e)
  //    {

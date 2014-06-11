@@ -44,6 +44,9 @@ jQuery(document).ready(function($){
 				tonjoo_tom_selector.find('.remove-image, .remove-file').on('click', function() {
 					tonjoo_tom_remove_file( $(this).parents('.section') );
 				});
+
+				// debug
+				alert(attachment);
 			});
 
 		}

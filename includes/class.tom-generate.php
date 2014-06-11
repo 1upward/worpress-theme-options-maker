@@ -555,7 +555,9 @@ class tomGenerate {
 	static function generate_create_options_fields() {
 		// global $allowedtags;
 
+		$option_name = 'tom_options';
 		$options = tomOptions::tom_options_fields();
+		$config = tomOptions::tom_configs();
 
 		$counter = 0;
 		$initNestable = '';
@@ -566,6 +568,20 @@ class tomGenerate {
 		// exit();
 
 		foreach ($options as $obj_key =>$key) {
+			$name = ! empty( $key['name'] ) ? $key['name'] : '';
+			$desc = ! empty( $key['desc'] ) ? $key['desc'] : '';
+			$type = ! empty( $key['type'] ) ? $key['type'] : '';
+			$val = ! empty( $key['default'] ) ? $key['default'] : '';
+			if ( $key['type'] != 'heading' ) {
+				if ( isset( $settings[($obj_key)]) ) {
+					$val = $settings[($obj_key)];
+					// Striping slashes of non-array options
+					if ( !is_array($val) ) {
+						$val = stripslashes( $val );
+					}
+				}
+			}
+
 
 			$output = '';
 			if ( $key['type'] != "heading" ) {
@@ -586,13 +602,56 @@ class tomGenerate {
 								</span>';
 					$output .= '</div>'."\n";
 					$output .= '<div class="nestable-input" id="'.esc_attr( $obj_key ).'" style="display:none;">'."\n";
-					$output .= 		'<p>
-									<label class="tomLabel" for="">
-											<span>Name</span><br>
-											<input name="tom_options['.esc_attr( $obj_key ).'][name]" type="text" class="" value="' . $key['name'] .'" />
-											<input name="tom_options['.esc_attr( $obj_key ).'][type]" type="text" class="" value="' . $key['type'] .'" />
-									</label>
-									</p>'."\n";
+					$output .= 		'<table class="widefat">
+										  <tbody>
+										    <tr class="inline-edit-row inline-edit-row-page inline-edit-page quick-edit-row quick-edit-row-page inline-edit-page alternate inline-editor">
+										      <td colspan="5" class="colspanchange" style="padding-bottom:10px;">
+										        <fieldset class="inline-edit-col-left">
+										          <div class="inline-edit-col">
+										            <h4>Edit Option : <span>'.esc_attr( $obj_key ).'</span></h4>
+										            <label>
+										              <span class="title">Name</span>
+										              <span class="input-text-wrap">
+										                <input type="text" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[name]" class="" value="' . esc_attr( $name ) . '">
+										              </span>
+										            </label>
+										            <label>
+										              <span class="title">
+										                Description
+										              </span>
+										              <span class="input-text-wrap">
+										                <textarea name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[desc]">' . esc_attr( $desc ) . '</textarea>
+										              </span>
+										            </label>
+										            </div>
+										          </div>
+										        </fieldset>
+										        <fieldset class="inline-edit-col-right">
+										          <div class="inline-edit-col">
+										            <label>
+										              <span class="title">
+										                Type
+										              </span>
+										              <span class="input-text-wrap">
+											              <select name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[type]">'."\n";
+											                foreach ($config['type-options'] as $value => $name) {
+										        			$output .= '<option value="'.$value.'" >'.$name.'</option>'."\n";
+											        		}
+					$output .= 							  '</select>
+								              		  </span>
+										            </label>
+										            <label>
+										              <span class="title">
+										                Default
+										              </span>
+										              <span class="input-text-wrap">
+										                <input type="text" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[default]" class="" value="' . esc_attr( $val ) . '">
+										              </span>
+										            </label>
+										          </div>
+										        </fieldset>
+										      </tbody>
+										  </table>'."\n";
 					$output .= '</div>'."\n";
 				$output .= '</li>'."\n";
 			}

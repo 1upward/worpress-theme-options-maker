@@ -27,7 +27,7 @@
     width: 767px;
 }
 #tonjoo-tom-wrap .metabox-holder.metabox-side {
-    width: 257px;
+    width: 300px;
 }
 #tonjoo-tom .group {
 	padding-bottom:40px;
@@ -599,19 +599,70 @@ border-bottom: 1px solid #ddd;
     color: #dd362d;
 }
 #add-tom-options {
-    padding: 10px;
+    padding: 5px 10px;
+    margin-top: 10px;
 }
-#add-tom-options .input {
-    width: 100%;
+
+#add-tom-options label {
+    padding-top: 8px;
+    width: 80px;
+    float: left;
+    text-align: left;
 }
+#add-tom-options .input select, #add-tom-options .input input, #add-tom-options .input textarea {
+    width: 190px;
+}
+#add-tom-options #options-dom {
+    text-align: right;
+    padding-right: 2px;
+    margin-bottom: 10px;
+}
+#add-tom-options .input-options input.input-key {
+    width: 40px;
+}
+#add-tom-options .input-options input.input-val {
+    width: 100px;
+}
+#add-tom-options .input p {
+    margin-left: 90px;
+}
+
 .dd-item .nestable-input {
-    padding: 10px;
+    padding: 5px 10px;
     background: rgb(247, 247, 247);
     margin-top: -5px;
     border: dashed 2px rgb(201, 198, 198);
     border-radius: 0 0 5px 5px;
     border-top: 0;
 }
+.inline-edit-col.nestable h4 {
+    margin: 5px 0;
+}
+.inline-edit-col label span.title {
+    display: block;
+    float: left;
+    width: 5em;
+}
+.inline-edit-col label span.input-text-wrap {
+    display: block;
+    margin-left: 5em;
+    margin-bottom: 5px;
+}
+.inline-edit-col label span.input-text-wrap select {
+    width: 100%;
+}
+.nestable-input .inline-edit-row fieldset label .input-text-wrap {
+    margin-left: 10em;
+}
+.inline-edit-col .nestable-side {
+    width: 50%;
+    border-right: solid 1px #C7C6C6;
+}
+.inline-edit-col .nestable-side.left {
+    float: left;
+    margin-right: 10px;
+}
+
 .form-table.tom-options {
     margin: 0px 20px;
 }
@@ -621,3 +672,8 @@ border-bottom: 1px solid #ddd;
 .tom-input {
     width: 80%;
 }
+
+
+
+
+
