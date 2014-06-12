@@ -612,16 +612,30 @@ border-bottom: 1px solid #ddd;
 #add-tom-options .input select, #add-tom-options .input input, #add-tom-options .input textarea {
     width: 190px;
 }
-#add-tom-options #options-dom {
+#options-container .tom-label-options {
+    font-style: normal;
+    color: #222;
+    font-style: normal;
+    font-weight: 400;
+    text-shadow: none;
+    vertical-align: baseline;
+    margin-left: 90px;
+    padding: 5px 0;
+}
+.options-container .input-options {
     text-align: right;
     padding-right: 2px;
     margin-bottom: 10px;
 }
-#add-tom-options .input-options input.input-key {
-    width: 40px;
+#add-tom-options #tom-options.input-options .input-options-group {
+    margin-bottom: 3px;
 }
-#add-tom-options .input-options input.input-val {
-    width: 100px;
+.input-options .btn-remove {
+    padding-top: 5px;
+    cursor: pointer;
+}
+.options-container .input-options .input-options-group input.input-opt {
+    width: 100px!important;
 }
 #add-tom-options .input p {
     margin-left: 90px;

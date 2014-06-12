@@ -87,50 +87,100 @@ jQuery(document).ready(function($) {
 	    return false;
 	});
 
+	
 	/* if select type change */
-	$('#tom-type').change(function(){
-		var val = $(this).val();
-	    // alert(val);
-	    if (val == 'select') {
-	    	$('#options-container').fadeIn(500);
-	    }
+	$('.tom-type').change(function(){
+		displayOptions();
 	});
 
-	var newId = 1;
-	$("#options-container").delegate( "a#new-repeatable", "click", function(event) { // click event
-	    event.preventDefault();
-	    // alert('ok');
-	    var cloneInput = $( "#tom-input-repeatable-0" ).clone();
-	    cloneInput.attr('id', 'tom-input-repeatable-'+newId);
-	    cloneInput.find('input.input-key').attr('name', 'rep_key_'+newId).val('');
-	    cloneInput.find('input.input-val').attr('name', 'rep_val_'+newId).val('');
-	    cloneInput.appendTo( "#tom-options" );
+	function displayOptions() {
+		/* loop for check all option type to show option div */
+		$('.tom-type').each(function(){
+			var container = $(this).attr('data-container');
+			// alert(container);
+			// return;
+			var val = $(this).val();
+			
+		    // alert(val);
+		    if (val == 'select') {
+		    	$('#'+container).fadeIn(500);
+		    } else {
+				$('#'+container).fadeOut(500);
+		    }
+		});
+		
+	}
 
-	    newId++;
+	/* Clone for repeatable options */
+	$(".options-container").delegate( "a#new-repeatable", "click", function(event) { // click event
+	    event.preventDefault();
+	    /* get parent id to append */
+		var idToAppend = $( this ).closest('.options-container').find('.input-options').first().attr('id');
+	    /* get element to clone */
+	    var elemToClone = $( '#'+idToAppend).find('.input-options-group');
+		var oldOrder = parseInt(elemToClone.last().attr('data-order'));
+		var newOrder = oldOrder+1;
+		// alert(idToAppend);
+
+	    var cloneInput = $( '#'+idToAppend).find('.input-options-group').first().clone();
+	    // alert(cloneInput);
+	    cloneInput.attr('data-order', newOrder);
+	    cloneInput.find('.label-opt').html('Option '+newOrder+' : ');
+	    cloneInput.find('input.input-opt').attr('name', newOrder).val('');
+	    cloneInput.appendTo( '#'+idToAppend );
+
 	    return false;
 	});
 
+	/* Delete repeatable options */
+	$(".input-options").delegate( "a.btn-remove", "click", function(event) { // click event
+	    event.preventDefault();
+	 		$(this).closest( "div.input-options-group" ).fadeOut(500, function() { $(this).remove(); });
+	    	
+	    return false;
+	});
+
+	/* TO do */
+	// function reorder(id) {
+	// 	var index = $( "#"+id ).index( this );
+ //  		$( "span" ).text( "That was div index #" + index );
+	// }
+
 	/* function to clone selected type to nestable */
 	function kelon(id) {
+		var arrayName = 'tom_options['+id+']';
 		var $orginal = $('#tom-type');
 		var $cloned = $orginal.clone();
 
 		//get original selects into a jq object
 		var $originalSelects = $orginal;
 		$cloned.each(function(index, item) {
-		     //set new select to value of old select
+		     //set new select name and value 
+		     $(item).attr( 'name', arrayName+'[type]' );
+		     $(item).attr( 'data-container', 'container-opt-'+id );
 		     $(item).val( $originalSelects.eq(index).val() );
 
 		});
 		$cloned.appendTo('#select_'+id);
 		// alert($cloned);
+
+		/* Clone repeatable Options*/
+		var opt = $('#add-opt-new').clone();
+			opt.find('.input-opt').each(function(index, item) {
+		     	//set new option name (with id)
+		     	var orgName = $(item).attr( 'name' );
+		     	$(item).attr( 'name', arrayName+'[options]['+orgName+']' );
+		     	// var x = $(item);
+		     	// alert(x); tom_options[dsdsd][desc]
+
+			});
+		opt.appendTo('#opt-container-'+id);
 	}
 
 	$("#tom-add-options").on("click", function(event) {
         var id = $("#add-tom-options input[id=tom-id]").val();
-        if (id.length){
-        var id = id.replace(/\s+/g, '');
-    	} else {
+        var id = id.replace(/\s+/g, '').toLowerCase();
+        if (!id.length){
     		alert('kosong');
     		return;
     	}
@@ -142,18 +192,18 @@ jQuery(document).ready(function($) {
 
 		var activeDiv = $('.nav-tab-active').attr('href');
     	
-    	var values = $('#repeatable-form').serializeArray();
+    	// alert('ok');
 
 	    // For testing
 	    event.preventDefault();
 	    // var template = $("#tom-type").clone();
 	    // template.attr("id","newid");
 	    // var template = '<li class="dd-item" data-id="'+id+'"><div class="dd-handle">'+name+'<span class="tom-action-buttons"><a class="blue edit-nestable" href="#"><i class="dashicons dashicons-edit"></i></a><a class="red delete-nestable" href="#"><i class="dashicons dashicons-trash"></i></a></span></div><div class="nestable-input" id="'+id+'" style="display:none;">';
-	    $.each(values, function() {
+	    // $.each(values, function() {
 	        // output.children("[data-key='" + this.name + "']").text(this.value);
 	    	// template += '<p><label class="tomLabel" for=""><span>'+this.name+'</span><br><input name="tom_options['+id+']['+this.name+']" type="text" class="" value="'+this.value+'">';
-	    	alert(this.value)
-	    });
+	    	// alert(this.value)
+	    // });
 
 		template ='<li class="dd-item" data-id="'+id+'">';
 		template +='  <div class="dd-handle">'+name+'';
@@ -190,7 +240,7 @@ jQuery(document).ready(function($) {
 		template +='          <div class="inline-edit-col">';
 		template +='            <label>';
 		template +='              <span class="title">Type</span>';
-		template +='              <span id="select_'+id+'" class="input-text-wrap">';
+		template +='              <span id="select_'+id+'" class="input-text-wrap" name="xxx">';
 		// template += select;
 		// template +='                <select name="'+arrayName+'[type]">';
 		// template +='                  <option value="0">Main Page (no parent)</option>';
@@ -198,6 +248,25 @@ jQuery(document).ready(function($) {
 		// template +='                </select>';
 		template +='              </span>';
 		template +='            </label>';
+		template +='			<label id="container-opt-'+id+'">';
+		template +='			  <span class="title">Options</span>';
+		template +='			  <span class="input-text-wrap">';
+		template +='			  <div id="opt-container-'+id+'" class="options-container">';
+		// template +='							<div id="add-opt-new" class="input-options">';
+		// template +='						        <div data-order="1" class="input-options-group">';
+		// template +='						        	<span class="label-opt">Option 1 : </span>';
+		// template +='						        	<input class="input-opt" name="opt[1]" value="">';
+		// template +='						        	<a class="btn-remove dashicons dashicons-dismiss"></a>';
+		// template +='					        	</div>';
+		// template +='					        	<div data-order="2" class="input-options-group">';
+		// template +='						        	<span class="label-opt">Option 2 : </span>';
+		// template +='						        	<input class="input-opt" name="opt[1]" value="">';
+		// template +='						        	<a class="btn-remove dashicons dashicons-dismiss"></a>';
+		// template +='					        	</div>';
+		// template +='					        </div>';
+		template +='			  </div>';
+		template +='	          </span>';
+		template +='			</label>';
 		template +='            <label>';
 		template +='              <span class="title">Default</span>';
 		template +='              <span class="input-text-wrap">';
@@ -220,8 +289,10 @@ jQuery(document).ready(function($) {
 		// var template = '<p><label class="tomLabel" for=""><span>Name</span><br><input name="tom_options['+id+'][name]" type="text" class="" value="Input Text"><input name="tom_options['+id+'][type]" type="text" class="" value="text"></label></p>';
 		$(activeDiv).find('ol.dd-list').append(template);
 		kelon(id);
-		/* Clear form */
-		$('#add-tom-options')[0].reset();
+		displayOptions();
+		/* Clear input */
+		$('#add-tom-options').find('option:first').attr('selected', 'selected'); 
+		$('#add-tom-options').find('input, textarea').val(''); 
 	});
 	
 

@@ -178,9 +178,64 @@ class tomOptions {
 		    	$config['sub_capability'],
 		    	$config['sub_menu_slug'],
 		    	array( $this, 'create_options_page' ) );
+
+        	/* test */
+        	add_submenu_page(
+		    	$config['parent_slug'],
+		    	$config['sub_page_title'],
+		    	$config['sub_menu_title'],
+		    	$config['sub_capability'],
+		    	'xxx',
+		    	array( $this, 'test' ) );
         }
 	}
 
+	function test() {
+	?>
+	<div class="wrap">
+		<h2>Test</h2>
+		<p>bnsdaklfa;f;a ggdgdg</p>
+
+	    <h2 class="nav-tab-wrapper">
+	        <?php echo tomGenerate::tom_tabs(); ?>
+	    </h2>
+
+	    <div id="tonjoo-tom-metabox" class="metabox-holder metabox-main">
+		    <div class="postbox">
+				<form action="options.php" method="post">
+				<div id="options-group-1" class="group dari-db" style="display: block;" style="height:300px;">
+					<h3>Sample from DB</h3>
+				</div>
+				<div id="" style="height:300px;">
+			    	
+			    </div>
+					
+				<div id="tonjoo-tom-submit">
+					<input type="submit" class="button-primary" name="update" value="Save" />
+					<input type="submit" class="reset-button button-secondary" name="reset" value="Reset" onclick="return confirm( '<?php print esc_js('Click OK to reset. Any theme settings will be lost!'); ?>' );" />
+					<div class="clear"></div>
+				</div>
+				</form>
+			</div> <!-- / #container -->
+		</div>
+		<div class="metabox-holder metabox-side">
+		  	<div class="postbox">
+			    <h3>
+			      Add New Option
+			    </h3>
+			    <div id="" style="height:300px;">
+			    	
+			    </div>
+		  	</div>
+		<!-- </div> -->
+			<div id="tonjoo-tom-submit">
+				<input type="submit" class="button-primary" name="update" value="Save" />
+				<input type="submit" class="reset-button button-secondary" name="reset" value="Reset" onclick="return confirm( '<?php print esc_js('Click OK to reset. Any theme settings will be lost!'); ?>' );" />
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+	<?php }
 
 	// Halaman tonjoo tom
 	function options_page() { ?>
@@ -288,7 +343,7 @@ class tomOptions {
 			        </label>
 			        <div class="input">
 			        <?php $config = $this->tom_configs(); ?>
-				        <select name="type" id="tom-type">
+				        <select name="type" id="tom-type" class="tom-type" data-container="container-opt-new">
 			        	<?php  
 			        		foreach ($config['type-options'] as $value => $name) {
 			        			echo '<option value="'.$value.'">'.$name.'</option>';
@@ -298,17 +353,22 @@ class tomOptions {
 				        <p>
 				          Type of option.
 				        </p>
-			        </div>
-			        <div id="options-container" style="display:none;">
-			        	<label for="tom-options">
-				          Options :
-				        </label>
-				        <form id="repeatable-form">
-					        <div id="tom-options" class="input-options">
-						        <p id="tom-input-repeatable-0"><input id="key-1" class="input-key" name="rep_key_0" type="text" value=""> => <input id="val-1" class="input-val" name="rep_value_0" type="text" value=""></p>
+				        <div id="container-opt-new" class="options-container" style="display:none;">
+				        	<div class="tom-label-options">Options : </div>
+					        <div id="add-opt-new" class="input-options">
+						        <div data-order="1" class="input-options-group">
+						        	<span class="label-opt">Option 1 : </span>
+						        	<input class="input-opt" name="1" value="">
+						        	<a class="btn-remove dashicons dashicons-dismiss"></a>
+					        	</div>
+					        	<div data-order="2" class="input-options-group">
+						        	<span class="label-opt">Option 2 : </span>
+						        	<input class="input-opt" name="2" value="">
+						        	<a class="btn-remove dashicons dashicons-dismiss"></a>
+					        	</div>
 					        </div>
-				        </form>
-				        <p><a id="new-repeatable" href="#">Add New Field</a></p>
+					        <p><a id="new-repeatable" href="#">Add New Field</a></p>
+				        </div>
 			        </div>
 			      	<label for="tom-default">
 			          Default :
@@ -326,7 +386,7 @@ class tomOptions {
 				<a id="tom-add-options" class="button-primary">Add Option</a>
 				<div class="clear"></div>
 			</div>
-	</div>
+		</div>
 	</div>
 	<?php
 	}

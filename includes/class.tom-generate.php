@@ -7,6 +7,10 @@ class tomGenerate {
 		$options = tomOptions::tom_options_fields();
 		$menu = '';
 
+		// echo "<pre>";
+		// print_r($options); exit();
+		// echo "</pre>";
+
 		foreach ( $options as $obj_key =>$key ) {
 			// Heading for Navigation
 			if ( $key['type'] == "heading" ) {
@@ -63,7 +67,7 @@ class tomGenerate {
 		// 	$options = filter_by_value($options_all, 'group', '1');
 		// }
 		// echo "<pre>";
-		// print_r($nResults);
+		// print_r($options);
 		// echo "</pre>";
 		$counter = 0;
 		$menu = '';
@@ -78,6 +82,7 @@ class tomGenerate {
 			$name = ! empty( $key['name'] ) ? $key['name'] : '';
 			$desc = ! empty( $key['desc'] ) ? $key['desc'] : '';
 			$type = ! empty( $key['type'] ) ? $key['type'] : '';
+			$options = ! empty( $key['options'] ) ? $key['options'] : array();
 			$val = ! empty( $key['default'] ) ? $key['default'] : '';
 			if ( $key['type'] != 'heading' ) {
 				if ( isset( $settings[($obj_key)]) ) {
@@ -167,7 +172,7 @@ class tomGenerate {
 				$output .= '<tr>' . "\n";
 				$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 				$output .= '<td><select class="tom-input" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" id="' . esc_attr( $obj_key ) . '">' . "\n";
-							foreach ($key['options'] as $key => $option ) {
+							foreach ($options as $key => $option ) {
 								/* function selected dr wp @http://codex.wordpress.org/Function_Reference/selected */
 								$output .= '<option'. selected( $val, $key, false ) .' value="' . esc_attr( $key ) . '">' . esc_html( $option ) . '</option>';
 							}	
@@ -179,7 +184,7 @@ class tomGenerate {
 				$output .= '<tr>' . "\n";
 				$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 				$output .= '<td>' . "\n";
-							foreach ($key['options'] as $key => $option ) {
+							foreach ($options as $key => $option ) {
 								/* function selected dr wp @http://codex.wordpress.org/Function_Reference/checked */
 								$output .= '<input type="' . esc_attr( $type ) . '" class="tom-input" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" value="'. esc_attr( $key ) . '" '. checked( $val, $key, false) .'>' . esc_attr( $option ) . "\n";
 							}	
@@ -207,7 +212,7 @@ class tomGenerate {
 				$output .= '<tr>' . "\n";
 				$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 				$output .= '<td><div class="controls">' . "\n";
-							foreach ( $key['options'] as $key => $option ) {
+							foreach ( $options as $key => $option ) {
 								$selected = '';
 								if ( $val != '' && ($val == $key) ) {
 									$selected = ' tom-radio-img-selected';
@@ -224,7 +229,7 @@ class tomGenerate {
 				$output .= '<tr>' . "\n";
 				$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 				$output .= '<td>' . "\n";
-							foreach ($key['options'] as $key => $option) {
+							foreach ($options as $key => $option) {
 								$checked = '';
 								$label = $option;
 								$option = preg_replace('/[^a-zA-Z0-9._\-]/', '', strtolower($key));
@@ -571,6 +576,9 @@ class tomGenerate {
 			$name = ! empty( $key['name'] ) ? $key['name'] : '';
 			$desc = ! empty( $key['desc'] ) ? $key['desc'] : '';
 			$type = ! empty( $key['type'] ) ? $key['type'] : '';
+			$configs = tomOptions::tom_configs();
+			$types = $configs['type-options'];
+			$options = ! empty( $key['options'] ) ? $key['options'] : array();
 			$val = ! empty( $key['default'] ) ? $key['default'] : '';
 			if ( $key['type'] != 'heading' ) {
 				if ( isset( $settings[($obj_key)]) ) {
@@ -633,11 +641,33 @@ class tomGenerate {
 										                Type
 										              </span>
 										              <span class="input-text-wrap">
-											              <select name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[type]">'."\n";
-											                foreach ($config['type-options'] as $value => $name) {
-										        			$output .= '<option value="'.$value.'" >'.$name.'</option>'."\n";
-											        		}
+											              <select name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[type]" class="tom-type" data-container="container-opt-'.esc_attr( $obj_key ).'">'."\n";
+											                foreach ($types as $key => $option ) {
+																/* function selected dr wp @http://codex.wordpress.org/Function_Reference/selected */
+																$output .= '<option'. selected( $type, $key, false ) .' value="' . esc_attr( $key ) . '">' . esc_html( $option ) . '</option>';
+															}
 					$output .= 							  '</select>
+								              		  </span>
+										            </label>
+										            <label id="container-opt-'.esc_attr( $obj_key ).'">
+										              <span class="title">
+										                Options
+										              </span>
+										              <span class="input-text-wrap">
+											           	<div class="options-container">
+													        <div id="add-opt-'.esc_attr( $obj_key ).'" class="input-options">'."\n";
+															$order = 1;
+															foreach ($options as $key => $value ) {
+					$output .=									'<div data-order="'.$order.'" class="input-options-group">
+														        	<span class="label-opt">'.$key.' : </span>
+														        	<input class="input-opt" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[options]['.$key.']" value="'.$value.'">
+														        	<a class="btn-remove dashicons dashicons-dismiss"></a>
+													        	</div>'."\n";
+															$order++;
+															}
+					$output .= 								'</div>
+													        <p><a id="new-repeatable" href="#">Add New Field</a></p>
+												        </div>
 								              		  </span>
 										            </label>
 										            <label>
@@ -657,7 +687,7 @@ class tomGenerate {
 			}
 
 			// Heading for Navigation
-			if ($key['type'] == "heading") {
+			if (is_array($key) && $key['type'] == "heading") {
 				$counter++;
 				if ( $counter >= 2 ) {
 					$output .= '</ol></div></div>'."\n";
