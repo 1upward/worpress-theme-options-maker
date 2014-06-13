@@ -87,169 +87,80 @@ jQuery(document).ready(function($) {
 	    return false;
 	});
 
-	/* check display options on document ready */
-	displayOptions();
-
-	/* if select type change */
-	$(document).delegate( ".tom-type", "change", function(event) { // click event
-		displayOptions();
+	/* Trigger cek display options on document ready */
+	$('.tom-type').each(function(index,element){
+		displayOptions(element);
 	});
 
-	function displayOptions() {
-		/* loop for check all option type to show option div */
-		$('.tom-type').each(function(){
-			var container = $(this).attr('data-container');
-			var arrayName = 'tom_options['+container+']';
-			var valueDefault = $('#'+container+'-hidden-default').val();
-			// alert(container);
-			// return;
-			var val = $(this).val();
-			var showOptions = false;
-			
-	    	// alert(val);
-		  	switch (val){
-			  	case "select":
-			  		// $('#'+container+'-options').fadeIn(500);
-			  		showOptions = true;
-			  		inputDefault = '<select name="'+arrayName+'[default]" id="tom-default"><option value="">Select Default Value</option></select>';
-			  		break;
+	/* Trigger cek display options if select type change */
+	$(document).delegate( ".tom-type", "change", function(event) { 
+		event.preventDefault();
+		displayOptions(this);
+	});
 
-			  	case "textarea":
-			  		inputDefault = '<textarea name="'+arrayName+'[default]" id="tom-default">'+valueDefault+'</textarea>';
-			  		break;
+	/* function to display or hide repeatable options, and default field */
+	function displayOptions(element){
 
-			  	default:
-			  		inputDefault = '<input name="'+arrayName+'[default]" id="tom-default" type="text" value="'+valueDefault+'">';
-		  	}
+		var containerId = $(element).attr('data-container');
+		var arrayName = 'tom_options['+containerId+']';
 
-		  	if (showOptions == true) {
-		  			templateRepeatable = '<div data-order="1" class="input-options-group">';
-					templateRepeatable += 	'<span class="label-opt">1 : </span>';
-					templateRepeatable += 	'<input class="input-opt input-key" name="tom_options['+container+'][options][opt-key][]" value="" placeholder="Key">';
-					templateRepeatable += 	'<input class="input-opt input-val" name="tom_options['+container+'][options][opt-val][]" value="" placeholder="Value">';
-					templateRepeatable += 	'<a class="btn-remove dashicons dashicons-dismiss"></a>';
-					templateRepeatable += '</div>';
-
-				var cek = $('#add-opt-'+container).find('.input-options-group');
-				if (!cek.length) {
-					$('#add-opt-'+container).html(templateRepeatable);
-				}
-
-		  		$('#'+container+'-options').fadeIn(500);
-		  	} else {
-		  		/* hide input */
-		  		$('#'+container+'-options').fadeOut(500);
-
-		  	}
-
-		  	$('#'+container+'-default').html(inputDefault);
-		});
-		
-	}
-
-	/* Clone for repeatable options */
-	$(".options-container").delegate( "a#new-repeatable", "click", function(event) { // click event
-	    event.preventDefault();
-	    /* get parent id to append */
-		var idToAppend = $( this ).closest('.options-container').find('.input-options').first().attr('id');
-	    /* get element to clone */
-	    var elemToClone = $( '#'+idToAppend).find('.input-options-group');
-		var oldOrder = parseInt(elemToClone.last().attr('data-order'));
-		var newOrder = oldOrder+1;
-		// alert(idToAppend);
+		var templateRepeatable 	= '<div data-order="1" class="input-options-group">';
+		templateRepeatable 		+= 	'<span class="label-opt">1 : </span>';
+		templateRepeatable 		+= 	'<input class="input-opt input-key" name="'+arrayName+'[options][opt-key][]" value="" placeholder="Key">';
+		templateRepeatable 		+= 	'<input class="input-opt input-val" name="'+arrayName+'[options][opt-val][]" value="" placeholder="Value">';
+		templateRepeatable 		+= 	'<a class="btn-remove dashicons dashicons-dismiss"></a>';
+		templateRepeatable 		+= '</div>';
 
 		
+		var showOptions = false;
+		var val = $(element).val();
+		/* switch value of type to display option and default for */
+	  	switch (val){
+		  	case "select":
+		  		showOptions = true;
+		  		inputDefault = '<select name="'+arrayName+'[default]" id="tom-default-'+containerId+'"><option value="">Select Default Value</option></select>';
+		  		break;
 
-	    // var cloneInput = templateRepeatable;
-	    var cloneInput = $( '#'+idToAppend).find('.input-options-group').first().clone();
-	    // alert(cloneInput);
-	    cloneInput.attr('data-order', newOrder);
-	    cloneInput.find('.label-opt').html( newOrder+' : ');
-	    cloneInput.find('input.input-opt').val('');
-	    cloneInput.appendTo( '#'+idToAppend );
+		  	case "textarea":
+		  		inputDefault = '<textarea name="'+arrayName+'[default]" id="tom-default-'+containerId+'"></textarea>';
+		  		break;
 
-	    return false;
-	});
+		  	default:
+		  		inputDefault = '<input name="'+arrayName+'[default]" id="tom-default-'+containerId+'" type="text" value="">';
+	  	}
 
-	/* Delete repeatable options */
-	$(document).delegate( "a.btn-remove", "click", function(event) { // click event
-	    event.preventDefault();
-	    var repeatableInput = $(this).closest('.input-options').find('.input-options-group');
-	    
-	    /* if the input remaining one, disable the delete and just emptied */
-	    if (repeatableInput.length <= '1' ) {
-	    	$(this).closest('.input-options-group').find('.input-opt').val('');
-	    	return false;
-	    }
+	  	if (showOptions == true) {
 
- 		$(this).closest( "div.input-options-group" ).fadeOut(500, function() { $(this).remove(); });
-	    	
-	    return false;
-	});
+			var cek = $('#add-opt-'+containerId).find('.input-options-group');
+			if (!cek.length) {
+				$('#add-opt-'+containerId).html(templateRepeatable);
+			}
 
-	/* TO do */
-	// function reorder(id) {
-	// 	var index = $( "#"+id ).index( this );
- //  		$( "span" ).text( "That was div index #" + index );
-	// }
-
-	/* function to clone selected type to nestable */
-	function kelon(id) {
-		var arrayName = 'tom_options['+id+']';
-		var orgType = $('#tom-type');
-		var type = orgType.clone();
-
-		//get original selects into a jq object
-		type.each(function(index, item) {
-		     //set new select name and value 
-		     $(item).attr( 'name', arrayName+'[type]' );
-		     $(item).attr( 'data-container', id );
-		     $(item).val( orgType.eq(index).val() );
-
-		});
-		type.appendTo('#select_'+id);
-		// alert(type);
-
-		/* Clone repeatable Options*/
-		var opt = $('#add-opt-new').clone().attr('id', 'add-opt-'+id);
-			opt.find('.input-opt').each(function(index, item) {
-		     	//set new option name (with id)
-		     	var orgName = $(item).attr( 'name' );
-		     	$(item).attr( 'name', arrayName+'[options]['+orgName+'][]' );
-		     	// var x = $(item);
-		     	// alert(x); tom_options[dsdsd][desc]
-
-			});
-		opt.appendTo('#opt-container-'+id);
+	  		$('#'+containerId+'-options').fadeIn(500);
+	  	} else {
+	  		/* hide input */
+	  		$('#'+containerId+'-options').fadeOut(500);
+	  	}
+	  	$('#'+containerId+'-default').html(inputDefault);
 	}
 
-	$("#tom-add-options").on("click", function(event) {
-        var id = $("#add-tom-options input[id=tom-id]").val();
+	/* Add option to nestable list*/
+	$(document).delegate( "#tom-add-options", "click", function(event) {
+		event.preventDefault();
+		var id = $("#add-tom-options input[id=tom-id-new-data]").val();
         var id = id.replace(/\s+/g, '').toLowerCase();
         if (!id.length){
     		alert('kosong');
     		return;
     	}
-        var name = $("#add-tom-options input[id=tom-name]").val();
-        var desc = $("#add-tom-options textarea#tom-desc").val();
-        var type = $("#add-tom-options select#tom-type").val();
-        var defaultValue = $("#add-tom-options input[id=tom-default]").val();
 		var arrayName = 'tom_options['+id+']';
 
-		var activeDiv = $('.nav-tab-active').attr('href');
-    	
-    	// alert('ok');
+        var name = $("#add-tom-options input[id=tom-name-new-data]").val();
+        var desc = $("#add-tom-options textarea#tom-desc-new-data").val();
+        var type = $("#add-tom-options select#tom-type-new-data").val();
+        var defaultValue = $("#add-tom-options input[id=tom-default-new-data]").val();
 
-	    // For testing
-	    event.preventDefault();
-	    // var template = $("#tom-type").clone();
-	    // template.attr("id","newid");
-	    // var template = '<li class="dd-item" data-id="'+id+'"><div class="dd-handle">'+name+'<span class="tom-action-buttons"><a class="blue edit-nestable" href="#"><i class="dashicons dashicons-edit"></i></a><a class="red delete-nestable" href="#"><i class="dashicons dashicons-trash"></i></a></span></div><div class="nestable-input" id="'+id+'" style="display:none;">';
-	    // $.each(values, function() {
-	        // output.children("[data-key='" + this.name + "']").text(this.value);
-	    	// template += '<p><label class="tomLabel" for=""><span>'+this.name+'</span><br><input name="tom_options['+id+']['+this.name+']" type="text" class="" value="'+this.value+'">';
-	    	// alert(this.value)
-	    // });
+		var activeDiv = $('.nav-tab-active').attr('href');
 
 		template ='<li class="dd-item" data-id="'+id+'">';
 		template +='  <div class="dd-handle">'+name+'';
@@ -310,13 +221,13 @@ jQuery(document).ready(function($) {
 		// template +='						        	<a class="btn-remove dashicons dashicons-dismiss"></a>';
 		// template +='					        	</div>';
 		// template +='					        </div>';
+		template +='			  <p><a id="new-repeatable" href="#">Add New Field</a></p>';
 		template +='			  </div>';
 		template +='	          </span>';
 		template +='			</label>';
 		template +='            <label>';
 		template +='              <span class="title">Default</span>';
 		template +='              <span class="input-text-wrap input">';
-		template +='              	<input type="hidden" id="'+id+'-hidden-default" value="'+defaultValue+'">';
 		template +='              	<div id="'+id+'-default">';
 		// template +='                	<input type="text" name="'+arrayName+'[default]" value="'+defaultValue+'">';
 		template +='              	</div>';
@@ -330,49 +241,92 @@ jQuery(document).ready(function($) {
 		template +='</li>';
 
 
-
-	    // template += '</div></li>';
-
-		// var id = $("#add-tom-options input[name=id]").val();
-		// var id = "xxx";
-		// var template = '<p><label class="tomLabel" for=""><span>Name</span><br><input name="tom_options['+id+'][name]" type="text" class="" value="Input Text"><input name="tom_options['+id+'][type]" type="text" class="" value="text"></label></p>';
 		$(activeDiv).find('ol.dd-list').append(template);
 		kelon(id);
 		/* Clear input */
 		$('#add-tom-options').find('option:first').attr('selected', 'selected'); 
 		$('#add-tom-options').find('input, textarea').val(''); 
-		displayOptions();
+		displayOptions('#tom-type-'+id);
 	});
 	
 
+	/* Clone for repeatable options */
+	$(document).delegate( "a#new-repeatable", "click", function(event) { // click event
+	    event.preventDefault();
+	    // alert('ok');
+	    
+	    /* get parent id to append */
+		var idToAppend = $( this ).closest('.options-container').find('.input-options').first().attr('id');
+	    /* get element to clone */
+	    var elemToClone = $( '#'+idToAppend).find('.input-options-group');
+		var oldOrder = parseInt(elemToClone.last().attr('data-order'));
+		var newOrder = oldOrder+1;
+		// alert(idToAppend);
 
+		
 
+	    // var cloneInput = templateRepeatable;
+	    var cloneInput = $( '#'+idToAppend).find('.input-options-group').first().clone();
+	    // alert(cloneInput);
+	    cloneInput.attr('data-order', newOrder);
+	    cloneInput.find('.label-opt').html( newOrder+' : ');
+	    cloneInput.find('input.input-opt').val('');
+	    cloneInput.appendTo( '#'+idToAppend );
 
+	    return false;
+	});
 
+	/* Delete repeatable options */
+	$(document).delegate( "a.btn-remove", "click", function(event) { // click event
+	    event.preventDefault();
+	    var repeatableInput = $(this).closest('.input-options').find('.input-options-group');
+	    
+	    /* if the input remaining one, disable the delete and just emptied */
+	    if (repeatableInput.length <= '1' ) {
+	    	$(this).closest('.input-options-group').find('.input-opt').val('');
+	    	return false;
+	    }
 
-	// var updateOutput = function(e)
- //    {
- //        var list   = e.length ? e : $(e.target),
- //            output = list.data('output');
- //        if (window.JSON) {
- //            output.val(window.JSON.stringify(list.nestable('serialize')));//, null, 2));
- //        } else {
- //            output.val('JSON browser support required for this demo.');
- //        }
- //    };
+ 		$(this).closest( "div.input-options-group" ).fadeOut(500, function() { $(this).remove(); });
+	    	
+	    return false;
+	});
 
-    // activate Nestable for list 1
-    // $('#nestable-1').nestable({'maxDepth':'1'});
-    // $('#nestable-2').nestable({'maxDepth':'1'});
-    // $('#nestable-3').nestable({'maxDepth':'1'});
-    // $('#nestable-4').nestable({'maxDepth':'1'});
-    
+	/* TO do */
+	// function reorder(id) {
+	// 	var index = $( "#"+id ).index( this );
+ //  		$( "span" ).text( "That was div index #" + index );
+	// }
 
-    // output initial serialised data
-    // updateOutput($('#nestable-1').data('output', $('#nestable-1-output')));
-    // updateOutput($('#nestable-2').data('output', $('#nestable-2-output')));
-    // updateOutput($('#nestable-3').data('output', $('#nestable-3-output')));
-    // updateOutput($('#nestable-4').data('output', $('#nestable-4-output')));
+	/* function to clone selected type to nestable */
+	function kelon(id) {
+		// alert(id);
+		var arrayName = 'tom_options['+id+']';
 
+		/* Clone select type */
+		var orgType = $('#tom-type-new-data');
+		var type = orgType.clone();
+		type.each(function(index, item) {
+		     //set new select name and value 
+		     $(item).attr( 'name', arrayName+'[type]' );
+		     $(item).attr( 'id', 'tom-type-'+id );
+		     $(item).attr( 'data-container', id );
+		     $(item).val( orgType.eq(index).val() );
+
+		});
+		type.appendTo('#select_'+id);
+
+		/* Clone repeatable Options*/
+		var opt = $('#add-opt-new-data').clone().attr('id', 'add-opt-'+id);
+			opt.find('.input-opt').each(function(index, item) {
+		     	//set new option name (with id)
+		     	var orgName = $(item).attr( 'name' );
+		     	$(item).attr( 'name', arrayName+'[options]['+orgName+'][]' );
+		     	// var x = $(item);
+		     	// alert(x); tom_options[dsdsd][desc]
+
+			});
+		opt.prependTo('#opt-container-'+id);
+	}
 
 });

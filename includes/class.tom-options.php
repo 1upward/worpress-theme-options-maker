@@ -327,30 +327,30 @@ class tomOptions {
 			      Add New Option
 			    </h3>
 			    <div id="add-tom-options">
-			    	<label for="tom-id">
+			    	<label for="tom-id-new-data">
 			          Option ID :
 			        </label>
 			        <div class="input">
-				        <input id="tom-id" type="text" value="" class="input-width">
+				        <input id="tom-id-new-data" type="text" value="" class="input-width">
 				        <p>
 				          Option ID (use for key and shortcode).
 				        </p>
 			        </div>
-			      	<label for="tom-name">
+			      	<label for="tom-name-new-data">
 			          Name :
 			        </label>
 			        <div class="input">
-			        <input name="name" id="tom-name" type="text" value="" class="input-width">
+			        <input name="name" id="tom-name-new-data" type="text" value="" class="input-width">
 			        <div class="input">
 				        <p>
 				          The name of option.
 				        </p>
 			        </div>
-			        <label for="tom-desc">
+			        <label for="tom-desc-new-data">
 			          Desription :
 			        </label>
 			        <div class="input">
-				        <textarea name="desc" id="tom-desc" class="input-width"></textarea>
+				        <textarea name="desc" id="tom-desc-new-data" class="input-width"></textarea>
 				        <p>
 				          Short description of option.
 				        </p>
@@ -360,7 +360,7 @@ class tomOptions {
 			        </label>
 			        <div class="input">
 			        <?php $config = $this->tom_configs(); ?>
-				        <select name="type" id="tom-type" class="tom-type" data-container="new-data">
+				        <select name="type" id="tom-type-new-data" id="tom-type-new-data" class="tom-type" data-container="new-data">
 			        	<?php  
 			        		foreach ($config['type-options'] as $value => $name) {
 			        			echo '<option value="'.$value.'">'.$name.'</option>';
@@ -372,7 +372,7 @@ class tomOptions {
 				        </p>
 				        <div id="new-data-options" class="options-container" style="display:none;">
 				        	<div class="tom-label-options">Options : </div>
-					        <div id="add-opt-new" class="input-options">
+					        <div id="add-opt-new-data" class="input-options">
 						        <div data-order="1" class="input-options-group">
 						        	<span class="label-opt">1 : </span>
 						        	<input class="input-opt input-key" name="opt-key" value="" placeholder="Key">
@@ -383,13 +383,12 @@ class tomOptions {
 					        <p><a id="new-repeatable" href="#">Add New Field</a></p>
 				        </div>
 			        </div>
-			      	<label for="tom-default">
+			      	<label for="tom-default-new-data">
 			          Default :
 			        </label>
 			        <div class="input">
-			        	<input id="new-data-hidden-default" type="hidden" value="">
 			        	<div id="new-data-default">
-				        	<!-- <input name="default" id="tom-default" type="text" value=""> -->
+				        	<!-- <input name="default" id="tom-default-new-data" type="text" value=""> -->
 				        </div>
 				        <p>
 				          Default value.

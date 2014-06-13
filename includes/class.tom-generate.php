@@ -641,7 +641,7 @@ class tomGenerate {
 										                Type
 										              </span>
 										              <span class="input-text-wrap input">
-											              <select name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[type]" class="tom-type" data-container="'.esc_attr( $obj_key ).'">'."\n";
+											              <select name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[type]" id="tom-type-'.esc_attr( $obj_key ).'" class="tom-type" data-container="'.esc_attr( $obj_key ).'">'."\n";
 											                foreach ($types as $key => $option ) {
 																/* function selected dr wp @http://codex.wordpress.org/Function_Reference/selected */
 																$output .= '<option'. selected( $type, $key, false ) .' value="' . esc_attr( $key ) . '">' . esc_html( $option ) . '</option>';
@@ -654,7 +654,7 @@ class tomGenerate {
 										                Options
 										              </span>
 										              <span class="input-text-wrap input">
-											           	<div class="options-container">
+											           	<div id="opt-container-'.esc_attr( $obj_key ).'" class="options-container">
 													        <div id="add-opt-'.esc_attr( $obj_key ).'" class="input-options">'."\n";
 															$order = 1;
 															foreach ($options as $key => $value ) {
@@ -676,7 +676,6 @@ class tomGenerate {
 										                Default
 										              </span>
 										              <span class="input-text-wrap input">
-										              	<input id="'.esc_attr( $obj_key ).'-hidden-default" type="hidden" value="' . esc_attr( $val ) . '">
 			        									<div id="'.esc_attr( $obj_key ).'-default">
 										              	</div>
 										              </span>
