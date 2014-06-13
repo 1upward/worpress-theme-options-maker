@@ -1,10 +1,3 @@
-#tonjoo-tom-metabox {
-    margin-bottom: 80px!important;
-}
-#tonjoo-tom {
-    max-width:767px;
-    background:#fff;
-}
 .metabox-holder .postbox h3 {
 	cursor: default;
 	background-color: #f1f1f1;
@@ -17,20 +10,24 @@
 #tonjoo-tom .section {
 	padding:10px 10px 0;
 }
-#tonjoo-tom-wrap .metabox-holder {
+.wrap .metabox-holder {
     float: left;
-    height: 100px;
-    margin: 1em;
+    margin: 10px;
+    padding-top: 0px!important;
 }
-
-#tonjoo-tom-wrap .metabox-holder.metabox-main {
-    width: 767px;
+.wrap .updated.fade.settings-error.below-h2 {
+    margin-bottom: 0px;
 }
-#tonjoo-tom-wrap .metabox-holder.metabox-side {
+.wrap .metabox-holder.metabox-main {
+    max-width: 691px;
+    width: 100%;
+}
+.wrap .metabox-holder.metabox-side {
     width: 300px;
+    max-width: 100%;
 }
 #tonjoo-tom .group {
-	padding-bottom:40px;
+	padding-bottom:20px;
 }
 #tonjoo-tom .section .controls {
 	float: left;
@@ -609,7 +606,7 @@ border-bottom: 1px solid #ddd;
     float: left;
     text-align: left;
 }
-#add-tom-options .input select, #add-tom-options .input input, #add-tom-options .input textarea {
+#add-tom-options .input select, #add-tom-options .input input.input-width, #add-tom-options .input textarea {
     width: 190px;
 }
 #options-container .tom-label-options {
@@ -627,15 +624,18 @@ border-bottom: 1px solid #ddd;
     padding-right: 2px;
     margin-bottom: 10px;
 }
-#add-tom-options #tom-options.input-options .input-options-group {
+#add-tom-options .input-options .input-options-group {
     margin-bottom: 3px;
 }
 .input-options .btn-remove {
     padding-top: 5px;
     cursor: pointer;
 }
-.options-container .input-options .input-options-group input.input-opt {
-    width: 100px!important;
+.options-container .input-options .input-options-group input.input-key {
+    width: 50px;
+}
+.options-container .input-options .input-options-group input.input-val {
+    width: 80px;
 }
 #add-tom-options .input p {
     margin-left: 90px;
@@ -666,7 +666,7 @@ border-bottom: 1px solid #ddd;
     width: 100%;
 }
 .nestable-input .inline-edit-row fieldset label .input-text-wrap {
-    margin-left: 10em;
+    margin-left: 80px;
 }
 .inline-edit-col .nestable-side {
     width: 50%;

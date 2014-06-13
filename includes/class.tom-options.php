@@ -40,8 +40,24 @@ class tomOptions {
     }
 
     public function validate_create_options( $input ) {
+
+    	/* Parse input options */
+    	foreach ($input as $key => $value) {
+    		if(!empty($value['options'])) {
+    			/* combine input value key and input value to one array as key => value */
+    			$combine[$key]['options'] = array_combine($value['options']['opt-key'], $value['options']['opt-val']);
+    			/* get other field like name, type */
+    			$org[$key] = $value;
+    			/* Merge options field */
+    			$haveoptions[$key] = array_merge($org[$key],$combine[$key]);
+    		}
+    	}
+    	/* Merge with main input */
+    	$input = array_merge($input,$haveoptions);
+    	
   //   	echo "<pre>";
   //   	print_r($input);
+  //   	// print_r($input);
   //   	echo "</pre>";
 		// exit();
 
@@ -50,6 +66,7 @@ class tomOptions {
 			
 		// 	return $input;
 		// }
+		add_settings_error( 'tom_options', 'save_options', 'Options saved.', 'updated fade' );
 		return $input;
 		
 	}
@@ -200,7 +217,7 @@ class tomOptions {
 	        <?php echo tomGenerate::tom_tabs(); ?>
 	    </h2>
 
-	    <div id="tonjoo-tom-metabox" class="metabox-holder metabox-main">
+	    <div class="metabox-holder metabox-main">
 		    <div class="postbox">
 				<form action="options.php" method="post">
 				<div id="options-group-1" class="group dari-db" style="display: block;" style="height:300px;">
@@ -252,7 +269,7 @@ class tomOptions {
 
 	    <?php settings_errors( 'tonjoo-tom' ); ?>
 
-	    <div id="tonjoo-tom-metabox" class="metabox-holder metabox-main">
+	    <div id="tom-options-panel" class="metabox-holder metabox-main">
 		    <div id="tonjoo-tom" class="postbox">
 				<form action="options.php" method="post">
 				<?php settings_fields( 'tonjoo-tom' ); ?>
@@ -265,7 +282,7 @@ class tomOptions {
 				</form>
 			</div> <!-- / #container -->
 		</div>
-		<div class="metabox-holder metabox-side">
+		<div id="tom-adds-panel" class="metabox-holder metabox-side">
 		  <div class="form-wrap postbox">
 		    <h3>
 		      Add New Option
@@ -279,7 +296,7 @@ class tomOptions {
 	}
 
 	function create_options_page() { ?>
-	<div id="tonjoo-tom-wrap" class="wrap">
+	<div class="wrap">
 
 		<?php $config = $this->tom_configs(); ?>
 		<h2><?php echo esc_html( $config['sub_page_title'] ); ?></h2>
@@ -289,9 +306,9 @@ class tomOptions {
 	        <?php echo tomGenerate::create_tom_tabs(); ?>
 	    </h2>
 
-	    <?php settings_errors( 'tonjoo-tom' ); ?>
+	    <?php settings_errors( 'tom_options' ); ?>
 
-	    <div id="tonjoo-tom-metabox" class="metabox-holder metabox-main">
+	    <div id="tom-create-options-panel" class="metabox-holder metabox-main">
 		    <div id="tonjoo-tom" class="postbox">
 				<form action="options.php" method="post">
 				<?php settings_fields( 'tom_options' ); ?>
@@ -304,7 +321,7 @@ class tomOptions {
 				</form>
 			</div> <!-- / #container -->
 		</div>
-		<div class="metabox-holder metabox-side">
+		<div id="tom-add-options-panel" class="metabox-holder metabox-side">
 		  	<div class="form-wrap postbox">
 			    <h3>
 			      Add New Option
@@ -314,7 +331,7 @@ class tomOptions {
 			          Option ID :
 			        </label>
 			        <div class="input">
-				        <input id="tom-id" type="text" value="">
+				        <input id="tom-id" type="text" value="" class="input-width">
 				        <p>
 				          Option ID (use for key and shortcode).
 				        </p>
@@ -323,7 +340,7 @@ class tomOptions {
 			          Name :
 			        </label>
 			        <div class="input">
-			        <input name="name" id="tom-name" type="text" value="">
+			        <input name="name" id="tom-name" type="text" value="" class="input-width">
 			        <div class="input">
 				        <p>
 				          The name of option.
@@ -333,7 +350,7 @@ class tomOptions {
 			          Desription :
 			        </label>
 			        <div class="input">
-				        <textarea name="desc" id="tom-desc"></textarea>
+				        <textarea name="desc" id="tom-desc" class="input-width"></textarea>
 				        <p>
 				          Short description of option.
 				        </p>
@@ -343,7 +360,7 @@ class tomOptions {
 			        </label>
 			        <div class="input">
 			        <?php $config = $this->tom_configs(); ?>
-				        <select name="type" id="tom-type" class="tom-type" data-container="container-opt-new">
+				        <select name="type" id="tom-type" class="tom-type" data-container="new-data">
 			        	<?php  
 			        		foreach ($config['type-options'] as $value => $name) {
 			        			echo '<option value="'.$value.'">'.$name.'</option>';
@@ -353,17 +370,13 @@ class tomOptions {
 				        <p>
 				          Type of option.
 				        </p>
-				        <div id="container-opt-new" class="options-container" style="display:none;">
+				        <div id="new-data-options" class="options-container" style="display:none;">
 				        	<div class="tom-label-options">Options : </div>
 					        <div id="add-opt-new" class="input-options">
 						        <div data-order="1" class="input-options-group">
-						        	<span class="label-opt">Option 1 : </span>
-						        	<input class="input-opt" name="1" value="">
-						        	<a class="btn-remove dashicons dashicons-dismiss"></a>
-					        	</div>
-					        	<div data-order="2" class="input-options-group">
-						        	<span class="label-opt">Option 2 : </span>
-						        	<input class="input-opt" name="2" value="">
+						        	<span class="label-opt">1 : </span>
+						        	<input class="input-opt input-key" name="opt-key" value="" placeholder="Key">
+						        	<input class="input-opt input-val" name="opt-val" value="" placeholder="Value">
 						        	<a class="btn-remove dashicons dashicons-dismiss"></a>
 					        	</div>
 					        </div>
@@ -374,7 +387,10 @@ class tomOptions {
 			          Default :
 			        </label>
 			        <div class="input">
-				        <input name="default" id="tom-default" type="text" value="">
+			        	<input id="new-data-hidden-default" type="hidden" value="">
+			        	<div id="new-data-default">
+				        	<!-- <input name="default" id="tom-default" type="text" value=""> -->
+				        </div>
 				        <p>
 				          Default value.
 				        </p>

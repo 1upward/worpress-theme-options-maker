@@ -619,7 +619,7 @@ class tomGenerate {
 										            <h4>Edit Option : <span>'.esc_attr( $obj_key ).'</span></h4>
 										            <label>
 										              <span class="title">Name</span>
-										              <span class="input-text-wrap">
+										              <span class="input-text-wrap input">
 										                <input type="text" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[name]" class="" value="' . esc_attr( $name ) . '">
 										              </span>
 										            </label>
@@ -627,7 +627,7 @@ class tomGenerate {
 										              <span class="title">
 										                Description
 										              </span>
-										              <span class="input-text-wrap">
+										              <span class="input-text-wrap input">
 										                <textarea name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[desc]">' . esc_attr( $desc ) . '</textarea>
 										              </span>
 										            </label>
@@ -640,8 +640,8 @@ class tomGenerate {
 										              <span class="title">
 										                Type
 										              </span>
-										              <span class="input-text-wrap">
-											              <select name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[type]" class="tom-type" data-container="container-opt-'.esc_attr( $obj_key ).'">'."\n";
+										              <span class="input-text-wrap input">
+											              <select name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[type]" class="tom-type" data-container="'.esc_attr( $obj_key ).'">'."\n";
 											                foreach ($types as $key => $option ) {
 																/* function selected dr wp @http://codex.wordpress.org/Function_Reference/selected */
 																$output .= '<option'. selected( $type, $key, false ) .' value="' . esc_attr( $key ) . '">' . esc_html( $option ) . '</option>';
@@ -649,18 +649,19 @@ class tomGenerate {
 					$output .= 							  '</select>
 								              		  </span>
 										            </label>
-										            <label id="container-opt-'.esc_attr( $obj_key ).'">
+										            <label id="'.esc_attr( $obj_key ).'-options">
 										              <span class="title">
 										                Options
 										              </span>
-										              <span class="input-text-wrap">
+										              <span class="input-text-wrap input">
 											           	<div class="options-container">
 													        <div id="add-opt-'.esc_attr( $obj_key ).'" class="input-options">'."\n";
 															$order = 1;
 															foreach ($options as $key => $value ) {
 					$output .=									'<div data-order="'.$order.'" class="input-options-group">
-														        	<span class="label-opt">'.$key.' : </span>
-														        	<input class="input-opt" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[options]['.$key.']" value="'.$value.'">
+														        	<span class="label-opt">'.esc_attr( $order ).' : </span>
+														        	<input class="input-opt input-key" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[options][opt-key][]" value="'.esc_attr( $key ).'">
+														        	<input class="input-opt input-val" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[options][opt-val][]" value="'.esc_attr( $value ).'">
 														        	<a class="btn-remove dashicons dashicons-dismiss"></a>
 													        	</div>'."\n";
 															$order++;
@@ -674,8 +675,10 @@ class tomGenerate {
 										              <span class="title">
 										                Default
 										              </span>
-										              <span class="input-text-wrap">
-										                <input type="text" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[default]" class="" value="' . esc_attr( $val ) . '">
+										              <span class="input-text-wrap input">
+										              	<input id="'.esc_attr( $obj_key ).'-hidden-default" type="hidden" value="' . esc_attr( $val ) . '">
+			        									<div id="'.esc_attr( $obj_key ).'-default">
+										              	</div>
 										              </span>
 										            </label>
 										          </div>
