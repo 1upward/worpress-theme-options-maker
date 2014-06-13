@@ -87,9 +87,11 @@ jQuery(document).ready(function($) {
 	    return false;
 	});
 
-	
+	/* check display options on document ready */
+	displayOptions();
+
 	/* if select type change */
-	$('.tom-type').change(function(){
+	$(document).delegate( ".tom-type", "change", function(event) { // click event
 		displayOptions();
 	});
 
@@ -97,16 +99,50 @@ jQuery(document).ready(function($) {
 		/* loop for check all option type to show option div */
 		$('.tom-type').each(function(){
 			var container = $(this).attr('data-container');
+			var arrayName = 'tom_options['+container+']';
+			var valueDefault = $('#'+container+'-hidden-default').val();
 			// alert(container);
 			// return;
 			var val = $(this).val();
+			var showOptions = false;
 			
-		    // alert(val);
-		    if (val == 'select') {
-		    	$('#'+container).fadeIn(500);
-		    } else {
-				$('#'+container).fadeOut(500);
-		    }
+	    	// alert(val);
+		  	switch (val){
+			  	case "select":
+			  		// $('#'+container+'-options').fadeIn(500);
+			  		showOptions = true;
+			  		inputDefault = '<select name="'+arrayName+'[default]" id="tom-default"><option value="">Select Default Value</option></select>';
+			  		break;
+
+			  	case "textarea":
+			  		inputDefault = '<textarea name="'+arrayName+'[default]" id="tom-default">'+valueDefault+'</textarea>';
+			  		break;
+
+			  	default:
+			  		inputDefault = '<input name="'+arrayName+'[default]" id="tom-default" type="text" value="'+valueDefault+'">';
+		  	}
+
+		  	if (showOptions == true) {
+		  			templateRepeatable = '<div data-order="1" class="input-options-group">';
+					templateRepeatable += 	'<span class="label-opt">1 : </span>';
+					templateRepeatable += 	'<input class="input-opt input-key" name="tom_options['+container+'][options][opt-key][]" value="" placeholder="Key">';
+					templateRepeatable += 	'<input class="input-opt input-val" name="tom_options['+container+'][options][opt-val][]" value="" placeholder="Value">';
+					templateRepeatable += 	'<a class="btn-remove dashicons dashicons-dismiss"></a>';
+					templateRepeatable += '</div>';
+
+				var cek = $('#add-opt-'+container).find('.input-options-group');
+				if (!cek.length) {
+					$('#add-opt-'+container).html(templateRepeatable);
+				}
+
+		  		$('#'+container+'-options').fadeIn(500);
+		  	} else {
+		  		/* hide input */
+		  		$('#'+container+'-options').fadeOut(500);
+
+		  	}
+
+		  	$('#'+container+'-default').html(inputDefault);
 		});
 		
 	}
@@ -122,20 +158,31 @@ jQuery(document).ready(function($) {
 		var newOrder = oldOrder+1;
 		// alert(idToAppend);
 
+		
+
+	    // var cloneInput = templateRepeatable;
 	    var cloneInput = $( '#'+idToAppend).find('.input-options-group').first().clone();
 	    // alert(cloneInput);
 	    cloneInput.attr('data-order', newOrder);
-	    cloneInput.find('.label-opt').html('Option '+newOrder+' : ');
-	    cloneInput.find('input.input-opt').attr('name', newOrder).val('');
+	    cloneInput.find('.label-opt').html( newOrder+' : ');
+	    cloneInput.find('input.input-opt').val('');
 	    cloneInput.appendTo( '#'+idToAppend );
 
 	    return false;
 	});
 
 	/* Delete repeatable options */
-	$(".input-options").delegate( "a.btn-remove", "click", function(event) { // click event
+	$(document).delegate( "a.btn-remove", "click", function(event) { // click event
 	    event.preventDefault();
-	 		$(this).closest( "div.input-options-group" ).fadeOut(500, function() { $(this).remove(); });
+	    var repeatableInput = $(this).closest('.input-options').find('.input-options-group');
+	    
+	    /* if the input remaining one, disable the delete and just emptied */
+	    if (repeatableInput.length <= '1' ) {
+	    	$(this).closest('.input-options-group').find('.input-opt').val('');
+	    	return false;
+	    }
+
+ 		$(this).closest( "div.input-options-group" ).fadeOut(500, function() { $(this).remove(); });
 	    	
 	    return false;
 	});
@@ -149,27 +196,26 @@ jQuery(document).ready(function($) {
 	/* function to clone selected type to nestable */
 	function kelon(id) {
 		var arrayName = 'tom_options['+id+']';
-		var $orginal = $('#tom-type');
-		var $cloned = $orginal.clone();
+		var orgType = $('#tom-type');
+		var type = orgType.clone();
 
 		//get original selects into a jq object
-		var $originalSelects = $orginal;
-		$cloned.each(function(index, item) {
+		type.each(function(index, item) {
 		     //set new select name and value 
 		     $(item).attr( 'name', arrayName+'[type]' );
-		     $(item).attr( 'data-container', 'container-opt-'+id );
-		     $(item).val( $originalSelects.eq(index).val() );
+		     $(item).attr( 'data-container', id );
+		     $(item).val( orgType.eq(index).val() );
 
 		});
-		$cloned.appendTo('#select_'+id);
-		// alert($cloned);
+		type.appendTo('#select_'+id);
+		// alert(type);
 
 		/* Clone repeatable Options*/
-		var opt = $('#add-opt-new').clone();
+		var opt = $('#add-opt-new').clone().attr('id', 'add-opt-'+id);
 			opt.find('.input-opt').each(function(index, item) {
 		     	//set new option name (with id)
 		     	var orgName = $(item).attr( 'name' );
-		     	$(item).attr( 'name', arrayName+'[options]['+orgName+']' );
+		     	$(item).attr( 'name', arrayName+'[options]['+orgName+'][]' );
 		     	// var x = $(item);
 		     	// alert(x); tom_options[dsdsd][desc]
 
@@ -223,13 +269,13 @@ jQuery(document).ready(function($) {
 		template +='            <h4>Edit Option : '+id+'</h4>';
 		template +='            <label>';
 		template +='              <span class="title">Name</span>';
-		template +='              <span class="input-text-wrap">';
+		template +='              <span class="input-text-wrap input">';
 		template +='                <input type="text" name="'+arrayName+'[name]" value="'+name+'">';
 		template +='              </span>';
 		template +='            </label>';
 		template +='            <label>';
 		template +='              <span class="title">Description</span>';
-		template +='              <span class="input-text-wrap">';
+		template +='              <span class="input-text-wrap input">';
 		template +='                <textarea name="'+arrayName+'[desc]">'+desc+'</textarea>';
 		template +='              </span>';
 		template +='            </label>';
@@ -240,7 +286,7 @@ jQuery(document).ready(function($) {
 		template +='          <div class="inline-edit-col">';
 		template +='            <label>';
 		template +='              <span class="title">Type</span>';
-		template +='              <span id="select_'+id+'" class="input-text-wrap" name="xxx">';
+		template +='              <span id="select_'+id+'" class="input-text-wrap input">';
 		// template += select;
 		// template +='                <select name="'+arrayName+'[type]">';
 		// template +='                  <option value="0">Main Page (no parent)</option>';
@@ -248,9 +294,9 @@ jQuery(document).ready(function($) {
 		// template +='                </select>';
 		template +='              </span>';
 		template +='            </label>';
-		template +='			<label id="container-opt-'+id+'">';
+		template +='			<label id="'+id+'-options">';
 		template +='			  <span class="title">Options</span>';
-		template +='			  <span class="input-text-wrap">';
+		template +='			  <span class="input-text-wrap input">';
 		template +='			  <div id="opt-container-'+id+'" class="options-container">';
 		// template +='							<div id="add-opt-new" class="input-options">';
 		// template +='						        <div data-order="1" class="input-options-group">';
@@ -269,8 +315,11 @@ jQuery(document).ready(function($) {
 		template +='			</label>';
 		template +='            <label>';
 		template +='              <span class="title">Default</span>';
-		template +='              <span class="input-text-wrap">';
-		template +='                <input type="text" name="'+arrayName+'[default]" value="'+defaultValue+'">';
+		template +='              <span class="input-text-wrap input">';
+		template +='              	<input type="hidden" id="'+id+'-hidden-default" value="'+defaultValue+'">';
+		template +='              	<div id="'+id+'-default">';
+		// template +='                	<input type="text" name="'+arrayName+'[default]" value="'+defaultValue+'">';
+		template +='              	</div>';
 		template +='              </span>';
 		template +='            </label>';
 		template +='          </div>';
@@ -289,10 +338,10 @@ jQuery(document).ready(function($) {
 		// var template = '<p><label class="tomLabel" for=""><span>Name</span><br><input name="tom_options['+id+'][name]" type="text" class="" value="Input Text"><input name="tom_options['+id+'][type]" type="text" class="" value="text"></label></p>';
 		$(activeDiv).find('ol.dd-list').append(template);
 		kelon(id);
-		displayOptions();
 		/* Clear input */
 		$('#add-tom-options').find('option:first').attr('selected', 'selected'); 
 		$('#add-tom-options').find('input, textarea').val(''); 
+		displayOptions();
 	});
 	
 
