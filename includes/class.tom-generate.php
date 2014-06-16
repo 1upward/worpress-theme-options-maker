@@ -37,7 +37,7 @@ class tomGenerate {
 				$class = '';
 				$class = ! empty( $obj_key ) ? $obj_key : $key['name'];
 				$class = preg_replace( '/[^a-zA-Z0-9._\-]/', '', strtolower($class) ) . '-tab';
-				$menu .= '<a id="options-group-'.  $counter . '-tab" class="nav-tab ' . $class .'" title="' . esc_attr( $key['name'] ) . '" href="' . esc_attr( '#options-group-'.  $counter ) . '">' . esc_html( $key['name'] ) . '</a>';
+				$menu .= '<a id="options-group-'.  $counter . '-tab" class="nav-tab ' . $class .'" title="' . esc_attr( $key['name'] ) . '" href="' . esc_attr( '#options-group-'.  $counter ) . '">' . esc_html( $key['name'] ) . '<div class="delete-group dashicons dashicons-dismiss"></div></a>';
 			}
 		}
 
@@ -654,12 +654,12 @@ class tomGenerate {
 										                Options
 										              </span>
 										              <span class="input-text-wrap input">
-											           	<div id="opt-container-'.esc_attr( $obj_key ).'" class="options-container">
+											           	<div id="opt-container-'.esc_attr( $obj_key ).'" class="options-container" data-default="'.esc_attr( $obj_key ).'">
 													        <div id="add-opt-'.esc_attr( $obj_key ).'" class="input-options">'."\n";
 															$order = 1;
 															foreach ($options as $key => $value ) {
 					$output .=									'<div data-order="'.$order.'" class="input-options-group">
-														        	<span class="label-opt">'.esc_attr( $order ).' : </span>
+														        	<i class="dashicons dashicons-yes"></i>
 														        	<input class="input-opt input-key" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[options][opt-key][]" value="'.esc_attr( $key ).'">
 														        	<input class="input-opt input-val" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[options][opt-val][]" value="'.esc_attr( $value ).'">
 														        	<a class="btn-remove dashicons dashicons-dismiss"></a>
@@ -676,8 +676,34 @@ class tomGenerate {
 										                Default
 										              </span>
 										              <span class="input-text-wrap input">
-			        									<div id="'.esc_attr( $obj_key ).'-default">
-										              	</div>
+										              	<input type="hidden" id="'.esc_attr( $obj_key ).'-hidden-default" value="'.esc_attr( $val ).'">
+			        									<div id="'.esc_attr( $obj_key ).'-default">';
+														/***********************
+														* Switch input type
+														************************/
+														switch ($type) {
+															case 'select':
+																if (!empty($options)) {
+					$output .=			              			'<select name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[default]" id="tom-default-'.esc_attr( $obj_key ).'">';										
+																	foreach ($options as $key => $option ) {
+																		/* function selected dr wp @http://codex.wordpress.org/Function_Reference/selected */
+																		$output .= '<option'. selected( $val, $key, false ) .' value="' . esc_attr( $key ) . '">' . esc_html( $option ) . '</option>';
+																	}
+					$output .=			              			'</select>';										
+																} else {
+					$output .=			              			'<select>Select default value</select>';	
+																}	
+																break;
+															
+															case 'textarea':
+					$output .=			              			'<textarea name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[default]" id="tom-default-'.esc_attr( $obj_key ).'">'.esc_attr( $val ).'</textarea>';
+																break;
+
+															default:
+					$output .=			              			'<input name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[default]" type="text" value="'.esc_attr( $val ).'">';											# code...
+																break;
+														}
+					$output .=			              	'</div>
 										              </span>
 										            </label>
 										          </div>

@@ -195,64 +195,8 @@ class tomOptions {
 		    	$config['sub_capability'],
 		    	$config['sub_menu_slug'],
 		    	array( $this, 'create_options_page' ) );
-
-        	/* test */
-        	add_submenu_page(
-		    	$config['parent_slug'],
-		    	$config['sub_page_title'],
-		    	$config['sub_menu_title'],
-		    	$config['sub_capability'],
-		    	'xxx',
-		    	array( $this, 'test' ) );
         }
 	}
-
-	function test() {
-	?>
-	<div class="wrap">
-		<h2>Test</h2>
-		<p>bnsdaklfa;f;a ggdgdg</p>
-
-	    <h2 class="nav-tab-wrapper">
-	        <?php echo tomGenerate::tom_tabs(); ?>
-	    </h2>
-
-	    <div class="metabox-holder metabox-main">
-		    <div class="postbox">
-				<form action="options.php" method="post">
-				<div id="options-group-1" class="group dari-db" style="display: block;" style="height:300px;">
-					<h3>Sample from DB</h3>
-				</div>
-				<div id="" style="height:300px;">
-			    	
-			    </div>
-					
-				<div id="tonjoo-tom-submit">
-					<input type="submit" class="button-primary" name="update" value="Save" />
-					<input type="submit" class="reset-button button-secondary" name="reset" value="Reset" onclick="return confirm( '<?php print esc_js('Click OK to reset. Any theme settings will be lost!'); ?>' );" />
-					<div class="clear"></div>
-				</div>
-				</form>
-			</div> <!-- / #container -->
-		</div>
-		<div class="metabox-holder metabox-side">
-		  	<div class="postbox">
-			    <h3>
-			      Add New Option
-			    </h3>
-			    <div id="" style="height:300px;">
-			    	
-			    </div>
-		  	</div>
-		<!-- </div> -->
-			<div id="tonjoo-tom-submit">
-				<input type="submit" class="button-primary" name="update" value="Save" />
-				<input type="submit" class="reset-button button-secondary" name="reset" value="Reset" onclick="return confirm( '<?php print esc_js('Click OK to reset. Any theme settings will be lost!'); ?>' );" />
-				<div class="clear"></div>
-			</div>
-		</div>
-	</div>
-	<?php }
 
 	// Halaman tonjoo tom
 	function options_page() { ?>
@@ -315,7 +259,7 @@ class tomOptions {
 				<?php tomGenerate::generate_create_options_fields(); /* Settings */ ?>
 				<div id="tonjoo-tom-submit">
 					<input type="submit" class="button-primary" name="update" value="Save" />
-					<a class="reset-button button-secondary" onclick="return confirm( '<?php print esc_js('Are you sure to delete option group?'); ?>' );">Delete Group</a>
+					<a class="reset-button button-secondary" onclick="return confirm( '<?php print esc_js('Are you sure to delete option group?'); ?>' );">Add New Group</a><input type="text" placeholder="Name Option Group"><input type="text" placeholder="Name Option Group">
 					<div class="clear"></div>
 				</div>
 				</form>
@@ -370,11 +314,11 @@ class tomOptions {
 				        <p>
 				          Type of option.
 				        </p>
-				        <div id="new-data-options" class="options-container" style="display:none;">
+				        <div id="new-data-options" class="options-container" style="display:none;" data-default="new-data">
 				        	<div class="tom-label-options">Options : </div>
 					        <div id="add-opt-new-data" class="input-options">
 						        <div data-order="1" class="input-options-group">
-						        	<span class="label-opt">1 : </span>
+						        	<i class="dashicons dashicons-yes"></i>
 						        	<input class="input-opt input-key" name="opt-key" value="" placeholder="Key">
 						        	<input class="input-opt input-val" name="opt-val" value="" placeholder="Value">
 						        	<a class="btn-remove dashicons dashicons-dismiss"></a>
@@ -386,9 +330,12 @@ class tomOptions {
 			      	<label for="tom-default-new-data">
 			          Default :
 			        </label>
+			        <div id="results"></div>
 			        <div class="input">
-			        	<div id="new-data-default">
-				        	<!-- <input name="default" id="tom-default-new-data" type="text" value=""> -->
+			        	<input type="hidden" id="new-data-hidden-default" value="">
+						<div id="new-data-default">
+						<!--   -->
+						<input name="default" type="text" id="tom-default-new-data" value="">
 				        </div>
 				        <p>
 				          Default value.

@@ -1,3 +1,8 @@
+.nav-tab-wrapper .delete-group {
+    margin-left: 5px;
+    font-size: 24px;
+    color: #e14d43;
+}
 .metabox-holder .postbox h3 {
 	cursor: default;
 	background-color: #f1f1f1;
@@ -626,6 +631,9 @@ border-bottom: 1px solid #ddd;
 }
 #add-tom-options .input-options .input-options-group {
     margin-bottom: 3px;
+}
+.input-options-group .dashicons {
+    padding-top: 5px;
 }
 .input-options .btn-remove {
     padding-top: 5px;
