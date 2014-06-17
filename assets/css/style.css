@@ -30,9 +30,22 @@
 .wrap .metabox-holder.metabox-side {
     width: 300px;
     max-width: 100%;
-}
+}/*
 #tonjoo-tom .group {
 	padding-bottom:20px;
+}*/
+#tonjoo-tom #new-group {
+    padding-bottom: 0px;
+}
+#tonjoo-tom div.container-table {
+    padding: 10px;
+}
+#tonjoo-tom #new-group div.container-new-group td.td-label {
+    padding-left: 30px;
+}
+
+#tonjoo-tom #new-group div.container-new-group .input-large {
+    width: 300px;
 }
 #tonjoo-tom .section .controls {
 	float: left;
@@ -684,17 +697,17 @@ border-bottom: 1px solid #ddd;
     float: left;
     margin-right: 10px;
 }
-
+/*
 .form-table.tom-options {
     margin: 0px 20px;
 }
 .form-table.tom-options td {
     padding-right: 30px;
 }
+*/
 .tom-input {
     width: 80%;
 }
-
 
 
 
