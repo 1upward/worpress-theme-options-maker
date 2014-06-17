@@ -39,46 +39,7 @@ class tomOptions {
 
     }
 
-    public function validate_create_options( $input ) {
-
-	  	if(!empty($input['new-group']['name'])) {
-	  		$idFromName = preg_replace('/[^a-zA-Z0-9._\-]/', '', strtolower($input['new-group']['name']) );
-	  		
-	  		$input[$idFromName]['name'] = $input['new-group']['name'];
-	  		$input[$idFromName]['type'] = 'heading';
-	  		$input[$idFromName]['desc'] = $input['new-group']['desc'];
-
-	  		unset($input['new-group']);
-	  	} else {
-	  		unset($input['new-group']);
-	  	}
-
-    	/* Parse input options */
-    	foreach ($input as $key => $value) {
-    		$haveoptions = array();
-    		if(!empty($value['options'])) {
-    			/* combine input value key and input value to one array as key => value */
-    			$combine[$key]['options'] = array_combine($value['options']['opt-key'], $value['options']['opt-val']);
-    			/* get other field like name, type */
-    			$org[$key] = $value;
-    			/* Merge options field */
-    			$haveoptions[$key] = array_merge($org[$key],$combine[$key]);
-    		}
-    		// $input = array_merge($input,$haveoptions);
-    	}
-    	/* Merge with main input */
-    	$input = array_merge($input,$haveoptions);
-
-  // 		echo "<pre>";
-  //   	print_r($input);
-  //   	echo "</pre>";
-		// exit();
-		
-		add_settings_error( 'tom_options', 'save_options', 'Options saved.', 'updated fade' );
-		return $input;
-		
-	}
-
+    
 	/* get all option from file or from database */
 	static function tom_options_fields() {
 
@@ -267,7 +228,7 @@ class tomOptions {
 				<?php tomGenerate::generate_create_options_fields(); /* Settings */ ?>
 				<div id="tonjoo-tom-submit">
 					<input type="submit" class="button-primary" name="update" value="Save" />
-					<a id="tom-delete-group" class="reset-button button-secondary" onclick="return confirm( '<?php print esc_js('Are you sure to delete options group ?'); ?>' );">Delete Group</a>
+					<a id="tom-delete-group" class="reset-button button-secondary">Delete Group</a>
 					<div class="clear"></div>
 				</div>
 				</form>
@@ -385,15 +346,27 @@ class tomOptions {
 	}
 
 	function validate_options( $input ) {
-		// echo "<pre>";
-		// print_r($input); 
-		// echo "</pre>";
-		// exit();
+		
 
 		if ( isset( $_POST['reset'] ) ) {
 			add_settings_error( 'tonjoo-tom', 'restore_defaults', 'Default options restored.', 'updated fade' );
 			return $this->get_default_values();
 		}
+
+		foreach ($input as $key => $value) {
+    		$haveoptions = array();
+    		if(!empty($value['options'])) {
+    			/* combine input value key and input value to one array as key => value */
+    			$combine[$key]['options'] = array_combine($value['options']['opt-key'], $value['options']['opt-val']);
+    			/* get other field like name, type */
+    			$org[$key] = $value;
+    			/* Merge options field */
+    			$haveoptions[$key] = array_merge($org[$key],$combine[$key]);
+    		}
+    		$input = array_merge($input,$haveoptions);
+    	}
+    	/* Merge with main input */
+    	$input = array_merge($input,$haveoptions);
 
 		// $clean = array();
 		// $options = $this->tom_options_fields();
@@ -427,41 +400,87 @@ class tomOptions {
 
 		// }
 
+  //   	echo "<pre>";
+		// print_r($input); 
+		// echo "</pre>";
+		// exit();
+
 		add_settings_error( 'tonjoo-tom', 'save_options', 'Options saved.', 'updated fade' );
 
 		return $input;
 	}
 
+	public function validate_create_options( $input ) {
+
+	  	if(!empty($input['new-group']['name'])) {
+	  		$idFromName = preg_replace('/[^a-zA-Z0-9._\-]/', '', strtolower($input['new-group']['name']) );
+	  		
+	  		$input[$idFromName]['name'] = $input['new-group']['name'];
+	  		$input[$idFromName]['type'] = 'heading';
+	  		$input[$idFromName]['desc'] = $input['new-group']['desc'];
+
+	  		unset($input['new-group']);
+	  	} else {
+	  		unset($input['new-group']);
+	  	}
+
+    	/* Parse input options */
+    	foreach ($input as $key => $value) {
+    		$haveoptions = array();
+    		if(!empty($value['options'])) {
+    			/* combine input value key and input value to one array as key => value */
+    			$combine[$key]['options'] = array_combine($value['options']['opt-key'], $value['options']['opt-val']);
+    			/* get other field like name, type */
+    			$org[$key] = $value;
+    			/* Merge options field */
+    			$haveoptions[$key] = array_merge($org[$key],$combine[$key]);
+    		}
+    		$input = array_merge($input,$haveoptions);
+    	}
+    	/* Merge with main input */
+    	$input = array_merge($input,$haveoptions);
+
+  // 		echo "<pre>";
+  //   	print_r($input);
+  //   	echo "</pre>";
+		// exit();
+		
+		add_settings_error( 'tom_options', 'save_options', 'Options saved.', 'updated fade' );
+		return $input;
+		
+	}
+
+
 
 	static function tom_recognized_background_repeat() {
 		$default = array(
-			'no-repeat' => __( 'No Repeat', 'options-framework' ),
-			'repeat-x'  => __( 'Repeat Horizontally', 'options-framework' ),
-			'repeat-y'  => __( 'Repeat Vertically', 'options-framework' ),
-			'repeat'    => __( 'Repeat All', 'options-framework' ),
+			'no-repeat' => 'No Repeat',
+			'repeat-x'  => 'Repeat Horizontally',
+			'repeat-y'  => 'Repeat Vertically',
+			'repeat'    => 'Repeat All',
 			);
 		return apply_filters( 'tom_recognized_background_repeat', $default );
 	}
 
 	static function tom_recognized_background_position() {
 		$default = array(
-			'top left'      => __( 'Top Left', 'options-framework' ),
-			'top center'    => __( 'Top Center', 'options-framework' ),
-			'top right'     => __( 'Top Right', 'options-framework' ),
-			'center left'   => __( 'Middle Left', 'options-framework' ),
-			'center center' => __( 'Middle Center', 'options-framework' ),
-			'center right'  => __( 'Middle Right', 'options-framework' ),
-			'bottom left'   => __( 'Bottom Left', 'options-framework' ),
-			'bottom center' => __( 'Bottom Center', 'options-framework' ),
-			'bottom right'  => __( 'Bottom Right', 'options-framework')
+			'top left'      => 'Top Left',
+			'top center'    => 'Top Center',
+			'top right'     => 'Top Right',
+			'center left'   => 'Middle Left',
+			'center center' => 'Middle Center',
+			'center right'  => 'Middle Right',
+			'bottom left'   => 'Bottom Left',
+			'bottom center' => 'Bottom Center',
+			'bottom right'  => 'Bottom Right',
 			);
 		return apply_filters( 'tom_recognized_background_position', $default );
 	}
 
 	static function tom_recognized_background_attachment() {
 		$default = array(
-			'scroll' => __( 'Scroll Normally', 'options-framework' ),
-			'fixed'  => __( 'Fixed in Place', 'options-framework')
+			'scroll' => 'Scroll Normally',
+			'fixed'  => 'Fixed in Place'
 			);
 		return apply_filters( 'tom_recognized_background_attachment', $default );
 	}
