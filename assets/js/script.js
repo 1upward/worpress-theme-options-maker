@@ -89,15 +89,15 @@ jQuery(document).ready(function($) {
 
 	/* Trigger cek display options on document ready */
 	$('.tom-type').each(function(index,element){
-		displayOptions(element); /* DIsplay default form */
-	  	// showDefault(element);
+		displayOptions(element);/* DIsplay default form */
+	  	showDefault(element);
 	});
 
 	/* Trigger cek display options if select type change */
 	$(document).delegate( ".tom-type", "change", function(event) { 
 		event.preventDefault();
-		displayOptions(this); /* DIsplay default form */
-	  	showDefault(this); /* Generate default input that match type */
+		displayOptions(this);/* DIsplay default form */
+	  	showDefault(this);
 	});
 
 	/* function to display or hide repeatable options, and default field */
@@ -121,21 +121,33 @@ jQuery(document).ready(function($) {
 		  	case "select":
 		  		showOptions = true;
 		  		break;
+
+		  	case "radio":
+		  		showOptions = true;
+		  		break;
+
+		  	case "multicheck":
+		  		showOptions = true;
+		  		break;
+
+		  	case "select-image":
+		  		showOptions = true;
+		  		break;
+
+		  	default:
+		  		showOptions = false;
 	  	}
 
 	  	if (showOptions == true) {
 	  		/* check if repeatable field not exist and append it */
-			var cek = $('#add-opt-'+containerId).find('.input-options-group');
-			if (!cek.length) {
-				$('#add-opt-'+containerId).html(templateRepeatable);
-			}
-			/* Show repeatable field */
+			// var cek = $('#add-opt-'+containerId).find('.input-options-group');
+			// if (!cek.length) {
+			// 	$('#add-opt-'+containerId).html(templateRepeatable);
+			// }
+			// /* Show repeatable field */
+	  		// 	$('#'+containerId+'-options').fadeIn(500);
+	  		$('#add-opt-'+containerId).html(templateRepeatable);
 	  		$('#'+containerId+'-options').fadeIn(500);
-	  		$('#'+containerId+'-options').delegate( ".input-val", "blur", function(event) { 
-				// event.preventDefault();
-				var idDefaultForm = containerId;
-				updateDefaultOption(idDefaultForm);
-			});
 	  	} else {
 	  		/* if false hide it */
 	  		$('#'+containerId+'-options').fadeOut(500);
@@ -143,7 +155,12 @@ jQuery(document).ready(function($) {
 	  	
 	}
 
-	/* Show default input form */
+	$(document).delegate( ".input-val", "blur", function(event) { 
+		event.preventDefault();
+		var idDefaultForm = $(this).closest('.options-container').attr('data-default');
+		updateDefaultOption(idDefaultForm);
+	});
+
 	function showDefault(element) {
 		var containerId = $(element).attr('data-container');
 		var arrayName = 'tom_options['+containerId+']';
@@ -163,6 +180,17 @@ jQuery(document).ready(function($) {
 		  		inputDefault = '<textarea name="'+arrayName+'[default]" id="tom-default-'+containerId+'"></textarea>';
 		  		break;
 
+		  	case "radio":
+		  		inputDefault = 	'<select name="'+arrayName+'[default]" id="tom-default-'+containerId+'">';
+		  		inputDefault += '<option value="">Select default option</option>';
+		  		inputDefault += '</select>';
+		  		updateDefaultOption(containerId);
+		  		break;
+
+		  	case "checkbox":
+		  		inputDefault = 	'<input type="checkbox" name="'+arrayName+'[default]" id="tom-default-'+containerId+'" value="true">';
+		  		break;
+
 		  	default:
 		  		inputDefault = '<input name="'+arrayName+'[default]" id="tom-default-'+containerId+'" type="text" value="'+valDefault+'">';
 	  	}
@@ -170,35 +198,35 @@ jQuery(document).ready(function($) {
 	  	$('#'+containerId+'-default').html(inputDefault);
 	}
 
-	/* display select default from options field */
+	
 	function updateDefaultOption(containerId) {
-		// alert(containerId);
-		var optionDefault="";
-		var key = [];
-		var val = [];
-		var input = $('#add-opt-'+containerId+' input.input-opt');
-		input.each(function(i, field){ 
-			if (field.name == 'opt-key'){
-					key.push(field.value);
-			}
-			if (field.name == 'opt-val'){
-				val.push(field.value);
-			}
-		});
+			var optionDefault="";
+			var key = [];
+			var val = [];
+			var input = $('#add-opt-'+containerId+' :input');
+			input.each(function(i, field){ 
+				// console.log(field);
+				if (field.placeholder == 'Key'){
+						key.push(field.value);
+				}
+				if (field.placeholder == 'Value'){
+					val.push(field.value);
+				}
+			});
 
-		var defaultOptions = {};
-			for (var i = 0; i < key.length; i++) {
-			    defaultOptions[key[i]] = val[i];
-			}
-		$.each( defaultOptions, function( key, val ) {
-			if (input.val().length) {
-		    	optionDefault += '<option value="'+key+'">'+val+"</option>";
-		    } else {
-		    	optionDefault += '<option value="">Select default option</option>';
-		    }
-		  });
-		// alert(containerId);
-		$('#tom-default-'+containerId).html(optionDefault);
+			var arr3 = {};
+				for (var i = 0; i < key.length; i++) {
+				    arr3[key[i]] = val[i];
+				}
+			$.each( arr3, function( key, val ) {
+				if (input.val().length) {
+			    	optionDefault += '<option value="'+key+'">'+val+"</option>";
+			    } else {
+			    	optionDefault += '<option value="">Select default option</option>';
+			    }
+			  });
+			$('#tom-default-'+containerId).html(optionDefault);
+			
 	}
 
 
@@ -344,17 +372,20 @@ jQuery(document).ready(function($) {
 
 
 		$(activeDiv).find('ol.dd-list').append(template);
-		clone(id);
-		/* Clear input */
-		$('#add-tom-options').find('option:first').attr('selected', 'selected'); 
-		$('#add-tom-options').find('input, textarea').val(''); 
 		displayOptions('#tom-type-'+id);
 		showDefault('#tom-type-'+id);
+		cloneNewData(id);
+		/* Clear input */
+		$('#add-tom-options').find('option:first').attr('selected', 'selected');
+		$('#new-data-options').hide();
+		$('#add-opt-new-data').html('');
+		$('#add-tom-options').find('input, textarea').val(''); 
+		$('#tom-default-new-data').html('<option value="">Select default option</option>'); 
 	});
 
 
 	/* function to clone option type, repeatable options to nestable */
-	function clone(id) {
+	function cloneNewData(id) {
 		// alert(id);
 		var arrayName = 'tom_options['+id+']';
 
@@ -382,6 +413,30 @@ jQuery(document).ready(function($) {
 
 			});
 		opt.prependTo('#opt-container-'+id);
+
+		/* Clone default field */		
+		var orgDef = $('#tom-default-new-data');
+		var def = orgDef.clone();
+		def.each(function(index, item) {
+			$(item).attr( 'name', arrayName+'[default]' );
+			$(item).attr( 'id', 'tom-default-'+id );
+			$(item).val( orgDef.eq(index).val() );
+		});
+		$('#'+id+'-default').html(def);
 	}
+
+	/* Delete group */
+	$(document).delegate( "#tom-delete-group", "click", function(event) {
+		event.preventDefault();
+		var activeTab = $('.nav-tab-active');
+		var activeDiv = activeTab.attr('href');
+		var prev = activeTab.prev();
+		// alert(activeDiv);
+		activeTab.fadeOut().remove();
+		$(activeDiv).fadeOut().remove();
+
+		prev.addClass('nav-tab-active');
+		tom_tabs();
+	});
 
 });
