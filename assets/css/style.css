@@ -266,7 +266,7 @@ border-bottom: 1px solid #ddd;
  * Nestable
  */
 
-.dd { position: relative; display: block; margin: 0; padding: 0; list-style: none; font-size: 13px; line-height: 20px; }
+/*.dd { position: relative; display: block; margin: 0; padding: 0; list-style: none; font-size: 13px; line-height: 20px; }
 
 .dd-list { display: block; position: relative; margin: 0; padding: 0; list-style: none; margin:0 10px;}
 .dd-list .dd-list { padding-left: 30px; }
@@ -309,7 +309,7 @@ border-bottom: 1px solid #ddd;
 .dd-dragel .dd-handle {
     -webkit-box-shadow: 2px 4px 6px 0 rgba(0,0,0,.1);
             box-shadow: 2px 4px 6px 0 rgba(0,0,0,.1);
-}
+}*/
 
 /**
  * Nestable Extras
