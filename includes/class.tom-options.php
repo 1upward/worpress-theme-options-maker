@@ -259,7 +259,7 @@ class tomOptions {
 				<?php tomGenerate::generate_create_options_fields(); /* Settings */ ?>
 				<div id="tonjoo-tom-submit">
 					<input type="submit" class="button-primary" name="update" value="Save" />
-					<a class="reset-button button-secondary" onclick="return confirm( '<?php print esc_js('Are you sure to delete option group?'); ?>' );">Add New Group</a><input type="text" placeholder="Name Option Group"><input type="text" placeholder="Name Option Group">
+					<a class="reset-button button-secondary" onclick="return confirm( '<?php print esc_js('Are you sure to delete options group ?'); ?>' );">Delete Group</a>
 					<div class="clear"></div>
 				</div>
 				</form>

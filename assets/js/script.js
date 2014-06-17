@@ -89,15 +89,15 @@ jQuery(document).ready(function($) {
 
 	/* Trigger cek display options on document ready */
 	$('.tom-type').each(function(index,element){
-		displayOptions(element);/* DIsplay default form */
+		displayOptions(element); /* DIsplay default form */
 	  	// showDefault(element);
 	});
 
 	/* Trigger cek display options if select type change */
 	$(document).delegate( ".tom-type", "change", function(event) { 
 		event.preventDefault();
-		displayOptions(this);/* DIsplay default form */
-	  	showDefault(this);
+		displayOptions(this); /* DIsplay default form */
+	  	showDefault(this); /* Generate default input that match type */
 	});
 
 	/* function to display or hide repeatable options, and default field */
@@ -132,7 +132,7 @@ jQuery(document).ready(function($) {
 			/* Show repeatable field */
 	  		$('#'+containerId+'-options').fadeIn(500);
 	  		$('#'+containerId+'-options').delegate( ".input-val", "blur", function(event) { 
-				event.preventDefault();
+				// event.preventDefault();
 				var idDefaultForm = containerId;
 				updateDefaultOption(idDefaultForm);
 			});
@@ -143,6 +143,7 @@ jQuery(document).ready(function($) {
 	  	
 	}
 
+	/* Show default input form */
 	function showDefault(element) {
 		var containerId = $(element).attr('data-container');
 		var arrayName = 'tom_options['+containerId+']';
@@ -153,6 +154,7 @@ jQuery(document).ready(function($) {
 		switch (type){
 		  	case "select":
 		  		inputDefault = 	'<select name="'+arrayName+'[default]" id="tom-default-'+containerId+'">';
+		  		inputDefault += '<option value="">Select default option</option>';
 		  		inputDefault += '</select>';
 		  		updateDefaultOption(containerId);
 		  		break;
@@ -168,67 +170,36 @@ jQuery(document).ready(function($) {
 	  	$('#'+containerId+'-default').html(inputDefault);
 	}
 
-	
+	/* display select default from options field */
 	function updateDefaultOption(containerId) {
-			var optionDefault="";
-			// var key = [];
-			// var val = [];
-			var test = $('#add-opt-'+containerId+' :input').serializeArray();
-			// $.each(test, function(i, field){
-			// 	$("#tom-default-new-data").append(i+"<option value='1'>Apples</option>"); 
+		// alert(containerId);
+		var optionDefault="";
+		var key = [];
+		var val = [];
+		var input = $('#add-opt-'+containerId+' input.input-opt');
+		input.each(function(i, field){ 
+			if (field.name == 'opt-key'){
+					key.push(field.value);
+			}
+			if (field.name == 'opt-val'){
+				val.push(field.value);
+			}
+		});
 
-				// alert(field.name);
-				// if (field.name == 'opt-key'){
-				// 	key.push(field.value);
-				// }
-				// if (field.name == 'opt-val'){
-				// 	val.push(field.value);
-				// }
-			$('#add-opt-'+containerId+' input.input-val').each(function(){ 
-				var temp = $(this);
-				if (temp.val().length) {
-					optionDefault += '<option value="">'+temp.val() +"</option>";
-				} else {
-					optionDefault += '<option value="">Select default value</option>';
-				}
-			});
-
-				// $('#add-opt-new-data input.input-opt').each(function(){ 
-				// 	$("#tom-default-new-data").html("<option value='1'>Apples</option>");
-				// });
-				// optionDefault += '<option value="'+key+'">'+val+'</option>';
-			// var test = $('#add-opt-'+containerId+' :input').serialize();
-			// // alert(test);
-			// $(test).each(function(index,element){
-			// 	// var key = element.hasClass('input-key').val();
-			// 	alert(element.value);
-			// });
-			// alert(key+'|'+val);
-			// var object = [];
-
-			// for(var i = 0; i < key.length; i++) {
-			//     object[key[i]] = val[i];
-			// }
-			// var object = $.extend({}, key, val);
-			// $.each(object, function(i, field){
-			// 	$('#tom-default-'+containerId).html(field);
-			// });
-			// $(object).each(function(i,fak){ 
-			// 	console.log(fak);
-			// });
-			$('#tom-default-'+containerId).html(optionDefault);
+		var defaultOptions = {};
+			for (var i = 0; i < key.length; i++) {
+			    defaultOptions[key[i]] = val[i];
+			}
+		$.each( defaultOptions, function( key, val ) {
+			if (input.val().length) {
+		    	optionDefault += '<option value="'+key+'">'+val+"</option>";
+		    } else {
+		    	optionDefault += '<option value="">Select default option</option>';
+		    }
+		  });
+		// alert(containerId);
+		$('#tom-default-'+containerId).html(optionDefault);
 	}
-
-	// function test() {
-
-	//   	var optionDefault="";
-	// 	$('#add-opt-new-data input[name=opt-key]').each(function(){ 
-	// 		var temp = $(this).val();
-	// 		optionDefault += temp +",";
-	// 	});
-		// $('#results').html(optionDefault);
-
-	// }
 
 
 	/* Clone for repeatable options */

@@ -37,9 +37,11 @@ class tomGenerate {
 				$class = '';
 				$class = ! empty( $obj_key ) ? $obj_key : $key['name'];
 				$class = preg_replace( '/[^a-zA-Z0-9._\-]/', '', strtolower($class) ) . '-tab';
-				$menu .= '<a id="options-group-'.  $counter . '-tab" class="nav-tab ' . $class .'" title="' . esc_attr( $key['name'] ) . '" href="' . esc_attr( '#options-group-'.  $counter ) . '">' . esc_html( $key['name'] ) . '<div class="delete-group dashicons dashicons-dismiss"></div></a>';
+				$menu .= '<a id="options-group-'.  $counter . '-tab" class="nav-tab ' . $class .'" title="' . esc_attr( $key['name'] ) . '" href="' . esc_attr( '#options-group-'.  $counter ) . '">' . esc_html( $key['name'] ) . '</a>';
 			}
 		}
+
+		$menu .= '<a id="new-group-tab" class="nav-tab" title="Create new group" href="#"><i class="dashicons dashicons-plus-alt"></i></a>';
 
 		return $menu;
 	}
