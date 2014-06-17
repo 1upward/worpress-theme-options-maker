@@ -41,8 +41,21 @@ class tomOptions {
 
     public function validate_create_options( $input ) {
 
+	  	if(!empty($input['new-group']['name'])) {
+	  		$idFromName = preg_replace('/[^a-zA-Z0-9._\-]/', '', strtolower($input['new-group']['name']) );
+	  		
+	  		$input[$idFromName]['name'] = $input['new-group']['name'];
+	  		$input[$idFromName]['type'] = 'heading';
+	  		$input[$idFromName]['desc'] = $input['new-group']['desc'];
+
+	  		unset($input['new-group']);
+	  	} else {
+	  		unset($input['new-group']);
+	  	}
+
     	/* Parse input options */
     	foreach ($input as $key => $value) {
+    		$haveoptions = array();
     		if(!empty($value['options'])) {
     			/* combine input value key and input value to one array as key => value */
     			$combine[$key]['options'] = array_combine($value['options']['opt-key'], $value['options']['opt-val']);
@@ -51,21 +64,16 @@ class tomOptions {
     			/* Merge options field */
     			$haveoptions[$key] = array_merge($org[$key],$combine[$key]);
     		}
+    		// $input = array_merge($input,$haveoptions);
     	}
     	/* Merge with main input */
     	$input = array_merge($input,$haveoptions);
-    	
-  //   	echo "<pre>";
+
+  // 		echo "<pre>";
   //   	print_r($input);
-  //   	// print_r($input);
   //   	echo "</pre>";
 		// exit();
-
-		// if ( ! isset( $input['reset_theme'] ) ) {
-			
-			
-		// 	return $input;
-		// }
+		
 		add_settings_error( 'tom_options', 'save_options', 'Options saved.', 'updated fade' );
 		return $input;
 		
@@ -259,7 +267,7 @@ class tomOptions {
 				<?php tomGenerate::generate_create_options_fields(); /* Settings */ ?>
 				<div id="tonjoo-tom-submit">
 					<input type="submit" class="button-primary" name="update" value="Save" />
-					<a class="reset-button button-secondary" onclick="return confirm( '<?php print esc_js('Are you sure to delete options group ?'); ?>' );">Delete Group</a>
+					<a id="tom-delete-group" class="reset-button button-secondary" onclick="return confirm( '<?php print esc_js('Are you sure to delete options group ?'); ?>' );">Delete Group</a>
 					<div class="clear"></div>
 				</div>
 				</form>
@@ -424,4 +432,37 @@ class tomOptions {
 		return $input;
 	}
 
+
+	static function tom_recognized_background_repeat() {
+		$default = array(
+			'no-repeat' => __( 'No Repeat', 'options-framework' ),
+			'repeat-x'  => __( 'Repeat Horizontally', 'options-framework' ),
+			'repeat-y'  => __( 'Repeat Vertically', 'options-framework' ),
+			'repeat'    => __( 'Repeat All', 'options-framework' ),
+			);
+		return apply_filters( 'tom_recognized_background_repeat', $default );
+	}
+
+	static function tom_recognized_background_position() {
+		$default = array(
+			'top left'      => __( 'Top Left', 'options-framework' ),
+			'top center'    => __( 'Top Center', 'options-framework' ),
+			'top right'     => __( 'Top Right', 'options-framework' ),
+			'center left'   => __( 'Middle Left', 'options-framework' ),
+			'center center' => __( 'Middle Center', 'options-framework' ),
+			'center right'  => __( 'Middle Right', 'options-framework' ),
+			'bottom left'   => __( 'Bottom Left', 'options-framework' ),
+			'bottom center' => __( 'Bottom Center', 'options-framework' ),
+			'bottom right'  => __( 'Bottom Right', 'options-framework')
+			);
+		return apply_filters( 'tom_recognized_background_position', $default );
+	}
+
+	static function tom_recognized_background_attachment() {
+		$default = array(
+			'scroll' => __( 'Scroll Normally', 'options-framework' ),
+			'fixed'  => __( 'Fixed in Place', 'options-framework')
+			);
+		return apply_filters( 'tom_recognized_background_attachment', $default );
+	}
 }
