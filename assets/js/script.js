@@ -1,4 +1,10 @@
 jQuery(document).ready(function($) {
+	
+	$('.container-body').each(function() {
+		if (jQuery.trim ($(this).text()) == "") {
+			$(this).append('hahaha');
+		}
+	});
 
 	// Loads the color pickers
 	$('.tom-color').wpColorPicker();
@@ -88,10 +94,10 @@ jQuery(document).ready(function($) {
 	});
 
 	/* Trigger cek display options on document ready */
-	$('.tom-type').each(function(index,element){
-		displayOptions(element);/* DIsplay default form */
-	  	showDefault(element);
-	});
+	// $('.tom-type').each(function(index,element){
+		// displayOptions(element);/* DIsplay default form */
+	  	// showDefault(element);
+	// });
 
 	/* Trigger cek display options if select type change */
 	$(document).delegate( ".tom-type", "change", function(event) { 
@@ -380,7 +386,7 @@ jQuery(document).ready(function($) {
 		$('#new-data-options').hide();
 		$('#add-opt-new-data').html('');
 		$('#add-tom-options').find('input, textarea').val(''); 
-		$('#tom-default-new-data').html('<option value="">Select default option</option>'); 
+		$('#new-data-default').html('<input name="default" type="text" id="tom-default-new-data" value="">'); 
 	});
 
 
@@ -404,10 +410,11 @@ jQuery(document).ready(function($) {
 
 		/* Clone repeatable Options*/
 		var opt = $('#add-opt-new-data').clone().attr('id', 'add-opt-'+id);
-			opt.find('.input-opt').each(function(index, item) {
+			opt.each(function(index, item) {
 		     	//set new option name (with id)
-		     	var orgName = $(item).attr( 'name' );
-		     	$(item).attr( 'name', arrayName+'[options]['+orgName+'][]' );
+		     	// var orgName = $(item).attr( 'name' );
+		     	$(item).find('.input-key').attr( 'name', arrayName+'[options][opt-key][]' );
+		     	$(item).find('.input-val').attr( 'name', arrayName+'[options][opt-val][]' );
 		     	// var x = $(item);
 		     	// alert(x); tom_options[dsdsd][desc]
 
@@ -428,15 +435,19 @@ jQuery(document).ready(function($) {
 	/* Delete group */
 	$(document).delegate( "#tom-delete-group", "click", function(event) {
 		event.preventDefault();
-		var activeTab = $('.nav-tab-active');
-		var activeDiv = activeTab.attr('href');
-		var prev = activeTab.prev();
-		// alert(activeDiv);
-		activeTab.fadeOut().remove();
-		$(activeDiv).fadeOut().remove();
+		if (confirm("Are you sure to delete options group ?")) {
+			var activeTab = $('.nav-tab-active');
+			var activeDiv = activeTab.attr('href');
+			var prev = activeTab.prev();
+			// alert(activeDiv);
+			activeTab.fadeOut().remove();
+			$(activeDiv).fadeOut().remove();
 
-		prev.addClass('nav-tab-active');
-		tom_tabs();
+			prev.addClass('nav-tab-active');
+			tom_tabs();
+		 }
+
+	    return false;
 	});
 
 });
