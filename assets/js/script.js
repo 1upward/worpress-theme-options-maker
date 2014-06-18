@@ -1,8 +1,18 @@
 jQuery(document).ready(function($) {
+
+	sizeContent();
+	$(window).resize(sizeContent);
+
+	function sizeContent() {
+		var windowSize = $('#wpbody-content').width();
+		var main = windowSize - 370;
+		// alert(windowSize);
+		$('.metabox-main').width(main+'px');
+	}
 	
 	$('.container-body').each(function() {
 		if (jQuery.trim ($(this).text()) == "") {
-			$(this).append('hahaha');
+			$(this).append('iseh kosong');
 		}
 	});
 
@@ -294,7 +304,7 @@ jQuery(document).ready(function($) {
 		var id = $("#add-tom-options input[id=tom-id-new-data]").val();
         var id = id.replace(/\s+/g, '').toLowerCase();
         if (!id.length){
-    		alert('kosong');
+    		alert('Option ID is required!');
     		return;
     	}
 		var arrayName = 'tom_options['+id+']';

@@ -24,7 +24,7 @@
     margin-bottom: 0px;
 }
 .wrap .metabox-holder.metabox-main {
-    max-width: 691px;
+    min-width: 300px;
     width: 100%;
 }
 .wrap .metabox-holder.metabox-side {
