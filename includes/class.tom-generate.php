@@ -210,7 +210,12 @@ class tomGenerate {
 				case "upload":
 					$output .= '<tr class="alternate">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
-					$output .= '<td>' . tomUpload::tom_uploader( $obj_key, $val, null );
+					$output .= '<td>
+								<input id="' . esc_attr( $obj_key ) . '" class="tom_media_url" type="text" name="" value="">
+								<input class="tom_media_id" type="text" value="">
+								<a href="#" class="tom_media_upload button-secondary">Choose</a><br>
+								<img class="tom_media_image" src="" />';
+								
 					$output .= '</td>' . "\n";
 					$output .= '</tr>' . "\n";
 
