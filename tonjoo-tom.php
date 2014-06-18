@@ -17,8 +17,6 @@ function tonjoo_tom_init() {
 	// Load other resource
 	require plugin_dir_path( __FILE__ ) . 'includes/class.tom-options.php';
 	require plugin_dir_path( __FILE__ ) . 'includes/class.tom-generate.php';
-	require plugin_dir_path( __FILE__ ) . 'includes/class.tom-upload.php';
-	// require plugin_dir_path( __FILE__ ) . 'includes/class.tom-sanitization.php';
 
 	/* if file config exist */
 	if ( file_exists( get_template_directory() . "/tonjoo_options.php" ) ) {
@@ -38,10 +36,6 @@ function tonjoo_tom_init() {
 	$tom = new tomOptions;
 	$tom->init();
 
-	// Instantiate the media uploader class
-	$tom_media_uploader = new tomUpload;
-	$tom_media_uploader->init();
-
 }
 add_action( 'init', 'tonjoo_tom_init', 20 );
 
@@ -59,8 +53,5 @@ function filter_by_value ($array, $index, $value){
       } 
   return $newarray; 
 } 
-
-
-
 
 ?>
