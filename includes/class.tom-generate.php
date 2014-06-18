@@ -73,7 +73,7 @@ class tomGenerate {
 		// 	$options = filter_by_value($options_all, 'group', '1');
 		// }
 		// echo "<pre>";
-		// print_r($options);
+		// print_r($settings);
 		// echo "</pre>";
 		$counter = 0;
 		$menu = '';
@@ -89,7 +89,10 @@ class tomGenerate {
 				$desc = ! empty( $key['desc'] ) ? $key['desc'] : '';
 				$type = ! empty( $key['type'] ) ? $key['type'] : '';
 				$options = ! empty( $key['options'] ) ? $key['options'] : array();
+				/* Default value from file */
 				$val = ! empty( $key['default'] ) ? $key['default'] : '';
+
+				/* change $val default with default value from db if exist */
 				if ( $key['type'] != 'heading' ) {
 					if ( isset( $settings[($obj_key)]) ) {
 						$val = $settings[($obj_key)];
@@ -99,6 +102,8 @@ class tomGenerate {
 						}
 					}
 				}
+
+				$shortcode = '[tom id=' . esc_attr( $obj_key ) . ']';
 
 				$output = '';
 				// Wrap all options
@@ -173,6 +178,12 @@ class tomGenerate {
 					$output .= '<tr class="alternate">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 					$output .= '<td><textarea class="tom-input" id="' . esc_attr( $obj_key ) . '" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" placeholder="' . esc_attr( $val ) . '" rows="4" cols="50">' . esc_attr( $val ) . '</textarea></td>' . "\n";
+					$output .= '<td class="shortcode">
+									<div class="shortcode-container">
+										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
+										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
+									</div>
+								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 					break;
 
@@ -185,6 +196,12 @@ class tomGenerate {
 									$output .= '<option'. selected( $val, $key, false ) .' value="' . esc_attr( $key ) . '">' . esc_html( $option ) . '</option>';
 								}	
 					$output .= '</td>' . "\n";
+					$output .= '<td class="shortcode">
+									<div class="shortcode-container">
+										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
+										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
+									</div>
+								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 					break;
 
@@ -197,26 +214,52 @@ class tomGenerate {
 									$output .= '<input type="' . esc_attr( $type ) . '" class="tom-input" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" value="'. esc_attr( $key ) . '" '. checked( $val, $key, false) .'>' . esc_attr( $option ) . "\n";
 								}	
 					$output .= '</td>' . "\n";
+					$output .= '<td class="shortcode">
+									<div class="shortcode-container">
+										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
+										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
+									</div>
+								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 					break;
 
 				case "checkbox":
 					$output .= '<tr class="alternate">' . "\n";
-					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $val ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
-					$output .= '<td><input id="' . esc_attr( $obj_key ) . '" class="tom-input" type="' . esc_attr( $type ) . '" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" '. checked( $val, 'true', false) .' /></td>' . "\n";
+					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
+					$output .= '<td><input id="' . esc_attr( $obj_key ) . '" class="tom-input" type="' . esc_attr( $type ) . '" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" value="1" '. checked( $val, '1', false) .' /></td>' . "\n";
+					$output .= '<td class="shortcode">
+									<div class="shortcode-container">
+										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
+										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
+									</div>
+								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 					break;
 
 				case "upload":
+					$image 	 = wp_get_attachment_image_src( $val, 'medium' ); 
+					$src 	 = (empty($val)) ? '' : $image[0];
+					$display = (empty($val)) ? 'style="display:none;"' : '';
 					$output .= '<tr class="alternate">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 					$output .= '<td>
-								<input id="' . esc_attr( $obj_key ) . '" class="tom_media_url" type="text" name="" value="">
-								<input class="tom_media_id" type="text" value="">
-								<a href="#" class="tom_media_upload button-secondary">Choose</a><br>
-								<img class="tom_media_image" src="" />';
+								<div id="' . esc_attr( $obj_key ) . '" class="tom_media_upload">
+									<img class="tom_media_image tom-option-image" src="'.$src.'" '. $display .'/>
+									<div>
+										<input class="tom_media_url" type="hidden" value="">
+										<input class="tom_media_id" type="hidden" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" value="' . esc_attr( $val ) . '">
+										<a href="#" class="tom_button_upload button-secondary">Choose</a>
+										<a href="#" class="tom_remove_image button-primary" ' . $display . '>Remove</a>
+									</div>
+								</div>';
 								
 					$output .= '</td>' . "\n";
+					$output .= '<td class="shortcode">
+									<div class="shortcode-container">
+										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
+										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
+									</div>
+								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 
 					break;
@@ -235,6 +278,12 @@ class tomGenerate {
 									$output .= '<img src="' . esc_url( $option ) . '" alt="' . $option .'" class="tom-radio-img-img' . $selected .'" onclick="document.getElementById(\''. esc_attr($obj_key .'_'. $key) .'\').checked=true;" />';
 								}
 					$output .= '</div></td>' . "\n";
+					$output .= '<td class="shortcode">
+									<div class="shortcode-container">
+										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
+										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
+									</div>
+								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 					break;
 
@@ -254,9 +303,15 @@ class tomGenerate {
 										$checked = checked($val[$option], 1, false);
 									}
 
-									$output .= '<input id="' . esc_attr( $id ) . '" class="tom-input" type="checkbox" name="' . esc_attr( $name ) . '" ' . $checked . ' />' . esc_html( $label ) . '<br>' . "\n";
+									$output .= '<input id="' . esc_attr( $id ) . '" class="tom-input" type="checkbox" name="' . esc_attr( $name ) . '" value="1" ' . $checked . ' />' . esc_html( $label ) . '<br>' . "\n";
 								}
 					$output .= '</td>' . "\n";
+					$output .= '<td class="shortcode">
+									<div class="shortcode-container">
+										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
+										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
+									</div>
+								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 					break;
 
@@ -271,6 +326,12 @@ class tomGenerate {
 								}
 					$output .= '<input name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" id="' . esc_attr( $obj_key ) . '" class="tom-color"  type="text" value="' . esc_attr( $val ) . '"' . $default_color .' />';
 					$output .= '</td>' . "\n";
+					$output .= '<td class="shortcode">
+									<div class="shortcode-container">
+										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
+										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
+									</div>
+								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 					break;
 
@@ -293,61 +354,96 @@ class tomGenerate {
 								wp_editor( $val, $obj_key, $editor_settings );
 								$output = '';
 					$output .= '</td>' . "\n";
+					$output .= '<td class="shortcode">
+									<div class="shortcode-container">
+										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
+										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
+									</div>
+								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 					break;
 
-				case 'background':
+				case 'typography':
 
-					$background = $val;
+					unset( $font_size, $font_style, $font_face, $font_color );
+					$typography_defaults = array(
+						'size' => '',
+						'face' => '',
+						'style' => '',
+						'color' => ''
+					);
 
-					// Background Color
-					$default_color = '';
-					if ( isset( $key['default']['color'] ) ) {
-						if ( $val !=  $key['default']['color'] )
-							$default_color = ' data-default-color="' .$key['default']['color'] . '" ';
+					$typography_stored = wp_parse_args( $val, $typography_defaults );
+
+					$typography_options = array(
+						'sizes' => tom_recognized_font_sizes(),
+						'faces' => tom_recognized_font_faces(),
+						'styles' => tom_recognized_font_styles(),
+						'color' => true
+					);
+
+					if ( isset( $key['options'] ) ) {
+						$typography_options = wp_parse_args( $key['options'], $typography_options );
 					}
-					$output .= '<input name="' . esc_attr( $option_name . '[' . $obj_key . '][color]' ) . '" id="' . esc_attr( $obj_key . '_color' ) . '" class="tom-color tom-background-color"  type="text" value="' . esc_attr( $background['color'] ) . '"' . $default_color .' />';
 
-					// Background Image
-					if ( !isset($background['image']) ) {
-						$background['image'] = '';
+					// Font Size
+					if ( $typography_options['sizes'] ) {
+						$font_size = '<select class="tom-typography tom-typography-size" name="' . esc_attr( $option_name . '[' . $obj_key . '][size]' ) . '" id="' . esc_attr( $obj_key . '_size' ) . '">';
+						$sizes = $typography_options['sizes'];
+						foreach ( $sizes as $i ) {
+							$size = $i . 'px';
+							$font_size .= '<option value="' . esc_attr( $size ) . '" ' . selected( $typography_stored['size'], $size, false ) . '>' . esc_html( $size ) . '</option>';
+						}
+						$font_size .= '</select>';
 					}
 
-					$output .= tomUpload::tom_uploader( $obj_key, $background['image'], null, esc_attr( $option_name . '[' . $obj_key . '][image]' ) );
-
-					$class = 'tom-background-properties';
-					if ( '' == $background['image'] ) {
-						$class .= ' hide';
+					// Font Face
+					if ( $typography_options['faces'] ) {
+						$font_face = '<select class="tom-typography tom-typography-face" name="' . esc_attr( $option_name . '[' . $obj_key . '][face]' ) . '" id="' . esc_attr( $obj_key . '_face' ) . '">';
+						$faces = $typography_options['faces'];
+						foreach ( $faces as $key => $face ) {
+							$font_face .= '<option value="' . esc_attr( $key ) . '" ' . selected( $typography_stored['face'], $key, false ) . '>' . esc_html( $face ) . '</option>';
+						}
+						$font_face .= '</select>';
 					}
-					$output .= '<div class="' . esc_attr( $class ) . '">';
 
-					// Background Repeat
-					$output .= '<select class="tom-background tom-background-repeat" name="' . esc_attr( $option_name . '[' . $obj_key . '][repeat]'  ) . '" id="' . esc_attr( $obj_key . '_repeat' ) . '">';
-					$repeats = tomOptions::tom_recognized_background_repeat();
-
-					foreach ($repeats as $key => $repeat) {
-						$output .= '<option value="' . esc_attr( $key ) . '" ' . selected( $background['repeat'], $key, false ) . '>'. esc_html( $repeat ) . '</option>';
+					// Font Styles
+					if ( $typography_options['styles'] ) {
+						$font_style = '<select class="tom-typography tom-typography-style" name="'.$option_name.'['.$obj_key.'][style]" id="'. $obj_key.'_style">';
+						$styles = $typography_options['styles'];
+						foreach ( $styles as $key => $style ) {
+							$font_style .= '<option value="' . esc_attr( $key ) . '" ' . selected( $typography_stored['style'], $key, false ) . '>'. $style .'</option>';
+						}
+						$font_style .= '</select>';
 					}
-					$output .= '</select>';
 
-					// Background Position
-					$output .= '<select class="tom-background tom-background-position" name="' . esc_attr( $option_name . '[' . $obj_key . '][position]' ) . '" id="' . esc_attr( $obj_key . '_position' ) . '">';
-					$positions = tomOptions::tom_recognized_background_position();
-
-					foreach ($positions as $key=>$position) {
-						$output .= '<option value="' . esc_attr( $key ) . '" ' . selected( $background['position'], $key, false ) . '>'. esc_html( $position ) . '</option>';
+					// Font Color
+					if ( $typography_options['color'] ) {
+						$default_color = '';
+						if ( isset($key['default']['color']) ) {
+							if ( $val !=  $key['default']['color'] )
+								$default_color = ' data-default-color="' .$key['default']['color'] . '" ';
+						}
+						$font_color = '<input name="' . esc_attr( $option_name . '[' . $obj_key . '][color]' ) . '" id="' . esc_attr( $obj_key . '_color' ) . '" class="tom-color tom-typography-color  type="text" value="' . esc_attr( $typography_stored['color'] ) . '"' . $default_color .' />';
 					}
-					$output .= '</select>';
 
-					// Background Attachment
-					$output .= '<select class="tom-background tom-background-attachment" name="' . esc_attr( $option_name . '[' . $obj_key . '][attachment]' ) . '" id="' . esc_attr( $obj_key . '_attachment' ) . '">';
-					$attachments = tomOptions::tom_recognized_background_attachment();
+					// Allow modification/injection of typography fields
+					$typography_fields = compact( 'font_size', 'font_face', 'font_style', 'font_color' );
+					$typography_fields = apply_filters( 'tom_typography_fields', $typography_fields, $typography_stored, $option_name, $key );
+					
 
-					foreach ($attachments as $key => $attachment) {
-						$output .= '<option value="' . esc_attr( $key ) . '" ' . selected( $background['attachment'], $key, false ) . '>' . esc_html( $attachment ) . '</option>';
-					}
-					$output .= '</select>';
-					$output .= '</div>';
+					$output .= '<tr class="alternate">' . "\n";
+					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
+					$output .= '<td>' . "\n";
+					$output .= implode( '', $typography_fields );			
+					$output .= '</td>' . "\n";
+					$output .= '<td class="shortcode">
+									<div class="shortcode-container">
+										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
+										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
+									</div>
+								</td>' . "\n";
+					$output .= '</tr>' . "\n";
 
 					break;
 
@@ -356,6 +452,12 @@ class tomGenerate {
 					$output .= '<tr class="alternate">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 					$output .= '<td><input class="tom-input" type="' . esc_attr( $type ) . '" id="' . esc_attr( $obj_key ) . '" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" placeholder="' . esc_attr( $val ) . '" value="' . esc_attr( $val ) . '"></td>' . "\n";
+					$output .= '<td class="shortcode">
+									<div class="shortcode-container">
+										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
+										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
+									</div>
+								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 					// $output .= '<input id="' . esc_attr( $obj_key ) . '" class="tom-input" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" type="text" value="' . esc_attr( $val ) . '" />';
 					break;
@@ -649,10 +751,9 @@ class tomGenerate {
 
 		$counter = 0;
 		$initNestable = '';
-
 		
 		if(!empty($options)) {
-			// echo "<pre>";
+		// echo "<pre>";
 		// print_r($options);
 		// echo "</pre>";
 		// exit();
@@ -669,15 +770,15 @@ class tomGenerate {
 				}
 				$fieldoptions = ! empty( $key['options'] ) ? $key['options'] : array();
 				$val = ! empty( $key['default'] ) ? $key['default'] : '';
-				if ( $key['type'] != 'heading' ) {
-					if ( isset( $settings[($obj_key)]) ) {
-						$val = $settings[($obj_key)];
-						// Striping slashes of non-array options
-						if ( !is_array($val) ) {
-							$val = stripslashes( $val );
-						}
-					}
-				}
+				// if ( $key['type'] != 'heading' ) {
+				// 	if ( isset( $settings[($obj_key)]) ) {
+				// 		$val = $settings[($obj_key)];
+				// 		// Striping slashes of non-array options
+				// 		if ( !is_array($val) ) {
+				// 			$val = stripslashes( $val );
+				// 		}
+				// 	}
+				// }
 
 
 				$output = '';
@@ -745,20 +846,29 @@ class tomGenerate {
 											              <span class="input-text-wrap input">
 												           	<div id="opt-container-'.esc_attr( $obj_key ).'" class="options-container" data-default="'.esc_attr( $obj_key ).'">
 														        <div id="add-opt-'.esc_attr( $obj_key ).'" class="input-options">'."\n";
-																$order = 1;
-																foreach ($fieldoptions as $key => $value ) {
-																	// echo "<pre>";
-																	// print_r($fieldoptions);
-																	// echo "</pre>";
-																	// exit();
-																	// echo $key;
-						$output .=									'<div data-order="'.$order.'" class="input-options-group">
-															        	<i class="dashicons dashicons-yes"></i>
-															        	<input class="input-opt input-key" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[options][opt-key][]" value="'.$key.'" placeholder="Key">
-															        	<input class="input-opt input-val" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[options][opt-val][]" value="'.esc_attr( $value ).'" placeholder="Value">
-															        	<a class="btn-remove dashicons dashicons-dismiss"></a>
-														        	</div>'."\n";
-																$order++;
+																
+																switch ($type) {
+																	case 'typography':
+																		// print_r($fieldoptions);
+																		break;
+																	
+																	default:
+																		$order = 1;
+																		foreach ($fieldoptions as $key => $value ) {
+																			// echo "<pre>";
+																			// print_r($value);
+																			// echo "</pre>";
+																			// exit();
+																			// echo $key;
+								$output .=									'<div data-order="'.$order.'" class="input-options-group">
+																	        	<i class="dashicons dashicons-yes"></i>
+																	        	<input class="input-opt input-key" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[options][opt-key][]" value="'.$key.'" placeholder="Key">
+																	        	<input class="input-opt input-val" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[options][opt-val][]" value="'.esc_attr( $value ).'" placeholder="Value">
+																	        	<a class="btn-remove dashicons dashicons-dismiss"></a>
+																        	</div>'."\n";
+																		$order++;
+																		}
+																		break;
 																}
 						$output .= 								'</div>
 														        <p><a id="new-repeatable" href="#">Add New Field</a></p>
@@ -769,9 +879,9 @@ class tomGenerate {
 											              <span class="title">
 											                Default
 											              </span>
-											              <span class="input-text-wrap input">
-											              	<input type="hidden" id="'.esc_attr( $obj_key ).'-hidden-default" value="'.esc_attr( $val ).'">
-				        									<div id="'.esc_attr( $obj_key ).'-default">';
+											              <span class="input-text-wrap input">';
+						// $output .=					     '<input type="hidden" id="'.esc_attr( $obj_key ).'-hidden-default" value="">';
+				        $output .=						 '<div id="'.esc_attr( $obj_key ).'-default">';
 															/***********************
 															* Switch input type
 															************************/
@@ -792,9 +902,14 @@ class tomGenerate {
 																case 'textarea':
 						$output .=			              			'<textarea name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[default]" id="tom-default-'.esc_attr( $obj_key ).'">'.esc_attr( $val ).'</textarea>';
 																	break;
+																
+																case 'typography':
+																	// print_r($val);
+						// $output .=			              			'<textarea name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[default]" id="tom-default-'.esc_attr( $obj_key ).'">'.esc_attr( $val['size'] ).'</textarea>';
+																	break;
 
 																default:
-						$output .=			              			'<input name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[default]" type="text" value="'.esc_attr( $val ).'">';											# code...
+						$output .=			              			'<input name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[default]" type="text" value="'.esc_attr( $val ).'">';
 																	break;
 															}
 						$output .=			              	'</div>

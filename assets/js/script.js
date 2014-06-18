@@ -181,7 +181,7 @@ jQuery(document).ready(function($) {
 		var containerId = $(element).attr('data-container');
 		var arrayName = 'tom_options['+containerId+']';
 		var type = $(element).val();
-		var valDefault = $('#'+containerId+'-hidden-default').val();
+		// var valDefault = $('#'+containerId+'-hidden-default').val();
 		
 
 		switch (type){
@@ -208,7 +208,7 @@ jQuery(document).ready(function($) {
 		  		break;
 
 		  	default:
-		  		inputDefault = '<input name="'+arrayName+'[default]" id="tom-default-'+containerId+'" type="text" value="'+valDefault+'">';
+		  		inputDefault = '<input name="'+arrayName+'[default]" id="tom-default-'+containerId+'" type="text" value="">';
 	  	}
 
 	  	$('#'+containerId+'-default').html(inputDefault);
@@ -371,7 +371,7 @@ jQuery(document).ready(function($) {
 		template +='            <label>';
 		template +='              <span class="title">Default</span>';
 		template +='              <span class="input-text-wrap input">';
-		template +='              	<input type="hidden" id="'+id+'-hidden-default" value="'+defaultValue+'">';
+		// template +='              	<input type="hidden" id="'+id+'-hidden-default" value="'+defaultValue+'">';
 		template +='              	<div id="'+id+'-default">';
 		/********************************************************************
 		*		APPENDED BY FUNCTION 
@@ -402,7 +402,6 @@ jQuery(document).ready(function($) {
 
 	/* function to clone option type, repeatable options to nestable */
 	function cloneNewData(id) {
-		// alert(id);
 		var arrayName = 'tom_options['+id+']';
 
 		/* Clone select type */
@@ -430,6 +429,10 @@ jQuery(document).ready(function($) {
 
 			});
 		opt.prependTo('#opt-container-'+id);
+		/* Clone attribute display to hide or show */
+		var display = $('#new-data-options').css('display');
+		$('#'+id+'-options').css('display', display);
+		// alert(display);
 
 		/* Clone default field */		
 		var orgDef = $('#tom-default-new-data');
@@ -460,8 +463,11 @@ jQuery(document).ready(function($) {
 	    return false;
 	});
 
-	$('.tom_media_upload').click(function(e) {
-	    e.preventDefault();
+	$('.tom_media_upload').delegate( ".tom_button_upload", "click", function(event) {
+	// $('.tom_media_upload').click(function(e) {
+	    event.preventDefault();
+	    var div = $(this).closest('.tom_media_upload');
+	    // alert(div.attr('id'));
 
 	    var custom_uploader = wp.media({
 	        title: 'Select Option Image',
@@ -472,11 +478,62 @@ jQuery(document).ready(function($) {
 	    })
 	    .on('select', function() {
 	        var attachment = custom_uploader.state().get('selection').first().toJSON();
-	        $('.tom_media_image').attr('src', attachment.url);
-	        $('.tom_media_url').val(attachment.url);
-	        $('.tom_media_id').val(attachment.id);
+	        $(div).find('.tom_media_image').attr('src', attachment.url);
+	        $(div).find('.tom_media_image').show();
+	        $(div).find('.tom_button_upload').html('Change');
+	        $(div).find('.tom_media_url').val(attachment.url);
+	        $(div).find('.tom_media_id').val(attachment.id);
+        	$(div).find('.tom_remove_image').show();
 	    })
 	    .open();
 	});
+
+	$('.tom_media_upload').delegate( ".tom_remove_image", "click", function(event) {
+		var div = $(this).closest('.tom_media_upload');
+
+		$(div).find('.tom_media_image').attr('src', '');
+        $(div).find('.tom_media_image').hide();
+        $(div).find('.tom_button_upload').html('Choose');
+        $(div).find('.tom_media_url').val('');
+        $(div).find('.tom_media_id').val('');
+        $(div).find('.tom_remove_image').hide();
+	});
+
+
+	/* Shortcode */
+	$('.input-shortcode').hide();
+	// $('.button-copy-shortcode').hover(function() {
+	//   $(this).closest('.shortcode').find('.input-shortcode').fadeIn('500');
+	// });
+
+	// $( ".button-copy-shortcode" ).hover(
+	//   function() {
+	//     $(this).closest('.shortcode').find('.input-shortcode').animate({width: 'toggle'});
+	//   }
+	// );
+
+	var copy_sel = $('.shortcode a.button-copy-shortcode');
+
+    // Disables other default handlers on click (avoid issues)
+    copy_sel.on('click', function(e) {
+        e.preventDefault();
+    });
+
+    // Apply clipboard click event
+    copy_sel.clipboard({
+        path: 'http://funkmo-studio/wordpress/wp-content/plugins/tonjoo-tom/assets/js/jquery.clipboard.swf',
+
+        copy: function() {
+            var this_sel = $(this);
+            var shortcode = this_sel.closest('.shortcode').find('.input-shortcode').val();
+
+            // Hide "Copy" and show "Copied, copy again?" message in link
+            // this_sel.find('.code-copy-first').hide();
+            // this_sel.find('.code-copy-done').show();
+
+            // Return text in closest element (useful when you have multiple boxes that can be copied)
+            return shortcode;
+        }
+    });
 
 });

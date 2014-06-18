@@ -54,4 +54,71 @@ function filter_by_value ($array, $index, $value){
   return $newarray; 
 } 
 
+function tom_shortcode( $atts = NULL ) {
+    $param = shortcode_atts( array(
+        'id' => '',
+        'default' => '',
+    ), $atts );
+
+   	$id = $param['id'];
+   	$default = $param['default'];
+
+    $data = get_option( 'tom_data' );
+    $options = tomOptions::tom_options_fields();
+	$type = (!empty($options[$id]['type'])) ? $options[$id]['type'] : '';
+	$val = (!empty($data[$id])) ? $data[$id] : '';
+
+	/* Switch option type for special handling */
+	switch ($type) {
+		case 'upload':
+			$image = wp_get_attachment_image_src( $val );
+			$value = $image[0];
+			break;
+
+		case 'typography':
+			$value = 'style="font-size:'.$val['size'].'; font-family:'.$val['face'].'; font-weight:'.$val['style'].'; color:'.$val['color'].';"';
+			break;
+		
+		default:
+			$value =  $val;
+			break;
+	}
+    
+    /* If value empty try to get default value from shortcode */
+	$tom_data = (!empty($value)) ? $value : $default;
+
+    return $tom_data;
+}
+
+add_shortcode( 'tom', 'tom_shortcode' );
+
+function tom_recognized_font_sizes() {
+	$sizes = range( 9, 71 );
+	$sizes = apply_filters( 'tom_recognized_font_sizes', $sizes );
+	$sizes = array_map( 'absint', $sizes );
+	return $sizes;
+}
+
+function tom_recognized_font_faces() {
+	$default = array(
+		'arial'     => 'Arial',
+		'verdana'   => 'Verdana, Geneva',
+		'trebuchet' => 'Trebuchet',
+		'georgia'   => 'Georgia',
+		'times'     => 'Times New Roman',
+		'tahoma'    => 'Tahoma, Geneva',
+		'palatino'  => 'Palatino',
+		'helvetica' => 'Helvetica*'
+		);
+	return apply_filters( 'tom_recognized_font_faces', $default );
+}
+function tom_recognized_font_styles() {
+	$default = array(
+		'normal'      => 'Normal',
+		'italic'      => 'Italic',
+		'bold'        => 'Bold',
+		'bold italic' => 'Bold Italic',
+		);
+	return apply_filters( 'tom_recognized_font_styles', $default );
+}
 ?>

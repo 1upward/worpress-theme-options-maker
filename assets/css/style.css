@@ -165,8 +165,8 @@
 	display:none;
 }
 #tonjoo-tom .tom-option-image {
-	max-width:340px;
-	margin:3px 0 18px 0;
+	max-width: 240px;
+    border: solid 5px #E9E9E9;
 }
 #tonjoo-tom .mini .controls select, #tonjoo-tom .section .mini .controls {
 	width: 140px;
@@ -188,49 +188,8 @@
 }
 
 /* Image Uploader */
-
-#tonjoo-tom .controls input.upload {
-	width:80%;
-}
-#tonjoo-tom .screenshot {
-	float:left;
-	margin-left:1px;
-	position:relative;
-	width:344px;
-	margin-top:3px;
-}
-#tonjoo-tom .screenshot img {
-	background:#fafafa;
-	border-color:#ccc #eee #eee #ccc;
-	border-style:solid;
-	border-width:1px;
-	float:left;
-	max-width:334px;
-	padding:4px;
-	margin-bottom:10px;
-}
-#tonjoo-tom .screenshot .remove-image {
-	background:url("../images/ico-delete.png") no-repeat;
-	border:medium none;
-	bottom:4px;
-	display:block;
-	float:left;
-	height:16px;
-	padding:0;
-	position:absolute;
-	left:-4px;
-	text-indent:-9999px;
-	width:16px;
-}
-#tonjoo-tom .screenshot .no_image .file_link {
-	margin-left: 20px;
-}
-#tonjoo-tom .screenshot .no_image .remove-button {
-	bottom: 0px;
-}
-#tonjoo-tom .reset-button {
-	float:left;
-	cursor:pointer;
+.tom_media_upload {
+    max-width: 240px;
 }
 
 /* Bottom Section */
@@ -645,6 +604,7 @@ border-bottom: 1px solid #ddd;
 #add-tom-options .input-options .input-options-group {
     margin-bottom: 3px;
 }
+
 .input-options-group .dashicons {
     padding-top: 5px;
 }
@@ -697,18 +657,50 @@ border-bottom: 1px solid #ddd;
     float: left;
     margin-right: 10px;
 }
-/*
-.form-table.tom-options {
+
+/*.form-table.tom-options {
     margin: 0px 20px;
 }
 .form-table.tom-options td {
     padding-right: 30px;
+}*/
+.tom-options .wp-picker-container {
+    padding-left: 5px;
+    padding-top: 5px;
+    vertical-align: middle;
 }
-*/
+select.tom-typography {
+    max-width: 100px;
+}
+/*.tom-options .tom-option-image {
+    max-width: 200px;
+    height: auto;
+}*/
+.widefat th {
+    width: 180px;
+}
 .tom-input {
-    width: 80%;
+    width: 100%;
 }
+.tom_media_upload .image-option {
+    float: left;
+}
+/*td.shortcode {
+    width: 150px;
+}*/
 
-
-
-
+td .shortcode-container {
+    display: table;
+    margin-top: 5px;
+}
+td .shortcode-container .input-shortcode {
+    display: table-cell;
+    width: 120px;
+}
+td .shortcode-container a.button-copy-shortcode {
+    display: table-cell;
+    border: solid 1px #C2C2C2;
+    border-radius: 3px;
+    padding: 0 2px;
+    vertical-align: middle;
+}

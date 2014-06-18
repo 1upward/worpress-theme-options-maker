@@ -85,6 +85,7 @@ class tomOptions {
 	function enqueue_admin_scripts() {
 		// Enqueue custom option panel JS
 		wp_enqueue_script( 'nestable', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/jquery.nestable.js', array('jquery'));
+		wp_enqueue_script( 'zclip', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/jquery.clipboard.js', array( 'jquery' ) );
 		wp_enqueue_script( 'tonjoo-script', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/script.js', array( 'jquery','wp-color-picker' ) );
 		
 		/* Media Uploader */
@@ -138,6 +139,7 @@ class tomOptions {
 								'select-image' => 'Image Select',
 								'color' => 'Color Picker',
 								'editor' => 'Text Editor',
+								'typography' => 'Typography'
 								)
 
 		);
@@ -207,9 +209,11 @@ class tomOptions {
 		<div id="tom-adds-panel" class="metabox-holder metabox-side">
 		  <div class="form-wrap postbox">
 		    <h3>
-		      Add New Option
+		      Another Awesome Plugins
 		    </h3>
-		 	
+		 	<div style="text-align: center; padding: 20px;">
+		 		<img src="https://tonjoo.com/beta/wp-content/uploads/2014/05/FRS-banner-box-Premium.jpg">
+		 	</div>
 		  </div>
 		</div>
 		</div> <!-- / .wrap -->
@@ -310,7 +314,7 @@ class tomOptions {
 			        </label>
 			        <div id="results"></div>
 			        <div class="input">
-			        	<input type="hidden" id="new-data-hidden-default" value="">
+			        	<!-- <input type="hidden" id="new-data-hidden-default" value=""> -->
 						<div id="new-data-default">
 						<!--   -->
 						<input name="default" type="text" id="tom-default-new-data" value="">
@@ -461,36 +465,36 @@ class tomOptions {
 
 
 
-	static function tom_recognized_background_repeat() {
-		$default = array(
-			'no-repeat' => 'No Repeat',
-			'repeat-x'  => 'Repeat Horizontally',
-			'repeat-y'  => 'Repeat Vertically',
-			'repeat'    => 'Repeat All',
-			);
-		return apply_filters( 'tom_recognized_background_repeat', $default );
-	}
+	// static function tom_recognized_background_repeat() {
+	// 	$default = array(
+	// 		'no-repeat' => 'No Repeat',
+	// 		'repeat-x'  => 'Repeat Horizontally',
+	// 		'repeat-y'  => 'Repeat Vertically',
+	// 		'repeat'    => 'Repeat All',
+	// 		);
+	// 	return apply_filters( 'tom_recognized_background_repeat', $default );
+	// }
 
-	static function tom_recognized_background_position() {
-		$default = array(
-			'top left'      => 'Top Left',
-			'top center'    => 'Top Center',
-			'top right'     => 'Top Right',
-			'center left'   => 'Middle Left',
-			'center center' => 'Middle Center',
-			'center right'  => 'Middle Right',
-			'bottom left'   => 'Bottom Left',
-			'bottom center' => 'Bottom Center',
-			'bottom right'  => 'Bottom Right',
-			);
-		return apply_filters( 'tom_recognized_background_position', $default );
-	}
+	// static function tom_recognized_background_position() {
+	// 	$default = array(
+	// 		'top left'      => 'Top Left',
+	// 		'top center'    => 'Top Center',
+	// 		'top right'     => 'Top Right',
+	// 		'center left'   => 'Middle Left',
+	// 		'center center' => 'Middle Center',
+	// 		'center right'  => 'Middle Right',
+	// 		'bottom left'   => 'Bottom Left',
+	// 		'bottom center' => 'Bottom Center',
+	// 		'bottom right'  => 'Bottom Right',
+	// 		);
+	// 	return apply_filters( 'tom_recognized_background_position', $default );
+	// }
 
-	static function tom_recognized_background_attachment() {
-		$default = array(
-			'scroll' => 'Scroll Normally',
-			'fixed'  => 'Fixed in Place'
-			);
-		return apply_filters( 'tom_recognized_background_attachment', $default );
-	}
+	// static function tom_recognized_background_attachment() {
+	// 	$default = array(
+	// 		'scroll' => 'Scroll Normally',
+	// 		'fixed'  => 'Fixed in Place'
+	// 		);
+	// 	return apply_filters( 'tom_recognized_background_attachment', $default );
+	// }
 }
