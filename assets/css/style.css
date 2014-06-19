@@ -704,3 +704,10 @@ td .shortcode-container a.button-copy-shortcode {
     padding: 0 2px;
     vertical-align: middle;
 }
+
+.empty-options {
+    text-align: center;
+    color: #8F8F8F;
+    border: dashed 2px;
+    border-radius: 15px;
+}

@@ -5,14 +5,18 @@ jQuery(document).ready(function($) {
 
 	function sizeContent() {
 		var windowSize = $('#wpbody-content').width();
-		var main = windowSize - 370;
+		var main = windowSize - 380;
 		// alert(windowSize);
 		$('.metabox-main').width(main+'px');
 	}
 	
 	$('.container-body').each(function() {
+		var emptyOptions = '<div class="empty-options">';
+			emptyOptions +=		'<h1>There is no option here..</h1>';
+			emptyOptions +=		'<h4>please create the option first</h4>';
+			emptyOptions +=	'</div>';
 		if (jQuery.trim ($(this).text()) == "") {
-			$(this).append('iseh kosong');
+			$(this).append(emptyOptions);
 		}
 	});
 

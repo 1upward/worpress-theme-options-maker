@@ -736,7 +736,10 @@ class tomGenerate {
 				    Oops! your options look empty..
 				  </h3>
 				  <div class="container-table">
-				  	<div><i class="dashicons dashicons-smiley"></i></div>
+				  	<div class="empty-options">
+						<h1>Oops! your options look empty..</h1>
+						<h4>Please create options or put options file on theme directory</h4>
+				  	</div>
 				  </div>
 				</div>';
 		}

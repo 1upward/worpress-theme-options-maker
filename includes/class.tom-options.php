@@ -122,7 +122,7 @@ class tomOptions {
             'position' => '61',
 
             /* for sub menu */
-            'parent_slug' => 'tonjoo-tom',
+            // 'parent_slug' => 'tonjoo-tom',
             'sub_page_title' => 'Theme Options Maker (TOM) Settings',
             'sub_page_desc' => "Customize your theme options!, you can add, edit, or delete easily here. Don't forget to save your changes or you will lose it",
 			'sub_menu_title' => 'Create Options',
@@ -169,7 +169,8 @@ class tomOptions {
 
         if ($config['mode'] == 'full') {
         	add_submenu_page(
-		    	$config['parent_slug'],
+		    	// $config['parent_slug'],
+		    	$config['menu_slug'],
 		    	$config['sub_page_title'],
 		    	$config['sub_menu_title'],
 		    	$config['sub_capability'],
