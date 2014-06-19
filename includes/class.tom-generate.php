@@ -724,24 +724,41 @@ class tomGenerate {
 			/* tutup table terakhir */
 			echo '</tbody></table></div>';
 
+			/* Print Submit Button */
+			echo 	'<div id="tonjoo-tom-submit">
+						<input type="submit" class="button-primary" name="update" value="Save" />
+						<input type="submit" class="reset-button button-secondary" name="reset" value="Reset" onclick="return confirm( \'Are you sure to reset. Any theme settings will be lost!\');" />
+						<div class="clear"></div>
+					</div>';
+
 			if ( tomGenerate::tom_tabs() != '' ) {
 				echo '</div>';
 			}
 
+
 		} else { 
 
 		/* Handle if empty options  */
-		echo '	<div id="empty-group" class="group empty-group">
-				  <h3>
-				    Oops! your options look empty..
-				  </h3>
-				  <div class="container-table">
-				  	<div class="empty-options">
-						<h1>Oops! your options look empty..</h1>
-						<h4>Please create options or put options file on theme directory</h4>
-				  	</div>
-				  </div>
-				</div>';
+		$config = tomOptions::tom_configs();
+		$output =  '<div id="empty-group" class="group empty-group">
+					  <h3>
+					    Oops! your options look empty..
+					  </h3>
+					  <div class="container-table">
+					  	<div class="empty-options">
+							<h1>Oops! your options look empty..</h1>
+							<h4>Please create options or put options file on theme directory</h4>';
+		/* If Create options enabled, display button to create it */
+		if ($config['mode'] == 'full') {
+		$output .=	  	   '<div class="please-create-options">
+					  			<a href="' . get_admin_url( null, 'admin.php?page=' . $config['sub_menu_slug'] ) .'" class="btn">Create Options Now</a>
+					  		</div>';
+		}
+		$output .=	   '</div>
+					  </div>
+					</div>';
+		echo $output;
+
 		}
 	}
 

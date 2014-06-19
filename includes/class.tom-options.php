@@ -113,9 +113,9 @@ class tomOptions {
 			/* Default cofigurations */
             'mode' => 'full',
 
-            'page_title' => 'Theme Options',
+            'page_title' => 'Tonjoo Theme Options Maker (TTOM)',
             'page_desc' => "Customize your theme options!, you can add, edit, or delete easily here. Don't forget to save your changes or you will lose it",
-			'menu_title' => 'Theme Options',
+			'menu_title' => 'TTOM Options',
 			'capability' => 'edit_theme_options',
 			'menu_slug' => 'tonjoo-tom',
             'icon_url' => 'dashicons-editor-paste-text',
@@ -123,7 +123,7 @@ class tomOptions {
 
             /* for sub menu */
             // 'parent_slug' => 'tonjoo-tom',
-            'sub_page_title' => 'Theme Options Maker (TOM) Settings',
+            'sub_page_title' => 'Tonjoo Theme Options Maker (TTOM) Settings',
             'sub_page_desc' => "Customize your theme options!, you can add, edit, or delete easily here. Don't forget to save your changes or you will lose it",
 			'sub_menu_title' => 'Create Options',
 			'sub_capability' => 'manage_options',
@@ -199,11 +199,6 @@ class tomOptions {
 				<form action="options.php" method="post">
 				<?php settings_fields( 'tonjoo-tom' ); ?>
 				<?php tomGenerate::generate_options_fields(); /* Settings */ ?>
-				<div id="tonjoo-tom-submit">
-					<input type="submit" class="button-primary" name="update" value="Save" />
-					<input type="submit" class="reset-button button-secondary" name="reset" value="Reset" onclick="return confirm( '<?php print esc_js('Click OK to reset. Any theme settings will be lost!'); ?>' );" />
-					<div class="clear"></div>
-				</div>
 				</form>
 			</div> <!-- / #container -->
 		</div>
