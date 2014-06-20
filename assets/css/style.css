@@ -214,6 +214,10 @@
 width: 100%;
 }
 
+#tonjoo-tom .quick-edit-row-page fieldset.inline-edit-col-right .inline-edit-col {
+    border: none;
+}
+
 #datatable thead {
 cursor: default;
 background-color: #f1f1f1;

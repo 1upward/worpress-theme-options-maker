@@ -15,6 +15,21 @@ class tomOptions {
 
 		add_action( 'admin_menu', array( $this, 'add_custom_options_page' ) );
 
+		/* Ajax */
+		add_action( 'wp_ajax_my_action', array( $this, 'my_action_callback' ) );
+
+
+	}
+
+	function my_action_callback() {
+		global $wpdb;
+		// $whatever = intval( $_POST['whatever'] );
+		// $whatever += 10;
+	        // echo $whatever;
+		$formData = $_POST['form_data'];
+		// $options
+		print_r($_POST['form_data']);
+		die();
 	}
 
 	function tom_settings_init() {
@@ -97,6 +112,13 @@ class tomOptions {
             wp_enqueue_script('thickbox');
             wp_enqueue_style('thickbox');
         }
+
+        /* Ajax */
+        wp_enqueue_script( 'ajax-script', plugins_url( '/js/my_query.js', __FILE__ ), array('jquery') );
+		
+		// in javascript, object properties are accessed as ajax_object.ajax_url, ajax_object.we_value
+		wp_localize_script( 'ajax-script', 'ajax_object',
+	            array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'we_value' => 1234 ) );
 		
 		/* Javasvript variable TTOM */
 		$config = $this->tom_configs();
@@ -236,7 +258,7 @@ class tomOptions {
 
 	    <div id="tom-create-options-panel" class="metabox-holder metabox-main">
 		    <div id="tonjoo-tom" class="postbox">
-				<form action="options.php" method="post">
+				<form id="f_create-options" action="options.php" method="post">
 				<?php settings_fields( 'tom_options' ); ?>
 				<?php tomGenerate::generate_create_options_fields(); /* Settings */ ?>
 				</form>
@@ -254,7 +276,7 @@ class tomOptions {
 			        <div class="input">
 				        <input id="tom-id-new-data" type="text" value="" class="input-width">
 				        <p>
-				          Option ID (use for key and shortcode).
+				          Option ID (Use for Shortcode).
 				        </p>
 			        </div>
 			      	<label for="tom-name-new-data">

@@ -407,6 +407,7 @@ jQuery(document).ready(function($) {
 		$('#new-data-default').html('<input name="default" type="text" id="tom-default-new-data" value="">'); 
 		$('.empty-options').remove();
 		$('#tonjoo-tom-submit').show();
+		ajaxSubmit('#f_create-options');
 	});
 
 
@@ -559,5 +560,22 @@ jQuery(document).ready(function($) {
 	   mouseenter : showTooltip,
 	   mouseleave: hideTooltip
 	});
+
+	/* Submit Form*/
+	function ajaxSubmit(formId){
+		var formData = $(formId).serialize();
+
+		var data = {
+			'action': 'my_action',
+			'form_data': formData,
+			'whatever': 1234
+		};
+		// We can also pass the url value separately from ajaxurl for front end AJAX implementations
+		$.post(ajaxurl, data, function(response) {
+			alert('Got this from the server: ' + response);
+		});
+
+	return false;
+	}
 
 });
