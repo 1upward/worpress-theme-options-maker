@@ -79,7 +79,6 @@ class tomOptions {
 	function enqueue_admin_styles() {
 
 		wp_enqueue_style( 'tonjoo-tom', plugin_dir_url( dirname(__FILE__) ) . 'assets/css/style.css', array() );
-		wp_enqueue_style( 'hint', plugin_dir_url( dirname(__FILE__) ) . 'assets/css/hint.css', array() );
 		wp_enqueue_style( 'wp-color-picker' );
 	}
 	
@@ -87,7 +86,6 @@ class tomOptions {
 		// Enqueue custom option panel JS
 		wp_enqueue_script( 'nestable', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/jquery.nestable.js', array('jquery'));
 		wp_enqueue_script( 'zclip', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/jquery.clipboard.js', array( 'jquery' ) );
-		// wp_enqueue_script( 'tooltips', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/tooltips.js', array( 'jquery' ) );
 		wp_enqueue_script( 'tonjoo-script', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/script.js', array( 'jquery','wp-color-picker' ) );
 		
 		/* Media Uploader */

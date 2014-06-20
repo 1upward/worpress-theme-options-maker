@@ -103,7 +103,8 @@ class tomGenerate {
 					}
 				}
 
-				$shortcode = '[tom id="'.$obj_key.'"]';
+				$short_default = !empty($key['default']) ? ' default="'.$key['default'].'"' : '';
+				$shortcode = '[tom id="'.$obj_key.'"'.$short_default.']';
 
 				$output = '';
 				// Wrap all options

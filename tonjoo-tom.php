@@ -54,6 +54,9 @@ function filter_by_value ($array, $index, $value){
   return $newarray; 
 } 
 
+/**************
+* SHORTCODE 
+**************/
 function tom_shortcode( $atts = NULL ) {
     $param = shortcode_atts( array(
         'id' => '',
@@ -70,15 +73,19 @@ function tom_shortcode( $atts = NULL ) {
 
 	/* Switch option type for special handling */
 	switch ($type) {
+		case 'multicheck':
+			$value = serialize($val);
+			break;
+
 		case 'upload':
 			$image = wp_get_attachment_image_src( $val );
 			$value = $image[0];
 			break;
 
 		case 'typography':
-			$value = 'style="font-size:'.$val['size'].'; font-family:'.$val['face'].'; font-weight:'.$val['style'].'; color:'.$val['color'].';"';
+			$value = serialize($val);
 			break;
-		
+
 		default:
 			$value =  $val;
 			break;
@@ -91,6 +98,13 @@ function tom_shortcode( $atts = NULL ) {
 }
 
 add_shortcode( 'tom', 'tom_shortcode' );
+
+
+
+
+
+
+
 
 function tom_recognized_font_sizes() {
 	$sizes = range( 9, 71 );
