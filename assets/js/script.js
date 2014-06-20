@@ -1,5 +1,4 @@
 jQuery(document).ready(function($) {
-
 	sizeContent();
 	$(window).resize(sizeContent);
 
@@ -13,10 +12,15 @@ jQuery(document).ready(function($) {
 	$('.container-body').each(function() {
 		var emptyOptions = '<div class="empty-options">';
 			emptyOptions +=		'<h1>There is no option here..</h1>';
-			emptyOptions +=		'<h4>please create the option first</h4>';
+			if (tomMode == 'full') {
+				emptyOptions +=		'<h4>please create the option <a href="'+tomCreatePage+'#tom-id-new-data">first</a></h4>';
+			}
 			emptyOptions +=	'</div>';
 		if (jQuery.trim ($(this).text()) == "") {
+			/* Append empty message */
 			$(this).append(emptyOptions);
+			/* Hide submit button */
+			$('#tonjoo-tom-submit').hide();
 		}
 	});
 
@@ -401,6 +405,8 @@ jQuery(document).ready(function($) {
 		$('#add-opt-new-data').html('');
 		$('#add-tom-options').find('input, textarea').val(''); 
 		$('#new-data-default').html('<input name="default" type="text" id="tom-default-new-data" value="">'); 
+		$('.empty-options').remove();
+		$('#tonjoo-tom-submit').show();
 	});
 
 
@@ -467,6 +473,7 @@ jQuery(document).ready(function($) {
 	    return false;
 	});
 
+	/* Media upload */
 	$('.tom_media_upload').delegate( ".tom_button_upload", "click", function(event) {
 	// $('.tom_media_upload').click(function(e) {
 	    event.preventDefault();
@@ -503,41 +510,54 @@ jQuery(document).ready(function($) {
         $(div).find('.tom_remove_image').hide();
 	});
 
+	/* Copy to clipboard */
+	$("a.button-copy-shortcode").on('mouseover', function(event){
+		event.preventDefault();
 
-	/* Shortcode */
-	$('.input-shortcode').hide();
-	// $('.button-copy-shortcode').hover(function() {
-	//   $(this).closest('.shortcode').find('.input-shortcode').fadeIn('500');
-	// });
+        //turn off this listening event for the element that triggered this
+        // $(this).off('mouseover');
 
-	// $( ".button-copy-shortcode" ).hover(
-	//   function() {
-	//     $(this).closest('.shortcode').find('.input-shortcode').animate({width: 'toggle'});
-	//   }
-	// );
+         //initialize clipboard
+        $(this).clipboard({
+            path: pluginDir+'/tonjoo-tom/assets/js/jquery.clipboard.swf',
+            copy: function() {
+	            var shortcode = $(this).find('.shortcodeValue').text();
+	            $(this).find('.tooltip-body').html('Copied to clipboard');
+	            // Hide "Copy" and show "Copied, copy again?" message in link
+	            // this_sel.find('.code-copy-first').hide();
+	            // this_sel.find('.code-copy-done').show();
 
-	var copy_sel = $('.shortcode a.button-copy-shortcode');
+	            // Return text in closest element (useful when you have multiple boxes that can be copied)
+	            return shortcode;
+	        }
+         });
+     });
 
-    // Disables other default handlers on click (avoid issues)
-    copy_sel.on('click', function(e) {
-        e.preventDefault();
-    });
 
-    // Apply clipboard click event
-    copy_sel.clipboard({
-        path: 'http://funkmo-studio/wordpress/wp-content/plugins/tonjoo-tom/assets/js/jquery.clipboard.swf',
+	/* Tooltip */
+	var showTooltip = function(event) {
+		// alert('ok');
+	  	$('div.tooltip').remove();
+	  	var title 	= $(this).find('.shortcodeValue').attr('data-title');
+	  	var shortcode 	= $(this).find('.shortcodeValue').text();
+	  	var	elementDiv 	=  '<div class="tooltip">';
+	  		elementDiv 	+= '	<div class="tooltip-head">'+title+'</div>';
+	  		elementDiv 	+= '	<div class="tooltip-body">'+shortcode+'</div>';
+	  		elementDiv 	+= '</div>';
 
-        copy: function() {
-            var this_sel = $(this);
-            var shortcode = this_sel.closest('.shortcode').find('.input-shortcode').val();
+	  	$(elementDiv).appendTo($(this));
 
-            // Hide "Copy" and show "Copied, copy again?" message in link
-            // this_sel.find('.code-copy-first').hide();
-            // this_sel.find('.code-copy-done').show();
-
-            // Return text in closest element (useful when you have multiple boxes that can be copied)
-            return shortcode;
-        }
-    });
+	  	var position = $(this).position();
+	  	$('div.tooltip').css({top: position.top - 10, left: position.left + 38});
+	};
+ 
+	var hideTooltip = function() {
+	   $('div.tooltip').remove();
+	};
+ 
+	$("a.button-copy-shortcode").on({
+	   mouseenter : showTooltip,
+	   mouseleave: hideTooltip
+	});
 
 });

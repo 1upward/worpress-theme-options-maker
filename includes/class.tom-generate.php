@@ -103,7 +103,7 @@ class tomGenerate {
 					}
 				}
 
-				$shortcode = '[tom id=' . esc_attr( $obj_key ) . ']';
+				$shortcode = '[tom id="'.$obj_key.'"]';
 
 				$output = '';
 				// Wrap all options
@@ -179,10 +179,7 @@ class tomGenerate {
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 					$output .= '<td><textarea class="tom-input" id="' . esc_attr( $obj_key ) . '" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" placeholder="' . esc_attr( $val ) . '" rows="4" cols="50">' . esc_attr( $val ) . '</textarea></td>' . "\n";
 					$output .= '<td class="shortcode">
-									<div class="shortcode-container">
-										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
-										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
-									</div>
+									<span><a class="button-copy-shortcode" title="Copy Shortcode" href="#"><i class="dashicons dashicons-nametag"></i><span class="shortcodeValue" data-title="'. esc_attr( $name ) .'" style="display:none;">'.$shortcode.'</span></a></span>
 								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 					break;
@@ -197,10 +194,7 @@ class tomGenerate {
 								}	
 					$output .= '</td>' . "\n";
 					$output .= '<td class="shortcode">
-									<div class="shortcode-container">
-										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
-										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
-									</div>
+									<span><a class="button-copy-shortcode" title="Copy Shortcode" href="#"><i class="dashicons dashicons-nametag"></i><span class="shortcodeValue" data-title="'. esc_attr( $name ) .'" style="display:none;">'.$shortcode.'</span></a></span>
 								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 					break;
@@ -215,10 +209,7 @@ class tomGenerate {
 								}	
 					$output .= '</td>' . "\n";
 					$output .= '<td class="shortcode">
-									<div class="shortcode-container">
-										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
-										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
-									</div>
+									<span><a class="button-copy-shortcode" title="Copy Shortcode" href="#"><i class="dashicons dashicons-nametag"></i><span class="shortcodeValue" data-title="'. esc_attr( $name ) .'" style="display:none;">'.$shortcode.'</span></a></span>
 								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 					break;
@@ -228,10 +219,7 @@ class tomGenerate {
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 					$output .= '<td><input id="' . esc_attr( $obj_key ) . '" class="tom-input" type="' . esc_attr( $type ) . '" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" value="1" '. checked( $val, '1', false) .' /></td>' . "\n";
 					$output .= '<td class="shortcode">
-									<div class="shortcode-container">
-										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
-										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
-									</div>
+									<span><a class="button-copy-shortcode" title="Copy Shortcode" href="#"><i class="dashicons dashicons-nametag"></i><span class="shortcodeValue" data-title="'. esc_attr( $name ) .'" style="display:none;">'.$shortcode.'</span></a></span>
 								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 					break;
@@ -255,10 +243,7 @@ class tomGenerate {
 								
 					$output .= '</td>' . "\n";
 					$output .= '<td class="shortcode">
-									<div class="shortcode-container">
-										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
-										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
-									</div>
+									<span><a class="button-copy-shortcode" title="Copy Shortcode" href="#"><i class="dashicons dashicons-nametag"></i><span class="shortcodeValue" data-title="'. esc_attr( $name ) .'" style="display:none;">'.$shortcode.'</span></a></span>
 								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 
@@ -279,10 +264,7 @@ class tomGenerate {
 								}
 					$output .= '</div></td>' . "\n";
 					$output .= '<td class="shortcode">
-									<div class="shortcode-container">
-										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
-										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
-									</div>
+									<span><a class="button-copy-shortcode" title="Copy Shortcode" href="#"><i class="dashicons dashicons-nametag"></i><span class="shortcodeValue" data-title="'. esc_attr( $name ) .'" style="display:none;">'.$shortcode.'</span></a></span>
 								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 					break;
@@ -307,10 +289,7 @@ class tomGenerate {
 								}
 					$output .= '</td>' . "\n";
 					$output .= '<td class="shortcode">
-									<div class="shortcode-container">
-										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
-										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
-									</div>
+									<span><a class="button-copy-shortcode" title="Copy Shortcode" href="#"><i class="dashicons dashicons-nametag"></i><span class="shortcodeValue" data-title="'. esc_attr( $name ) .'" style="display:none;">'.$shortcode.'</span></a></span>
 								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 					break;
@@ -327,10 +306,7 @@ class tomGenerate {
 					$output .= '<input name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" id="' . esc_attr( $obj_key ) . '" class="tom-color"  type="text" value="' . esc_attr( $val ) . '"' . $default_color .' />';
 					$output .= '</td>' . "\n";
 					$output .= '<td class="shortcode">
-									<div class="shortcode-container">
-										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
-										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
-									</div>
+									<span><a class="button-copy-shortcode" title="Copy Shortcode" href="#"><i class="dashicons dashicons-nametag"></i><span class="shortcodeValue" data-title="'. esc_attr( $name ) .'" style="display:none;">'.$shortcode.'</span></a></span>
 								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 					break;
@@ -355,10 +331,7 @@ class tomGenerate {
 								$output = '';
 					$output .= '</td>' . "\n";
 					$output .= '<td class="shortcode">
-									<div class="shortcode-container">
-										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
-										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
-									</div>
+									<span><a class="button-copy-shortcode" title="Copy Shortcode" href="#"><i class="dashicons dashicons-nametag"></i><span class="shortcodeValue" data-title="'. esc_attr( $name ) .'" style="display:none;">'.$shortcode.'</span></a></span>
 								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 					break;
@@ -438,10 +411,7 @@ class tomGenerate {
 					$output .= implode( '', $typography_fields );			
 					$output .= '</td>' . "\n";
 					$output .= '<td class="shortcode">
-									<div class="shortcode-container">
-										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
-										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
-									</div>
+									<span><a class="button-copy-shortcode" title="Copy Shortcode" href="#"><i class="dashicons dashicons-nametag"></i><span class="shortcodeValue" data-title="'. esc_attr( $name ) .'" style="display:none;">'.$shortcode.'</span></a></span>
 								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 
@@ -453,10 +423,7 @@ class tomGenerate {
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 					$output .= '<td><input class="tom-input" type="' . esc_attr( $type ) . '" id="' . esc_attr( $obj_key ) . '" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" placeholder="' . esc_attr( $val ) . '" value="' . esc_attr( $val ) . '"></td>' . "\n";
 					$output .= '<td class="shortcode">
-									<div class="shortcode-container">
-										<a class="button-copy-shortcode" title="Copy Shortcode" href="#"><span class="dashicons dashicons-nametag"></span></a>
-										<input class="input-shortcode" type="text" readonly=readonly value="'. $shortcode .'">
-									</div>
+									<span><a class="button-copy-shortcode" title="Copy Shortcode" href="#"><i class="dashicons dashicons-nametag"></i><span class="shortcodeValue" data-title="'. esc_attr( $name ) .'" style="display:none;">'.$shortcode.'</span></a></span>
 								</td>' . "\n";
 					$output .= '</tr>' . "\n";
 					// $output .= '<input id="' . esc_attr( $obj_key ) . '" class="tom-input" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" type="text" value="' . esc_attr( $val ) . '" />';
@@ -724,16 +691,16 @@ class tomGenerate {
 			/* tutup table terakhir */
 			echo '</tbody></table></div>';
 
-			/* Print Submit Button */
-			echo 	'<div id="tonjoo-tom-submit">
-						<input type="submit" class="button-primary" name="update" value="Save" />
-						<input type="submit" class="reset-button button-secondary" name="reset" value="Reset" onclick="return confirm( \'Are you sure to reset. Any theme settings will be lost!\');" />
-						<div class="clear"></div>
-					</div>';
-
 			if ( tomGenerate::tom_tabs() != '' ) {
 				echo '</div>';
 			}
+
+			/* Submit Button */
+			$submit =  '<div id="tonjoo-tom-submit">
+							<input type="submit" class="button-primary" name="update" value="Save" />
+							<input type="submit" class="reset-button button-secondary" name="reset" value="Reset" onclick="return confirm( \'Are you sure to reset. Any theme settings will be lost!\');" />
+							<div class="clear"></div>
+						</div>';
 
 
 		} else { 
@@ -759,7 +726,13 @@ class tomGenerate {
 					</div>';
 		echo $output;
 
+		/* No Submit Button */
+		$submit =  '';
+
 		}
+
+		/* Print Submit Button */
+		echo $submit;
 	}
 
 	static function generate_create_options_fields() {
@@ -880,7 +853,7 @@ class tomGenerate {
 																			// echo "</pre>";
 																			// exit();
 																			// echo $key;
-								$output .=									'<div data-order="'.$order.'" class="input-options-group">
+						$output .=											'<div data-order="'.$order.'" class="input-options-group">
 																	        	<i class="dashicons dashicons-yes"></i>
 																	        	<input class="input-opt input-key" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[options][opt-key][]" value="'.$key.'" placeholder="Key">
 																	        	<input class="input-opt input-val" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[options][opt-val][]" value="'.esc_attr( $value ).'" placeholder="Value">
@@ -978,6 +951,13 @@ class tomGenerate {
 
 			echo '</ol></div>';
 			
+			// /* Print Submit and Delete Group Button */
+			// echo	'<div id="tonjoo-tom-submit">
+			// 			<input type="submit" class="button-primary" name="update" value="Save" />
+			// 			<a id="tom-delete-group" class="reset-button button-secondary">Delete Group</a>
+			// 			<div class="clear"></div>
+			// 		</div>';
+
 			// Outputs closing div if there tabs
 			if ( tomGenerate::create_tom_tabs() != '' ) {
 				echo '</div>'."\n";
@@ -988,29 +968,47 @@ class tomGenerate {
 						'. $initNestable .'
 					});
 				  </script>';
-		}
 
-		/* Create new option group */
-		echo '	<div id="new-group" class="group new-group">
-				  <h3>
-				    Create New Option Group
-				  </h3>
-				  <div class="container-table">
-				  	<table class="widefat">
-					  <tbody>
-					    <tr class="alternate">
-							<th scope="row"><label for="group-name">Group Name</label><br><span class="description">Name of option group</span></th>
-							<td><input class="tom-input" type="text" id="group-name" name="tom_options[new-group][name]" placeholder="Group Name" value=""></td>
-						</tr>
-					    <tr class="alternate">
-							<th scope="row"><label for="group-desc">Description</label><br><span class="description">Short descriptipn</span></th>
-							<td><textarea class="tom-input" id="group-desc" name="tom_options[new-group][desc]" placeholder="Description" rows="4" cols="50"></textarea></td>
-						</tr>
-					  </tbody>
-					</table>
-				  </div>
-				</div>';
+			
 
+			/* Submit and Delete Group Button */
+			$submit =  '<div id="tonjoo-tom-submit">
+							<input type="submit" class="button-primary" name="update" value="Save" />
+							<a id="tom-delete-group" class="reset-button button-secondary">Delete Group</a>
+							<div class="clear"></div>
+						</div>';
+		} else {
+
+			/* Create New Group Button */
+			$submit =  '<div id="tonjoo-tom-submit">
+							<input type="submit" class="button-primary" name="update" value="Create" />
+							<div class="clear"></div>
+						</div>';
+			}
+
+			/* Div Create new option group */
+			echo '	<div id="new-group" class="group new-group">
+					  <h3>
+					    Create New Option Group
+					  </h3>
+					  <div class="container-table">
+					  	<table class="widefat">
+						  <tbody>
+						    <tr class="alternate">
+								<th scope="row"><label for="group-name">Group Name</label><br><span class="description">Name of option group</span></th>
+								<td><input class="tom-input" type="text" id="group-name" name="tom_options[new-group][name]" placeholder="Group Name" value=""></td>
+							</tr>
+						    <tr class="alternate">
+								<th scope="row"><label for="group-desc">Description</label><br><span class="description">Short descriptipn</span></th>
+								<td><textarea class="tom-input" id="group-desc" name="tom_options[new-group][desc]" placeholder="Description" rows="4" cols="50"></textarea></td>
+							</tr>
+						  </tbody>
+						</table>
+					  </div>
+					</div>';
+
+			/* Print Submit Button */
+			echo $submit;
 	}
 
 }

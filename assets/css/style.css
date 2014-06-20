@@ -676,8 +676,11 @@ select.tom-typography {
     max-width: 200px;
     height: auto;
 }*/
-.widefat th {
+.tom-options th {
     width: 180px;
+}
+.tom-options td, .widefat th {
+    overflow: visible;
 }
 .tom-input {
     width: 100%;
@@ -685,19 +688,13 @@ select.tom-typography {
 .tom_media_upload .image-option {
     float: left;
 }
-/*td.shortcode {
-    width: 150px;
-}*/
 
-td .shortcode-container {
+td.shortcode {
     display: table;
     margin-top: 5px;
 }
-td .shortcode-container .input-shortcode {
-    display: table-cell;
-    width: 120px;
-}
-td .shortcode-container a.button-copy-shortcode {
+
+td.shortcode a.button-copy-shortcode {
     display: table-cell;
     border: solid 1px #C2C2C2;
     border-radius: 3px;
@@ -705,6 +702,53 @@ td .shortcode-container a.button-copy-shortcode {
     vertical-align: middle;
 }
 
+/* Tooltip */
+.tooltip {
+    position: absolute;
+    background: #fff;
+    border: 1px solid rgb(126, 124, 124);
+    z-index: 999;
+    width: auto;
+    display: table;
+}
+.tooltip .tooltip-head {
+    text-align: center;
+    background: rgb(224, 224, 224);
+    font-weight: bold;
+    border-bottom: solid 2px rgb(201, 201, 201);
+    color: rgb(126, 124, 124);
+    padding-top: 2px;
+    padding: 0 10px;
+}
+.tooltip .tooltip-body {
+    padding:5px;
+}
+.tooltip:after, .tooltip:before {
+    right: 100%;
+    top: 25%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.tooltip:after {
+    border-color: rgba(216, 218, 227, 0);
+    border-right-color: rgb(224, 224, 224);
+    border-width: 5px;
+    margin-top: -5px;
+}
+.tooltip:before {
+    border-color: rgba(0, 116, 162, 0);
+    border-right-color: rgb(126, 124, 124);
+    border-width: 6px;
+    margin-top: -6px;
+}
+
+
+/* Empty Options */
 .empty-options {
     text-align: center;
     color: #8F8F8F;
@@ -738,3 +782,14 @@ td .shortcode-container a.button-copy-shortcode {
     -webkit-box-shadow: inset 0 1px 0 #ec8a85,0 1px 0 rgba(0,0,0,.15);
     box-shadow: inset 0 1px 0 #ec8a85,0 1px 0 rgba(0,0,0,.15);
 }
+
+/*.tooltip {
+    position:absolute;
+    border:1px solid #333;
+    background-color:#161616;
+    border-radius:5px;
+    padding: 5px;
+    color:#fff;
+    font-size:12px Arial;
+}*/
+

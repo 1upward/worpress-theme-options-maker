@@ -79,6 +79,7 @@ class tomOptions {
 	function enqueue_admin_styles() {
 
 		wp_enqueue_style( 'tonjoo-tom', plugin_dir_url( dirname(__FILE__) ) . 'assets/css/style.css', array() );
+		wp_enqueue_style( 'hint', plugin_dir_url( dirname(__FILE__) ) . 'assets/css/hint.css', array() );
 		wp_enqueue_style( 'wp-color-picker' );
 	}
 	
@@ -86,6 +87,7 @@ class tomOptions {
 		// Enqueue custom option panel JS
 		wp_enqueue_script( 'nestable', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/jquery.nestable.js', array('jquery'));
 		wp_enqueue_script( 'zclip', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/jquery.clipboard.js', array( 'jquery' ) );
+		// wp_enqueue_script( 'tooltips', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/tooltips.js', array( 'jquery' ) );
 		wp_enqueue_script( 'tonjoo-script', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/script.js', array( 'jquery','wp-color-picker' ) );
 		
 		/* Media Uploader */
@@ -97,11 +99,15 @@ class tomOptions {
             wp_enqueue_script('thickbox');
             wp_enqueue_style('thickbox');
         }
-		// wp_enqueue_script('tonjoo-tom-datatables-js', plugin_dir_url( dirname(__FILE__) ) . 'js/jquery.dataTables.js');
-		// wp_enqueue_script('tonjoo-tom-jquery-ui-js', plugin_dir_url( dirname(__FILE__) ) . 'js/jquery-ui-1.10.4.custom.min.js');
-		// wp_enqueue_script('tonjoo-tom-reordering-js', plugin_dir_url( dirname(__FILE__) ) . 'js/jquery.dataTables.rowReordering.js');
-		// wp_enqueue_script('tonjoo-tom-sheepit-js', plugin_dir_url( dirname(__FILE__) ) . 'js/jquery.sheepItPlugin.js');
-		// wp_enqueue_script('tonjoo-tom-script-js', plugin_dir_url( dirname(__FILE__) ) . 'js/script.js');
+		
+		/* Javasvript variable TTOM */
+		$config = $this->tom_configs();
+		$dir = plugins_url();
+		echo '<script type="text/javascript">
+				var tomMode = "'.$config['mode'].'",
+					tomCreatePage = "' . get_admin_url( null, 'admin.php?page=' . $config['sub_menu_slug'] ) .'";
+					pluginDir = "' . $dir .'";
+			  </script>';
 	}
 
 	
@@ -208,7 +214,7 @@ class tomOptions {
 		      Another Awesome Plugins
 		    </h3>
 		 	<div style="text-align: center; padding: 20px;">
-		 		<img src="https://tonjoo.com/beta/wp-content/uploads/2014/05/FRS-banner-box-Premium.jpg">
+		 		<!-- <img src="https://tonjoo.com/beta/wp-content/uploads/2014/05/FRS-banner-box-Premium.jpg"> -->
 		 	</div>
 		  </div>
 		</div>
@@ -235,11 +241,6 @@ class tomOptions {
 				<form action="options.php" method="post">
 				<?php settings_fields( 'tom_options' ); ?>
 				<?php tomGenerate::generate_create_options_fields(); /* Settings */ ?>
-				<div id="tonjoo-tom-submit">
-					<input type="submit" class="button-primary" name="update" value="Save" />
-					<a id="tom-delete-group" class="reset-button button-secondary">Delete Group</a>
-					<div class="clear"></div>
-				</div>
 				</form>
 			</div> <!-- / #container -->
 		</div>
