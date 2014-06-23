@@ -817,6 +817,9 @@ class tomGenerate {
 											            </label>
 											            </div>
 											          </div>
+											          <div class="save-button">
+											        	<a href="#" class="btn button-primary">Save</a>
+											      	  </div>
 											        </fieldset>
 											        <fieldset class="inline-edit-col-right">
 											          <div class="inline-edit-col">
@@ -911,8 +914,10 @@ class tomGenerate {
 											            </label>
 											          </div>
 											        </fieldset>
-											      </tbody>
-											  </table>'."\n";
+											      </td>
+										        </tr>
+									      	</tbody>
+										  </table>'."\n";
 						$output .= '</div>'."\n";
 					$output .= '</li>'."\n";
 				}

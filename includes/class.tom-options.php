@@ -16,19 +16,25 @@ class tomOptions {
 		add_action( 'admin_menu', array( $this, 'add_custom_options_page' ) );
 
 		/* Ajax */
-		add_action( 'wp_ajax_my_action', array( $this, 'my_action_callback' ) );
+		add_action( 'wp_ajax_tom_options', array( $this, 'tom_options_callback' ) );
 
 
 	}
 
-	function my_action_callback() {
+	function tom_options_callback() {
 		global $wpdb;
-		// $whatever = intval( $_POST['whatever'] );
-		// $whatever += 10;
-	        // echo $whatever;
-		$formData = $_POST['form_data'];
-		// $options
-		print_r($_POST['form_data']);
+		$optionsId = $_POST['options'];
+
+		/* parse form data */
+		$formData = array();
+ 		parse_str($_POST['form_data'], $formData);
+
+ 		/* Update database */
+		if (update_option( $optionsId, $formData['tom_options'] ) ) {
+			echo "success";
+		} else {
+			echo "failed";
+		}
 		die();
 	}
 
@@ -112,13 +118,6 @@ class tomOptions {
             wp_enqueue_script('thickbox');
             wp_enqueue_style('thickbox');
         }
-
-        /* Ajax */
-        wp_enqueue_script( 'ajax-script', plugins_url( '/js/my_query.js', __FILE__ ), array('jquery') );
-		
-		// in javascript, object properties are accessed as ajax_object.ajax_url, ajax_object.we_value
-		wp_localize_script( 'ajax-script', 'ajax_object',
-	            array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'we_value' => 1234 ) );
 		
 		/* Javasvript variable TTOM */
 		$config = $this->tom_configs();
@@ -214,11 +213,11 @@ class tomOptions {
 		<h2><?php echo esc_html( $config['page_title'] ); ?></h2>
 		<p><?php echo esc_html( $config['page_desc'] ); ?></p>
 
+	    <p id="tom-notification"><?php settings_errors( 'tonjoo-tom' ); ?></p>
+
 	    <h2 class="nav-tab-wrapper">
 	        <?php echo tomGenerate::tom_tabs(); ?>
 	    </h2>
-
-	    <?php settings_errors( 'tonjoo-tom' ); ?>
 
 	    <div id="tom-options-panel" class="metabox-holder metabox-main">
 		    <div id="tonjoo-tom" class="postbox">
@@ -250,11 +249,11 @@ class tomOptions {
 		<h2><?php echo esc_html( $config['sub_page_title'] ); ?></h2>
 		<p><?php echo esc_html( $config['sub_page_desc'] ); ?></p>
 
+	    <p id="tom-notification"><?php settings_errors( 'tom_options' ); ?></p>
+
 	    <h2 class="nav-tab-wrapper">
 	        <?php echo tomGenerate::create_tom_tabs(); ?>
 	    </h2>
-
-	    <?php settings_errors( 'tom_options' ); ?>
 
 	    <div id="tom-create-options-panel" class="metabox-holder metabox-main">
 		    <div id="tonjoo-tom" class="postbox">
@@ -345,6 +344,7 @@ class tomOptions {
 		<!-- </div> -->
 			<div id="tonjoo-tom-submit">
 				<a id="tom-add-options" class="button-primary">Add Option</a>
+				<span class="tom-loading" style="display:none;"><img src="<?php echo admin_url(); ?>images/spinner.gif" alt=""></span>
 				<div class="clear"></div>
 			</div>
 		</div>

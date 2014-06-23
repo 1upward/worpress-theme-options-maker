@@ -407,7 +407,7 @@ jQuery(document).ready(function($) {
 		$('#new-data-default').html('<input name="default" type="text" id="tom-default-new-data" value="">'); 
 		$('.empty-options').remove();
 		$('#tonjoo-tom-submit').show();
-		ajaxSubmit('#f_create-options');
+		ajaxSubmit('f_create-options','tom_options');
 	});
 
 
@@ -561,21 +561,37 @@ jQuery(document).ready(function($) {
 	   mouseleave: hideTooltip
 	});
 
+
+
 	/* Submit Form*/
-	function ajaxSubmit(formId){
-		var formData = $(formId).serialize();
+	function ajaxSubmit(formId,optionId){
+		var formData = $('#'+formId).serialize();
 
 		var data = {
-			'action': 'my_action',
-			'form_data': formData,
-			'whatever': 1234
+			/* actions must be match with add_action name */
+			'action': 'tom_options',
+			'options': optionId,
+			'form_data': formData
 		};
-		// We can also pass the url value separately from ajaxurl for front end AJAX implementations
+		/* Post data*/
 		$.post(ajaxurl, data, function(response) {
-			alert('Got this from the server: ' + response);
+	       	$(".tom-loading").show();	       	
+			setTimeout( function() {
+				/* Remove notification if exist */
+				$('#setting-error-save_options').fadeOut('slow').remove();
+				if (response == 'success') {
+					$(".tom-loading").hide();
+					// alert('ok');
+					$('#tom-notification').html('<div id="setting-error-save_options" class="updated fade settings-error below-h2"><p><strong>Options saved.</strong></p></div>').hide().fadeIn('slow');
+				} else {
+					$(".tom-loading").hide();
+					// alert('Update failed');
+					$('#tom-notification').html('<div id="setting-error-save_options" class="error fade settings-error below-h2"><p><strong>Update failed.</strong></p></div>').hide().fadeIn('slow');
+				}
+				// console.log(response);
+		    },1000);
 		});
 
 	return false;
 	}
-
 });
