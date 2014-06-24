@@ -344,7 +344,7 @@ class tomOptions {
 		<!-- </div> -->
 			<div id="tonjoo-tom-submit">
 				<a id="tom-add-options" class="button-primary">Add Option</a>
-				<span class="tom-loading" style="display:none;"><img src="<?php echo admin_url(); ?>images/spinner.gif" alt=""></span>
+				<span id="loading-new-data" class="tom-loading" style="display:none;"><img src="<?php echo admin_url(); ?>images/spinner.gif" alt=""></span>
 				<div class="clear"></div>
 			</div>
 		</div>

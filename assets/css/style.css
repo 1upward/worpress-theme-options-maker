@@ -202,6 +202,9 @@
 #tonjoo-tom .button-primary {
 	float:right;
 }
+#tonjoo-tom .btn.button-primary.save-nestable {
+    float: none;
+}
 #tonjoo-tom .section:after {
 	content: "";
 	display: table;

@@ -176,7 +176,7 @@ class tomGenerate {
 					break;
 
 				case 'textarea':
-					$output .= '<tr class="alternate">' . "\n";
+					$output .= '<tr class="alternate tom-item">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 					$output .= '<td><textarea class="tom-input" id="' . esc_attr( $obj_key ) . '" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" placeholder="' . esc_attr( $val ) . '" rows="4" cols="50">' . esc_attr( $val ) . '</textarea></td>' . "\n";
 					$output .= '<td class="shortcode">
@@ -186,7 +186,7 @@ class tomGenerate {
 					break;
 
 				case 'select':
-					$output .= '<tr class="alternate">' . "\n";
+					$output .= '<tr class="alternate tom-item">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 					$output .= '<td><select class="tom-input" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" id="' . esc_attr( $obj_key ) . '">' . "\n";
 								foreach ($options as $key => $option ) {
@@ -201,7 +201,7 @@ class tomGenerate {
 					break;
 
 				case "radio":
-					$output .= '<tr class="alternate">' . "\n";
+					$output .= '<tr class="alternate tom-item">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 					$output .= '<td>' . "\n";
 								foreach ($options as $key => $option ) {
@@ -216,7 +216,7 @@ class tomGenerate {
 					break;
 
 				case "checkbox":
-					$output .= '<tr class="alternate">' . "\n";
+					$output .= '<tr class="alternate tom-item">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 					$output .= '<td><input id="' . esc_attr( $obj_key ) . '" class="tom-input" type="' . esc_attr( $type ) . '" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" value="1" '. checked( $val, '1', false) .' /></td>' . "\n";
 					$output .= '<td class="shortcode">
@@ -229,7 +229,7 @@ class tomGenerate {
 					$image 	 = wp_get_attachment_image_src( $val, 'medium' ); 
 					$src 	 = (empty($val)) ? '' : $image[0];
 					$display = (empty($val)) ? 'style="display:none;"' : '';
-					$output .= '<tr class="alternate">' . "\n";
+					$output .= '<tr class="alternate tom-item">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 					$output .= '<td>
 								<div id="' . esc_attr( $obj_key ) . '" class="tom_media_upload">
@@ -251,7 +251,7 @@ class tomGenerate {
 					break;
 
 				case "select-image":
-					$output .= '<tr class="alternate">' . "\n";
+					$output .= '<tr class="alternate tom-item">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 					$output .= '<td><div class="controls">' . "\n";
 								foreach ( $options as $key => $option ) {
@@ -271,7 +271,7 @@ class tomGenerate {
 					break;
 
 				case "multicheck":
-					$output .= '<tr class="alternate">' . "\n";
+					$output .= '<tr class="alternate tom-item">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 					$output .= '<td>' . "\n";
 								foreach ($options as $key => $option) {
@@ -297,7 +297,7 @@ class tomGenerate {
 
 				case "color":
 					$default_color = '';
-					$output .= '<tr class="alternate">' . "\n";
+					$output .= '<tr class="alternate tom-item">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 					$output .= '<td>' . "\n";
 								if ( isset($key['default']) ) {
@@ -313,7 +313,7 @@ class tomGenerate {
 					break;
 
 				case 'editor':
-					$output .= '<tr class="alternate">' . "\n";
+					$output .= '<tr class="alternate tom-item">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 					$output .= '<td>' . "\n";
 								echo $output;
@@ -406,7 +406,7 @@ class tomGenerate {
 					$typography_fields = apply_filters( 'tom_typography_fields', $typography_fields, $typography_stored, $option_name, $key );
 					
 
-					$output .= '<tr class="alternate">' . "\n";
+					$output .= '<tr class="alternate tom-item">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 					$output .= '<td>' . "\n";
 					$output .= implode( '', $typography_fields );			
@@ -420,7 +420,7 @@ class tomGenerate {
 
 				// default input
 				default:
-					$output .= '<tr class="alternate">' . "\n";
+					$output .= '<tr class="alternate tom-item">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 					$output .= '<td><input class="tom-input" type="' . esc_attr( $type ) . '" id="' . esc_attr( $obj_key ) . '" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" placeholder="' . esc_attr( $val ) . '" value="' . esc_attr( $val ) . '"></td>' . "\n";
 					$output .= '<td class="shortcode">
@@ -697,7 +697,7 @@ class tomGenerate {
 			}
 
 			/* Submit Button */
-			$submit =  '<div id="tonjoo-tom-submit">
+			$submit =  '<div id="tonjoo-tom-submit" class="hide-if-empty">
 							<input type="submit" class="button-primary" name="update" value="Save" />
 							<input type="submit" class="reset-button button-secondary" name="reset" value="Reset" onclick="return confirm( \'Are you sure to reset. Any theme settings will be lost!\');" />
 							<div class="clear"></div>
@@ -781,7 +781,7 @@ class tomGenerate {
 					// Keep all ids lowercase with no spaces
 					$obj_key = preg_replace('/[^a-zA-Z0-9._\-]/', '', strtolower($obj_key) );
 
-					$output .= '<li class="dd-item" data-id="'.esc_attr( $obj_key ).'">'."\n";
+					$output .= '<li class="dd-item tom-item" data-id="'.esc_attr( $obj_key ).'">'."\n";
 						$output .= '<div class="dd-handle">' . $key['name'] ."\n";
 						/* button action */
 						$output .= '<span class="tom-action-buttons">
@@ -818,7 +818,8 @@ class tomGenerate {
 											            </div>
 											          </div>
 											          <div class="save-button">
-											        	<a href="#" class="btn button-primary">Save</a>
+											        	<a href="#" class="btn button-primary save-nestable">Save</a>
+											      	  	<span id="loading-'.esc_attr( $obj_key ).'" class="tom-loading" style="display:none;"><img src="' . admin_url() . 'images/spinner.gif" alt=""></span>
 											      	  </div>
 											        </fieldset>
 											        <fieldset class="inline-edit-col-right">
@@ -979,7 +980,7 @@ class tomGenerate {
 
 			/* Submit and Delete Group Button */
 			$submit =  '<div id="tonjoo-tom-submit">
-							<input type="submit" class="button-primary" name="update" value="Save" />
+							<input type="submit" class="button-primary hide-if-empty" name="update" value="Save" />
 							<a id="tom-delete-group" class="reset-button button-secondary">Delete Group</a>
 							<div class="clear"></div>
 						</div>';
@@ -999,12 +1000,12 @@ class tomGenerate {
 					  </h3>
 					  <div class="container-table">
 					  	<table class="widefat">
-						  <tbody>
-						    <tr class="alternate">
+						  <tbody class="container-body">
+						    <tr class="alternate tom-item">
 								<th scope="row"><label for="group-name">Group Name</label><br><span class="description">Name of option group</span></th>
 								<td><input class="tom-input" type="text" id="group-name" name="tom_options[new-group][name]" placeholder="Group Name" value=""></td>
 							</tr>
-						    <tr class="alternate">
+						    <tr class="alternate tom-item">
 								<th scope="row"><label for="group-desc">Description</label><br><span class="description">Short descriptipn</span></th>
 								<td><textarea class="tom-input" id="group-desc" name="tom_options[new-group][desc]" placeholder="Description" rows="4" cols="50"></textarea></td>
 							</tr>
