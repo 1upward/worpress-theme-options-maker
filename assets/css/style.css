@@ -166,7 +166,7 @@
 }
 #tonjoo-tom .tom-option-image {
 	max-width: 240px;
-    border: solid 5px #E9E9E9;
+    /*border: solid 5px #E9E9E9;*/
 }
 #tonjoo-tom .mini .controls select, #tonjoo-tom .section .mini .controls {
 	width: 140px;
@@ -815,4 +815,17 @@ td.shortcode a.button-copy-shortcode {
 .input .status {
     /*color: #2ea2cc;*/
     font-style: italic;
+}
+#new-data-default .tom_media_upload {
+    margin-left: 90px;
+    margin-right: 5px;
+}
+.tom_media_upload img.tom-default-image {
+    width: 100%;
+}
+.tom_media_upload .tom_media_button {
+    margin-top: 5px;
+}
+.tom_media_upload .tom_media_button .tom_remove_image {
+    float: right;
 }

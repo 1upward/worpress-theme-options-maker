@@ -289,6 +289,18 @@ jQuery(document).ready(function($) {
 				updateDefaultOption(containerId);
 				break;
 
+			case "upload":
+		  		inputDefault = '<div id="tom-default-'+containerId+'" class="tom_media_upload">';
+				inputDefault += '	<img class="tom_media_image tom-default-image" src="" style="display:none;"/>';
+				inputDefault += '	<div class="tom_media_button">';
+				inputDefault += '		<input class="tom_media_url" type="hidden" name="'+arrayName+'[default]" value="">';
+				inputDefault += '		<a href="#" class="tom_button_upload button-secondary">Choose</a>';
+				inputDefault += '		<a href="#" class="tom_remove_image button-primary" style="display:none;">Remove</a>';
+				inputDefault += '	</div>';
+				inputDefault += '</div>';
+
+		  		break;
+
 		  	default:
 		  		inputDefault = '<input name="'+arrayName+'[default]" id="tom-default-'+containerId+'" type="text" value="">';
 	  	}
@@ -355,6 +367,7 @@ jQuery(document).ready(function($) {
 					    }
 				  	});		
 		  		}
+		  	/* Push to default container */	
 			$('#tom-default-'+containerId).html(optionDefault);
 	}
 
@@ -582,7 +595,7 @@ jQuery(document).ready(function($) {
 	});
 
 	/* Media upload */
-	$('.tom_media_upload').delegate( ".tom_button_upload", "click", function(event) {
+	$(document).delegate( ".tom_button_upload", "click", function(event) {
 	// $('.tom_media_upload').click(function(e) {
 	    event.preventDefault();
 	    var div = $(this).closest('.tom_media_upload');
@@ -607,7 +620,7 @@ jQuery(document).ready(function($) {
 	    .open();
 	});
 
-	$('.tom_media_upload').delegate( ".tom_remove_image", "click", function(event) {
+	$(document).delegate( ".tom_remove_image", "click", function(event) {
 		var div = $(this).closest('.tom_media_upload');
 
 		$(div).find('.tom_media_image').attr('src', '');

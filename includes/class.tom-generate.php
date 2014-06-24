@@ -103,7 +103,7 @@ class tomGenerate {
 					}
 				}
 
-				$short_default = !empty($key['default']) ? ' default="'.$key['default'].'"' : '';
+				$short_default = !empty($key['default']) && !is_array($key['default']) ? ' default="'.$key['default'].'"' : '';
 				$shortcode = '[tom id="'.$obj_key.'"'.$short_default.']';
 
 				$output = '';
@@ -226,9 +226,18 @@ class tomGenerate {
 					break;
 
 				case "upload":
-					$image 	 = wp_get_attachment_image_src( $val, 'medium' ); 
-					$src 	 = (empty($val)) ? '' : $image[0];
-					$display = (empty($val)) ? 'style="display:none;"' : '';
+					if (!empty($val)) {
+						$image 	 = wp_get_attachment_image_src( $val, 'medium' ); 
+						$src 	 = (is_numeric($val)) ? $image[0] : $val;
+						$display = '';
+					} else {
+						$src 	 = '';
+						$display = 'style="display:none;"';
+					}
+					// $image 	 = wp_get_attachment_image_src( $val, 'medium' ); 
+					// $src 	 = (empty($val)) ? '' : $val;
+					// $src 	 = (is_int($src)) ? $image[0] : $src;
+					// $display = (empty($val)) ? 'style="display:none;"' : '';
 					$output .= '<tr class="alternate tom-item">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
 					$output .= '<td>
@@ -921,8 +930,23 @@ class tomGenerate {
 																		}
 						$output .=			              			'</div>';										
 																	} else {
-						$output .=			              			'<select>Select default value</select>';	
+																			$output .= '<div id="tom-default-'.esc_attr( $obj_key ).'" class="tom-checkbox-default">';	
+																			$output .= '<div class="input-group-multicheck"><input class="input-multicheck" type="checkbox" disabled="disabled"><span class="status">Please create field options</span><br></div>';	
+																			$output .= '</div>';	
 																	}	
+																	break;
+
+																case 'upload':
+																			$display = (empty($val)) ? 'style="display:none;"' : '';
+						$output .=											'<div id="' . esc_attr( $obj_key ) . '" class="tom_media_upload">';
+						$output .=											'	<img class="tom_media_image tom-option-image" src="'.$val.'" '. $display .'/>';
+						$output .=											'	<div>';
+						$output .=											'		<input class="tom_media_url" type="hidden" value="">';
+						$output .=											'		<input class="tom_media_id" type="hidden" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[default]" value="' . esc_attr( $val ) . '">';
+						$output .=											'		<a href="#" class="tom_button_upload button-secondary">Choose</a>';
+						$output .=											'		<a href="#" class="tom_remove_image button-primary" ' . $display . '>Remove</a>';
+						$output .=											'	</div>';
+						$output .=											'</div>';
 																	break;
 																
 																case 'typography':
