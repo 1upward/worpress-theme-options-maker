@@ -805,3 +805,14 @@ td.shortcode a.button-copy-shortcode {
     font-size:12px Arial;
 }*/
 
+#new-data-default .tom-checkbox-default {
+    margin-left: 90px;
+    margin-top: 15px;
+}
+#new-data-default .tom-checkbox-default .input-group-multicheck {
+    margin-bottom: 5px;
+}
+.input .status {
+    /*color: #2ea2cc;*/
+    font-style: italic;
+}

@@ -1,4 +1,4 @@
-jQuery(document).ready(function($) {
+jQuery(document).ready(function($) {	
 
 	/* Set Conntent width */
 	sizeContent();
@@ -72,8 +72,10 @@ jQuery(document).ready(function($) {
 			}
 			emptyOptions +=	'</div>';
 
+			/* debug */
+			// alert($(activeTab+" .container-body").find('.tom-item').length);
+
 		if ($(activeTab+" .container-body").find('.tom-item').length == '') {
-			
 			$('.hide-if-empty').hide();
 			$('#tom-delete-group').show();
 			$(activeTab+" .container-body").html(emptyOptions);
@@ -143,8 +145,10 @@ jQuery(document).ready(function($) {
 	    if (confirm("Are you sure to delete option ?")) {
 		  // alert("sure banget ya..");
 		  $(this).closest( "li" ).fadeOut(500, function() { $(this).remove(); });
-		 }
-
+			var activeTab = $('.nav-tab-active'),
+		  	    activeDiv = activeTab.attr('href');
+			checkEmpty(activeDiv);
+		}
 	    return false;
 	});
 
@@ -187,8 +191,8 @@ jQuery(document).ready(function($) {
 
 		var templateRepeatable 	= '<div data-order="1" class="input-options-group">';
 		templateRepeatable 		+= 	'<i class="dashicons dashicons-yes"></i>';
-		templateRepeatable 		+= 	'<input class="input-opt input-key" name="'+arrayName+'[options][opt-key][]" value="" placeholder="Key">';
-		templateRepeatable 		+= 	'<input class="input-opt input-val" name="'+arrayName+'[options][opt-val][]" value="" placeholder="Value">';
+		templateRepeatable 		+= 	'<input class="input-opt input-key" name="'+arrayName+'[options][opt-key][]" data-key="key" value="" placeholder="Key">';
+		templateRepeatable 		+= 	'<input class="input-opt input-val" name="'+arrayName+'[options][opt-val][]" data-key="value" value="" placeholder="Value">';
 		templateRepeatable 		+= 	'<a class="btn-remove dashicons dashicons-dismiss"></a>';
 		templateRepeatable 		+= '</div>';
 
@@ -207,6 +211,12 @@ jQuery(document).ready(function($) {
 
 		  	case "multicheck":
 		  		showOptions = true;
+		  		var templateRepeatable 	= '<div data-order="1" class="input-options-group">';
+				templateRepeatable 		+= 	'<i class="dashicons dashicons-yes"></i>';
+				templateRepeatable 		+= 	'<input class="input-opt input-key" name="'+arrayName+'[options][opt-key][]" data-key="key" value="" placeholder="Key">';
+				templateRepeatable 		+= 	'<input class="input-opt input-val" name="'+arrayName+'[options][opt-val][]" data-key="value" value="" placeholder="Name">';
+				templateRepeatable 		+= 	'<a class="btn-remove dashicons dashicons-dismiss"></a>';
+				templateRepeatable 		+= '</div>';
 		  		break;
 
 		  	case "select-image":
@@ -267,8 +277,17 @@ jQuery(document).ready(function($) {
 		  		break;
 
 		  	case "checkbox":
-		  		inputDefault = 	'<input type="checkbox" name="'+arrayName+'[default]" id="tom-default-'+containerId+'" value="true">';
+		  		inputDefault = 	'<div id="tom-default-'+containerId+'" class="tom-checkbox-default"><input type="checkbox" name="'+arrayName+'[default]" value="1"><span class="status">( Not Checked )</span></div>';
 		  		break;
+
+		  	case "multicheck":
+		  		inputDefault =  '<div id="tom-default-'+containerId+'" class="tom-checkbox-default">';
+		  		inputDefault += '<div class="input-group-multicheck">';
+				inputDefault +=		'<input class="input-multicheck" type="checkbox" disabled="disabled"><span class="status">Please create field options</span><br>';
+				inputDefault +=	'</div>';
+				inputDefault +=	'</div>';
+				updateDefaultOption(containerId);
+				break;
 
 		  	default:
 		  		inputDefault = '<input name="'+arrayName+'[default]" id="tom-default-'+containerId+'" type="text" value="">';
@@ -277,18 +296,30 @@ jQuery(document).ready(function($) {
 	  	$('#'+containerId+'-default').html(inputDefault);
 	}
 
+	/* Display checkbox status */
+  	$(document).delegate( ".input input:checkbox", "change", function(event) { 
+		event.preventDefault();
+		var status = this.checked ? '( Checked )' : '( Not Checked )';
+		// alert(status);
+		$(this).siblings('.status').html(status);
+	});
 	
 	function updateDefaultOption(containerId) {
+			/* get select type value to determine option default type */
+			var type = $('.tom-type[data-container="'+containerId+'"]').val();
+			// alert(type);
+			var arrayName = 'tom_options['+containerId+']';
 			var optionDefault="";
 			var key = [];
 			var val = [];
 			var input = $('#add-opt-'+containerId+' :input');
-			input.each(function(i, field){ 
-				// console.log(field);
-				if (field.placeholder == 'Key'){
-						key.push(field.value);
+			input.each(function(i,field){ 
+				var dataKey = $(this).attr('data-key');
+				// alert(dataKey+' | '+field.value);
+				if (dataKey == 'key'){
+					key.push(field.value);
 				}
-				if (field.placeholder == 'Value'){
+				if (dataKey == 'value'){
 					val.push(field.value);
 				}
 			});
@@ -297,15 +328,34 @@ jQuery(document).ready(function($) {
 				for (var i = 0; i < key.length; i++) {
 				    arr3[key[i]] = val[i];
 				}
-			$.each( arr3, function( key, val ) {
-				if (input.val().length) {
-			    	optionDefault += '<option value="'+key+'">'+val+"</option>";
-			    } else {
-			    	optionDefault += '<option value="">Select default option</option>';
-			    }
-			  });
+
+			switch (type){
+			  	case "multicheck":
+			  		$.each( arr3, function( key, name ) {
+						if (input.val().length) {
+					    	// optionDefault += '<option value="'+key+'">'+val+"</option>";
+					    	optionDefault += '<div class="input-group-multicheck">';
+							optionDefault +=	'<input class="input-multicheck" type="checkbox" name="'+arrayName+'[default]['+key+']" value="1"> '+name+' <span class="status">( Not Checked )</span><br>';
+							optionDefault += '</div>';
+					    } else {
+					    	optionDefault += '<div class="input-group-multicheck">';
+							optionDefault +=	'<input class="input-multicheck" type="checkbox" disabled="disabled"><span class="status">Please create field options</span><br>';
+							optionDefault += '</div>';
+					    }
+				  	});	
+				  	// alert(containerId);
+			  		break;
+
+			  	default:
+			  		$.each( arr3, function( key, val ) {
+						if (input.val().length) {
+					    	optionDefault += '<option value="'+key+'">'+val+"</option>";
+					    } else {
+					    	optionDefault += '<option value="">Select default option</option>';
+					    }
+				  	});		
+		  		}
 			$('#tom-default-'+containerId).html(optionDefault);
-			
 	}
 
 
@@ -379,7 +429,7 @@ jQuery(document).ready(function($) {
 
 		var activeDiv = $('.nav-tab-active').attr('href');
 
-		template ='<li class="dd-item" data-id="'+id+'">';
+		template ='<li class="dd-item tom-item" data-id="'+id+'">';
 		template +='  <div class="dd-handle">'+name+'';
 		template +='    <span class="tom-action-buttons">';
 		template +='      <a class="blue edit-nestable" href="#">';
@@ -461,7 +511,7 @@ jQuery(document).ready(function($) {
 		$('#add-tom-options').find('input, textarea').val(''); 
 		$('#new-data-default').html('<input name="default" type="text" id="tom-default-new-data" value="">'); 
 		$('.empty-options').remove();
-		$('#tonjoo-tom-submit').show();
+		$('.hide-if-empty').show();
 		ajaxSubmit('f_create-options','tom_options','new-data');
 	});
 
@@ -504,8 +554,9 @@ jQuery(document).ready(function($) {
 		var orgDef = $('#tom-default-new-data');
 		var def = orgDef.clone();
 		def.each(function(index, item) {
-			$(item).attr( 'name', arrayName+'[default]' );
-			$(item).attr( 'id', 'tom-default-'+id );
+			/* Use .find('*').andSelf().filter(':input') because some input type wrapped by div */
+			$(item).find('*').andSelf().filter(':input').attr( 'name', arrayName+'[default]' );
+			$(item).find('*').andSelf().filter(':input').attr( 'id', 'tom-default-'+id );
 			$(item).val( orgDef.eq(index).val() );
 		});
 		$('#'+id+'-default').html(def);
@@ -514,13 +565,14 @@ jQuery(document).ready(function($) {
 	/* Delete group */
 	$(document).delegate( "#tom-delete-group", "click", function(event) {
 		event.preventDefault();
-		if (confirm("Are you sure to delete options group ?")) {
+		if (confirm("Are you sure to delete options group ?")) {			
 			var activeTab = $('.nav-tab-active');
 			var activeDiv = activeTab.attr('href');
 			var prev = activeTab.prev();
 			// alert(activeDiv);
 			activeTab.fadeOut().remove();
 			$(activeDiv).fadeOut().remove();
+			ajaxSubmit('f_create-options','tom_options','delete-group');
 
 			prev.addClass('nav-tab-active');
 			tom_tabs();

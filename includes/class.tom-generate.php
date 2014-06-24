@@ -900,6 +900,30 @@ class tomGenerate {
 																case 'textarea':
 						$output .=			              			'<textarea name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[default]" id="tom-default-'.esc_attr( $obj_key ).'">'.esc_attr( $val ).'</textarea>';
 																	break;
+
+																case 'checkbox':
+						$output .=			              			'<div id="tom-default-'.esc_attr( $obj_key ).'" class="tom-checkbox-default">';
+						$output .=			              				'<input type="checkbox" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[default]" value="1" '. checked( $val, '1', false) .'>';
+						$output .=			              				'<span class="status">'.($val == '1' ? '( Checked )' : '( Not Checked )').'</span>';
+						$output .=			              			'</div>';
+																	break;
+
+																case 'multicheck':
+																	if (!empty($fieldoptions)) {
+						$output .=			              			'<div id="tom-default-'.esc_attr( $obj_key ).'" class="tom-checkbox-default">';										
+																		foreach ($fieldoptions as $chkey => $chname ) {
+																			$chdef = ! empty( $val[$chkey] ) ? $val[$chkey] : '';
+																			/* function selected dr wp @http://codex.wordpress.org/Function_Reference/selected */
+																			$output .= '<div class="input-group-multicheck">';
+																			$output .= 		'<input class="input-multicheck" type="checkbox" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[default]['.$chkey.']" value="1" '. checked( $chdef, '1', false) .'> '. $chname; 
+																			$output .= 		' <span class="status">'.($chdef == '1' ? '( Checked )' : '( Not Checked )').'</span><br>';
+																			$output .= '</div>';
+																		}
+						$output .=			              			'</div>';										
+																	} else {
+						$output .=			              			'<select>Select default value</select>';	
+																	}	
+																	break;
 																
 																case 'typography':
 																	// print_r($val);
@@ -982,6 +1006,7 @@ class tomGenerate {
 			$submit =  '<div id="tonjoo-tom-submit">
 							<input type="submit" class="button-primary hide-if-empty" name="update" value="Save" />
 							<a id="tom-delete-group" class="reset-button button-secondary">Delete Group</a>
+							<span id="loading-delete-group" class="tom-loading" style="display:none;"><img src="' . admin_url() . 'images/spinner.gif" alt=""></span>
 							<div class="clear"></div>
 						</div>';
 		} else {
