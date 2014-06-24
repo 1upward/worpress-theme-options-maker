@@ -1,4 +1,6 @@
 jQuery(document).ready(function($) {
+
+	/* Set Conntent width */
 	sizeContent();
 	$(window).resize(sizeContent);
 
@@ -8,36 +10,8 @@ jQuery(document).ready(function($) {
 		// alert(windowSize);
 		$('.metabox-main').width(main+'px');
 	}
-	
-	$('.container-body').each(function() {
-		var emptyOptions = '<div class="empty-options">';
-			emptyOptions +=		'<h1>There is no option here..</h1>';
-			if (tomMode == 'full') {
-				emptyOptions +=		'<h4>please create the option <a href="'+tomCreatePage+'#tom-id-new-data">first</a></h4>';
-			}
-			emptyOptions +=	'</div>';
-		if (jQuery.trim ($(this).text()) == "") {
-			/* Append empty message */
-			$(this).append(emptyOptions);
-			/* Hide submit button */
-			$('#tonjoo-tom-submit').hide();
-		}
-	});
 
-	// Loads the color pickers
-	$('.tom-color').wpColorPicker();
-
-	// Image Options
-	$('.tom-radio-img-img').click(function(){
-		$(this).parent().parent().find('.tom-radio-img-img').removeClass('tom-radio-img-selected');
-		$(this).addClass('tom-radio-img-selected');
-	});
-
-	$('.tom-radio-img-label').hide();
-	$('.tom-radio-img-img').show();
-	$('.tom-radio-img-radio').hide();
-
-	// Loads tabbed sections if they exist
+	/* Handle Tab Active */
 	if ( $('.nav-tab-wrapper').length > 0 ) {
 		tom_tabs();
 	}
@@ -65,6 +39,8 @@ jQuery(document).ready(function($) {
 			$('.nav-tab-wrapper a:first').addClass('nav-tab-active');
 		}
 
+		checkEmpty(active_tab);
+
 		// Bind tabs clicks
 		$navtabs.click(function(e) {
 
@@ -75,16 +51,86 @@ jQuery(document).ready(function($) {
 
 			$(this).addClass('nav-tab-active').blur();
 
-			// if (typeof(localStorage) != 'undefined' ) {
-			// 	localStorage.setItem('active_tab', $(this).attr('href') );
-			// }
+			if (typeof(localStorage) != 'undefined' ) {
+				localStorage.setItem('active_tab', $(this).attr('href') );
+			}
 
 			var selected = $(this).attr('href');
 
 			$group.hide();
 			$(selected).fadeIn();
+			checkEmpty(selected);
 		});
 	}
+	
+	function checkEmpty(activeTab) {
+		// alert(activeTab);
+		var emptyOptions = '<div class="empty-options">';
+			emptyOptions +=		'<h1>There is no option here..</h1>';
+			if (tomMode == 'full') {
+				emptyOptions +=		'<h4>please create the option <a href="'+tomCreatePage+'#tom-id-new-data">first</a></h4>';
+			}
+			emptyOptions +=	'</div>';
+
+		if ($(activeTab+" .container-body").find('.tom-item').length == '') {
+			
+			$('.hide-if-empty').hide();
+			$('#tom-delete-group').show();
+			$(activeTab+" .container-body").html(emptyOptions);
+		} else {
+			if(activeTab == '#new-group') {
+				$('#tom-delete-group').hide();
+			} else {
+				$('#tom-delete-group').show();
+			}
+			$('.hide-if-empty').show();
+		}
+
+		// $(activeTab+" .container-body").each(function() {
+		//     if ($.trim($(this).text()) == '' ) {
+		//         // alert('hajar');
+		//         $(this).append(emptyOptions);
+		// 		/* Hide submit button */
+		// 		$('#tonjoo-tom-submit').hide();
+		//     } else {
+		//     	/* else show button */
+		//     	$('#tonjoo-tom-submit').show();
+		//     }
+		// });
+	}
+	// var xxx = $('.nav-tab-active').attr('href');
+	// alert(xxx);
+
+	// $('.container-body').each(function() {
+	// 	var emptyOptions = '<div class="empty-options">';
+	// 		emptyOptions +=		'<h1>There is no option here..</h1>';
+	// 		if (tomMode == 'full') {
+	// 			emptyOptions +=		'<h4>please create the option <a href="'+tomCreatePage+'#tom-id-new-data">first</a></h4>';
+	// 		}
+	// 		emptyOptions +=	'</div>';
+	// 		// alert(xxx);
+	// 	if ($.trim ($(this).text()) == "") {
+	// 		/* Append empty message */
+	// 		$(this).append(emptyOptions);
+	// 		/* Hide submit button */
+	// 		// alert(activeDiv);
+	// 		$('#tonjoo-tom-submit').hide();
+	// 	}
+	// });
+
+	// Loads the color pickers
+	$('.tom-color').wpColorPicker();
+
+	// Image Options
+	$('.tom-radio-img-img').click(function(){
+		$(this).parent().parent().find('.tom-radio-img-img').removeClass('tom-radio-img-selected');
+		$(this).addClass('tom-radio-img-selected');
+	});
+
+	$('.tom-radio-img-label').hide();
+	$('.tom-radio-img-img').show();
+	$('.tom-radio-img-radio').hide();
+
 
 	/* Prevent drag on action button */ 
 	$(".dd").delegate("a", "mousedown", function(event) { // mousedown prevent nestable click
@@ -98,6 +144,15 @@ jQuery(document).ready(function($) {
 		  // alert("sure banget ya..");
 		  $(this).closest( "li" ).fadeOut(500, function() { $(this).remove(); });
 		 }
+
+	    return false;
+	});
+
+	$(".dd").delegate( "a.save-nestable", "click", function(event) { // click event
+	    event.preventDefault();
+	    var id = $(this).closest( "li" ).attr("data-id");
+	   	// alert(id);
+	   	ajaxSubmit('f_create-options','tom_options',id);
 
 	    return false;
 	});
@@ -407,7 +462,7 @@ jQuery(document).ready(function($) {
 		$('#new-data-default').html('<input name="default" type="text" id="tom-default-new-data" value="">'); 
 		$('.empty-options').remove();
 		$('#tonjoo-tom-submit').show();
-		ajaxSubmit('f_create-options','tom_options');
+		ajaxSubmit('f_create-options','tom_options','new-data');
 	});
 
 
@@ -564,7 +619,7 @@ jQuery(document).ready(function($) {
 
 
 	/* Submit Form*/
-	function ajaxSubmit(formId,optionId){
+	function ajaxSubmit(formId,optionId,buttonId){
 		var formData = $('#'+formId).serialize();
 
 		var data = {
@@ -575,17 +630,17 @@ jQuery(document).ready(function($) {
 		};
 		/* Post data*/
 		$.post(ajaxurl, data, function(response) {
-	       	$(".tom-loading").show();	       	
+	       	$("#loading-"+buttonId).show();	       	
 			setTimeout( function() {
 				/* Remove notification if exist */
 				$('#setting-error-save_options').fadeOut('slow').remove();
 				if (response == 'success') {
-					$(".tom-loading").hide();
+					$("#loading-"+buttonId).hide();
 					// alert('ok');
 					$('#tom-notification').html('<div id="setting-error-save_options" class="updated fade settings-error below-h2"><p><strong>Options saved.</strong></p></div>').hide().fadeIn('slow');
 				} else {
-					$(".tom-loading").hide();
-					// alert('Update failed');
+					$("#loading-"+buttonId).hide();
+					// alert(response);
 					$('#tom-notification').html('<div id="setting-error-save_options" class="error fade settings-error below-h2"><p><strong>Update failed.</strong></p></div>').hide().fadeIn('slow');
 				}
 				// console.log(response);
