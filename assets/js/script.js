@@ -7,7 +7,6 @@ jQuery(document).ready(function($) {
 	function sizeContent() {
 		var windowSize = $('#wpbody-content').width();
 		var main = windowSize - 380;
-		// alert(windowSize);
 		$('.metabox-main').width(main+'px');
 	}
 
@@ -18,19 +17,19 @@ jQuery(document).ready(function($) {
 
 	function tom_tabs() {
 
-		var $group = $('.group'),
-			$navtabs = $('.nav-tab-wrapper a'),
+		var group = $('.group'),
+			navtabs = $('.nav-tab-wrapper a'),
 			active_tab = '';
 
-		// Hides all the .group sections to start
-		$group.hide();
+		/* Hide all group on start */
+		group.hide();
 
-		// Find if a selected tab is saved in localStorage
+		/* Find if a selected tab is saved in localStorage */
 		if ( typeof(localStorage) != 'undefined' ) {
 			active_tab = localStorage.getItem('active_tab');
 		}
 
-		// If active tab is saved and exists, load it's .group
+		/* If active tab is saved and exists, load it's .group */
 		if ( active_tab != '' && $(active_tab).length ) {
 			$(active_tab).fadeIn();
 			$(active_tab + '-tab').addClass('nav-tab-active');
@@ -41,13 +40,13 @@ jQuery(document).ready(function($) {
 
 		checkEmpty(active_tab);
 
-		// Bind tabs clicks
-		$navtabs.click(function(e) {
+		/* Bind tabs clicks */
+		navtabs.click(function(e) {
 
 			e.preventDefault();
 
-			// Remove active class from all tabs
-			$navtabs.removeClass('nav-tab-active');
+			/* Remove active class from all tabs */
+			navtabs.removeClass('nav-tab-active');
 
 			$(this).addClass('nav-tab-active').blur();
 
@@ -57,23 +56,19 @@ jQuery(document).ready(function($) {
 
 			var selected = $(this).attr('href');
 
-			$group.hide();
+			group.hide();
 			$(selected).fadeIn();
 			checkEmpty(selected);
 		});
 	}
 	
 	function checkEmpty(activeTab) {
-		// alert(activeTab);
 		var emptyOptions = '<div class="empty-options">';
 			emptyOptions +=		'<h1>There is no option here..</h1>';
 			if (tomMode == 'full') {
 				emptyOptions +=		'<h4>please create the option <a href="'+tomCreatePage+'#tom-id-new-data">first</a></h4>';
 			}
 			emptyOptions +=	'</div>';
-
-			/* debug */
-			// alert($(activeTab+" .container-body").find('.tom-item').length);
 
 		if ($(activeTab+" .container-body").find('.tom-item').length == '') {
 			$('.hide-if-empty').hide();
@@ -87,18 +82,6 @@ jQuery(document).ready(function($) {
 			}
 			$('.hide-if-empty').show();
 		}
-
-		// $(activeTab+" .container-body").each(function() {
-		//     if ($.trim($(this).text()) == '' ) {
-		//         // alert('hajar');
-		//         $(this).append(emptyOptions);
-		// 		/* Hide submit button */
-		// 		$('#tonjoo-tom-submit').hide();
-		//     } else {
-		//     	/* else show button */
-		//     	$('#tonjoo-tom-submit').show();
-		//     }
-		// });
 	}
 
 	/* Initialize color picker on document ready */
@@ -121,10 +104,9 @@ jQuery(document).ready(function($) {
 	    return false;
 	});
 
-	$(".dd").delegate( "a.delete-nestable", "click", function(event) { // click event
+	$(".dd").delegate( "a.delete-nestable", "click", function(event) { 
 	    event.preventDefault();
 	    if (confirm("Are you sure to delete option ?")) {
-		  // alert("sure banget ya..");
 		  $(this).closest( "li" ).fadeOut(500, function() { $(this).remove(); });
 			var activeTab = $('.nav-tab-active'),
 		  	    activeDiv = activeTab.attr('href');
@@ -133,19 +115,17 @@ jQuery(document).ready(function($) {
 	    return false;
 	});
 
-	$(".dd").delegate( "a.save-nestable", "click", function(event) { // click event
+	$(".dd").delegate( "a.save-nestable", "click", function(event) { 
 	    event.preventDefault();
 	    var id = $(this).closest( "li" ).attr("data-id");
-	   	// alert(id);
 	   	ajaxSubmit('f_create-options','tom_options',id);
 
 	    return false;
 	});
 
-	$(".dd").delegate( "a.edit-nestable", "click", function(event) { // click event
+	$(".dd").delegate( "a.edit-nestable", "click", function(event) { 
 	    event.preventDefault();
 	    var id = $(this).closest( "li" ).attr("data-id");
-	   	// alert(id);
 	   	$('.nestable-input#'+id).slideToggle('fast');
 
 	    return false;
@@ -154,7 +134,7 @@ jQuery(document).ready(function($) {
 	/* Trigger cek display options if select type change */
 	$(document).delegate( ".tom-type", "change", function(event) { 
 		event.preventDefault();
-		displayOptions(this);/* DIsplay default form */
+		displayOptions(this); // Display default form 
 	  	showDefault(this);
 	});
 
@@ -198,7 +178,6 @@ jQuery(document).ready(function($) {
 		  		showOptions = true;
 		  		var templateRepeatable 	= '<div data-order="1" class="input-options-group">';
 				templateRepeatable		+= 	'<div class="tom_media_upload repeatable_upload">';
-				// templateRepeatable		+= 	'	<img class="tom_media_image tom-default-image" src="" style="display:none;"/>';
 				templateRepeatable		+= 	'	<div class="tom_media_button">';
 				templateRepeatable		+= 	'		<img class="tom_media_image_thumb tom-default-image" src="" style="display:none; width: 30px;"/>';
 				templateRepeatable 		+= 	'		<input class="input-opt input-key" name="'+arrayName+'[options][opt-key][]" data-key="key" value="" placeholder="Key">';
@@ -215,13 +194,6 @@ jQuery(document).ready(function($) {
 	  	}
 
 	  	if (showOptions == true) {
-	  		/* check if repeatable field not exist and append it */
-			// var cek = $('#add-opt-'+containerId).find('.input-options-group');
-			// if (!cek.length) {
-			// 	$('#add-opt-'+containerId).html(templateRepeatable);
-			// }
-			// /* Show repeatable field */
-	  		// 	$('#'+containerId+'-options').fadeIn(500);
 	  		$('#add-opt-'+containerId).html(templateRepeatable);
 	  		$('#'+containerId+'-options').fadeIn(500);
 	  	} else {
@@ -241,8 +213,6 @@ jQuery(document).ready(function($) {
 		var containerId = $(element).attr('data-container');
 		var arrayName = 'tom_options['+containerId+']';
 		var type = $(element).val();
-		// var valDefault = $('#'+containerId+'-hidden-default').val();
-		
 
 		switch (type){
 		  	case "select":
@@ -328,14 +298,12 @@ jQuery(document).ready(function($) {
   	$(document).delegate( ".input input:checkbox", "change", function(event) { 
 		event.preventDefault();
 		var status = this.checked ? '( Checked )' : '( Not Checked )';
-		// alert(status);
 		$(this).siblings('.status').html(status);
 	});
 	
 	function updateDefaultOption(containerId) {
 			/* get select type value to determine option default type */
 			var type = $('.tom-type[data-container="'+containerId+'"]').val();
-			// alert(type);
 			var arrayName = 'tom_options['+containerId+']';
 			var optionDefault="";
 			var key = [];
@@ -343,7 +311,6 @@ jQuery(document).ready(function($) {
 			var input = $('#add-opt-'+containerId+' :input');
 			input.each(function(i,field){ 
 				var dataKey = $(this).attr('data-key');
-				// alert(dataKey+' | '+field.value);
 				if (dataKey == 'key'){
 					key.push(field.value);
 				}
@@ -372,7 +339,7 @@ jQuery(document).ready(function($) {
 							optionDefault += '</div>';
 					    }
 				  	});	
-				  	// alert(containerId);
+
 			  		break;
 
 			  	case "select-image":
@@ -383,7 +350,6 @@ jQuery(document).ready(function($) {
 					    	optionDefault += '<option value="">Select default option</option>';
 					    }
 				  	});
-				  	// alert(containerId);
 			  		break;
 
 			  	default:
@@ -403,7 +369,6 @@ jQuery(document).ready(function($) {
 	/* Clone for repeatable options */
 	$(document).delegate( "a#new-repeatable", "click", function(event) { // click event
 	    event.preventDefault();
-	    // alert('ok');
 	    
 	    /* get parent id to append */
 		var idToAppend = $( this ).closest('.options-container').find('.input-options').first().attr('id');
@@ -411,15 +376,9 @@ jQuery(document).ready(function($) {
 	    var elemToClone = $( '#'+idToAppend).find('.input-options-group');
 		var oldOrder = parseInt(elemToClone.last().attr('data-order'));
 		var newOrder = oldOrder+1;
-		// alert(idToAppend);
 
-		
-
-	    // var cloneInput = templateRepeatable;
 	    var cloneInput = $( '#'+idToAppend).find('.input-options-group').first().clone();
-	    // alert(cloneInput);
 	    cloneInput.attr('data-order', newOrder);
-	    // cloneInput.find('.label-opt').html( newOrder+' : ');
 	    cloneInput.find('input.input-opt').val('');
 	    /* Remove image for repeatable image */
 	    cloneInput.find('.tom-default-image').attr('src','');
@@ -433,9 +392,6 @@ jQuery(document).ready(function($) {
 	    event.preventDefault();
 	    var repeatableInput = $(this).closest('.input-options').find('.input-options-group');
 	    var idDefaultForm = $(this).closest('.options-container').attr('data-default');
-	    // var x = $(this).closest('.options-container');
-	    // var c =$(x).prev();
-	    // alert(idDefaultForm);
 
 	    /* if the input remaining one, disable the delete and just emptied */
 	    if (repeatableInput.length <= '1' ) {
@@ -581,15 +537,11 @@ jQuery(document).ready(function($) {
 		/* Clone repeatable Options*/
 		var opt = $('#add-opt-new-data').clone().attr('id', 'add-opt-'+id);
 			opt.each(function(index, item) {
-		     	//set new option name (with id)
-		     	// var orgName = $(item).attr( 'name' );
 		     	$(item).find('.input-key').attr( 'name', arrayName+'[options][opt-key][]' );
 		     	$(item).find('.input-val').attr( 'name', arrayName+'[options][opt-val][]' );
-		     	// var x = $(item);
-		     	// alert(x); tom_options[dsdsd][desc]
-
 			});
 		opt.prependTo('#opt-container-'+id);
+
 		/* Clone attribute display to hide or show */
 		var display = $('#new-data-options').css('display');
 		$('#'+id+'-options').css('display', display);
@@ -643,10 +595,8 @@ jQuery(document).ready(function($) {
 
 	/* Media upload */
 	$(document).delegate( ".tom_button_upload", "click", function(event) {
-	// $('.tom_media_upload').click(function(e) {
 	    event.preventDefault();
 	    var div = $(this).closest('.tom_media_upload');
-	    // alert(div.attr('id'));
 
 	    var custom_uploader = wp.media({
 	        title: 'Select Option Image',
@@ -665,10 +615,7 @@ jQuery(document).ready(function($) {
 	        $(div).find('.tom_media_url').val(attachment.url);
 	        $(div).find('.tom_media_id').val(attachment.id);
         	$(div).find('.tom_remove_image').show();
-	        
-	        /* Thumbnail for repeatable image */
-	        $(div).find('.tom_media_image_thumb').attr('src', attachment.url);
-	        $(div).find('.tom_media_image_thumb').show();
+        	
 	        var idDefaultForm = $(div).closest('.options-container').attr('data-default');
 			updateDefaultOption(idDefaultForm);
 	    })
@@ -690,20 +637,12 @@ jQuery(document).ready(function($) {
 	$("a.button-copy-shortcode").on('mouseover', function(event){
 		event.preventDefault();
 
-        //turn off this listening event for the element that triggered this
-        // $(this).off('mouseover');
-
-         //initialize clipboard
+        /* initialize clipboard */
         $(this).clipboard({
             path: pluginDir+'/tonjoo-tom/assets/js/jquery.clipboard.swf',
             copy: function() {
 	            var shortcode = $(this).find('.tooltipValue').text();
 	            $(this).find('.tooltip-body').html('Copied to clipboard');
-	            // Hide "Copy" and show "Copied, copy again?" message in link
-	            // this_sel.find('.code-copy-first').hide();
-	            // this_sel.find('.code-copy-done').show();
-
-	            // Return text in closest element (useful when you have multiple boxes that can be copied)
 	            return shortcode;
 	        }
          });
@@ -712,7 +651,6 @@ jQuery(document).ready(function($) {
 
 	/* Tooltip */
 	var showTooltip = function(event) {
-		// alert('ok');
 	  	$('div.tooltip').remove();
 	  	var title 	= $(this).find('.tooltipValue').attr('data-title');
 	  	var shortcode 	= $(this).find('.tooltipValue').text();
@@ -736,8 +674,6 @@ jQuery(document).ready(function($) {
 	   mouseleave: hideTooltip
 	});
 
-
-
 	/* Submit Form*/
 	function ajaxSubmit(formId,optionId,buttonId){
 		var formData = $('#'+formId).serialize();
@@ -756,11 +692,9 @@ jQuery(document).ready(function($) {
 				$('#setting-error-save_options').fadeOut('slow').remove();
 				if (response == 'success') {
 					$("#loading-"+buttonId).hide();
-					// alert('ok');
 					$('#tom-notification').html('<div id="setting-error-save_options" class="updated fade settings-error below-h2"><p><strong>Options saved.</strong></p></div>').hide().fadeIn('slow');
 				} else {
 					$("#loading-"+buttonId).hide();
-					// alert(response);
 					$('#tom-notification').html('<div id="setting-error-save_options" class="error fade settings-error below-h2"><p><strong>Update failed.</strong></p></div>').hide().fadeIn('slow');
 				}
 				// console.log(response);
@@ -773,17 +707,16 @@ jQuery(document).ready(function($) {
 
 /* Iklan */
 jQuery(function(){  
-var url = 'http://tonjoo.com/about/?ttom-jsonp=promo';
+	var url = 'http://tonjoo.com/about/?ttom-jsonp=promo';
+	jQuery.ajax({url: url, dataType:'jsonp'}).done(function(data){  
+		//promo_1
+		if(typeof data =='object'){  
+			jQuery("#promo_1 a").attr("href",data.permalink_promo_1);  
+			jQuery("#promo_1 img").attr("src",data.img_promo_1);
 
-jQuery.ajax({url: url, dataType:'jsonp'}).done(function(data){  
-//promo_1
-if(typeof data =='object'){  
-jQuery("#promo_1 a").attr("href",data.permalink_promo_1);  
-jQuery("#promo_1 img").attr("src",data.img_promo_1);
-
-//promo_2
-jQuery("#promo_2 a").attr("href",data.permalink_promo_2);  
-jQuery("#promo_2 img").attr("src",data.img_promo_2);  
-}
-});
+			//promo_2
+			jQuery("#promo_2 a").attr("href",data.permalink_promo_2);  
+			jQuery("#promo_2 img").attr("src",data.img_promo_2);  
+		}
+	});
 });

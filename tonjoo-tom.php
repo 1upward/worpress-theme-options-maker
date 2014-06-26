@@ -10,18 +10,15 @@
 
 function tonjoo_tom_init() {
 
-	//  permission
-	if ( !current_user_can( 'edit_theme_options' ) )
-		return;
-
-	// Load other resource
+	/* Load Core Files */
 	require plugin_dir_path( __FILE__ ) . 'includes/class.tom-options.php';
 	require plugin_dir_path( __FILE__ ) . 'includes/class.tom-generate.php';
 
-	/* if file config exist */
+	/* If file config exist */
 	if ( file_exists( get_template_directory() . "/tonjoo_options.php" ) ) {
 	    require_once( get_template_directory() . "/tonjoo_options.php" );
-	
+		
+		/* Insert value through filter */
 		if ( function_exists('tonjoo_tom_config') ) {
 			add_filter( 'tom_config', 'tonjoo_tom_config');
 		}
@@ -36,27 +33,13 @@ function tonjoo_tom_init() {
 	} 
 
 
-	// Instantiate the main plugin class.
+	// Instantiate plugin core.
 	$tom = new tomOptions;
 	$tom->init();
 
 }
 add_action( 'init', 'tonjoo_tom_init', 20 );
 
-
-function filter_by_value ($array, $index, $value){ 
-    if(is_array($array) && count($array)>0)  
-    { 
-        foreach(array_keys($array) as $key){ 
-            $temp[$key] = $array[$key][$index]; 
-             
-            if ($temp[$key] == $value){ 
-                $newarray[$key] = $array[$key]; 
-            } 
-        } 
-      } 
-  return $newarray; 
-} 
 
 /**************
 * SHORTCODE 
@@ -98,33 +81,26 @@ function tom_shortcode( $atts = NULL ) {
     /* If value empty try to get default value from shortcode */
 	$tom_data = (!empty($value)) ? $value : $default;
 
+	/* If SSL Enabled use https replace */
+	$tom_data = (is_ssl()) ? https_link($tom_data) : $tom_data;
+
     return $tom_data;
 }
 
 add_shortcode( 'tom', 'tom_shortcode' );
 
+/* Replace url to https */
+function https_link($url){
+	/* Validate value is URL */
+	if(filter_var($url, FILTER_VALIDATE_URL)) {
+		// Parse to get domain from url
+		$parse_base = parse_url(get_site_url());
+		$parse_url = parse_url($url);
 
-
-
-function tom_recognized_font_sizes() {
-	$sizes = range( 9, 11 );
-	$sizes = apply_filters( 'tom_recognized_font_sizes', $sizes );
-	$sizes = array_map( 'absint', $sizes );
-	return $sizes;
-}
-
-function tom_recognized_font_faces() {
-	$default = array(
-		'arial'     => 'Arial',
-		'verdana'   => 'Verdana, Geneva'
-		);
-	return apply_filters( 'tom_recognized_font_faces', $default );
-}
-function tom_recognized_font_styles() {
-	$default = array(
-		'normal'      => 'Normal',
-		'italic'      => 'Italic',
-		);
-	return apply_filters( 'tom_recognized_font_styles', $default );
+		if ($parse_url['host'] == $parse_base['host']) {
+			$url = str_replace('http://', 'https://', $url );
+		}
+	}
+	return $url;
 }
 ?>
