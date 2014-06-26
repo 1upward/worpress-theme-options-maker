@@ -679,7 +679,7 @@ border-bottom: 1px solid #ddd;
     padding-top: 5px;
     vertical-align: middle;
 }
-select.tom-typography {
+.metabox-side .input select.tom-typography {
     max-width: 100px;
 }
 /*.tom-options .tom-option-image {
@@ -816,6 +816,9 @@ td.shortcode a.button-copy-shortcode {
     /*color: #2ea2cc;*/
     font-style: italic;
 }
+#new-data-default .typography-options {
+    margin-left: 85px;
+}
 #new-data-default .tom_media_upload {
     margin-left: 90px;
     margin-right: 5px;
@@ -828,4 +831,12 @@ td.shortcode a.button-copy-shortcode {
 }
 .tom_media_upload .tom_media_button .tom_remove_image {
     float: right;
+}
+.input-options-group .tom_media_upload.repeatable_upload {
+    max-width: none;
+}
+
+.metabox-side .tom_banner img {
+    width: 260px;
+    margin-bottom: 20px;
 }

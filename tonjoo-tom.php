@@ -26,6 +26,10 @@ function tonjoo_tom_init() {
 			add_filter( 'tom_config', 'tonjoo_tom_config');
 		}
 
+		if ( function_exists('tonjoo_tom_default') ) {
+			add_filter( 'tom_default', 'tonjoo_tom_default');
+		}
+
 		if ( function_exists( 'tonjoo_tom_options' ) ) {
 			add_filter( 'tom_options', 'tonjoo_tom_options');
 		}
@@ -102,9 +106,8 @@ add_shortcode( 'tom', 'tom_shortcode' );
 
 
 
-
 function tom_recognized_font_sizes() {
-	$sizes = range( 9, 71 );
+	$sizes = range( 9, 11 );
 	$sizes = apply_filters( 'tom_recognized_font_sizes', $sizes );
 	$sizes = array_map( 'absint', $sizes );
 	return $sizes;
@@ -113,13 +116,7 @@ function tom_recognized_font_sizes() {
 function tom_recognized_font_faces() {
 	$default = array(
 		'arial'     => 'Arial',
-		'verdana'   => 'Verdana, Geneva',
-		'trebuchet' => 'Trebuchet',
-		'georgia'   => 'Georgia',
-		'times'     => 'Times New Roman',
-		'tahoma'    => 'Tahoma, Geneva',
-		'palatino'  => 'Palatino',
-		'helvetica' => 'Helvetica*'
+		'verdana'   => 'Verdana, Geneva'
 		);
 	return apply_filters( 'tom_recognized_font_faces', $default );
 }
@@ -127,8 +124,6 @@ function tom_recognized_font_styles() {
 	$default = array(
 		'normal'      => 'Normal',
 		'italic'      => 'Italic',
-		'bold'        => 'Bold',
-		'bold italic' => 'Bold Italic',
 		);
 	return apply_filters( 'tom_recognized_font_styles', $default );
 }

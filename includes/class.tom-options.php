@@ -169,11 +169,45 @@ class tomOptions {
 
 		);
 
-		/* ambil dari filter barangkali ada custom config dari file */
+		/* get options from file if exist */
 		$config_from_file = apply_filters( 'tom_config', $config_default );
 		$configs = array_merge($config_default, $config_from_file);
 		
 		return $configs;
+	}
+
+	static function tom_default_options() {
+
+		$opt_default = array(
+			'font-size' => range( 9, 71 ),
+			'font-face' => array(
+				'arial'     => 'Arial',
+				'verdana'   => 'Verdana, Geneva',
+				'trebuchet' => 'Trebuchet',
+				'georgia'   => 'Georgia',
+				'times'     => 'Times New Roman',
+				'tahoma'    => 'Tahoma, Geneva',
+				'palatino'  => 'Palatino',
+				'helvetica' => 'Helvetica'
+			),
+			'font-style' => array(
+				'normal'      => 'Normal',
+				'italic'      => 'Italic',
+				'bold'        => 'Bold',
+				'bold italic' => 'Bold Italic',
+			),
+			'editor-settings' => array(
+				'media_buttons' => true,
+				'textarea_rows' => 5,
+				'tinymce' => array( 'plugins' => 'wordpress' )
+			)
+		);
+
+		/* get options from file if exist */
+		$opt_from_file = apply_filters( 'tom_default', $opt_default );
+		$default = array_merge($opt_default, $opt_from_file);
+
+		return $default;
 	}
 
 	function add_custom_options_page() {
@@ -233,7 +267,12 @@ class tomOptions {
 		      Another Awesome Plugins
 		    </h3>
 		 	<div style="text-align: center; padding: 20px;">
-		 		<!-- <img src="https://tonjoo.com/beta/wp-content/uploads/2014/05/FRS-banner-box-Premium.jpg"> -->
+		 		<div id="promo_1" class="tom_banner">
+		 			<a href="" target="_blank"><img src=""></a>
+		 		</div>
+		 		<div id="promo_2" class="tom_banner">
+		 			<a href="" target="_blank"><img src=""></a>
+		 		</div>
 		 	</div>
 		  </div>
 		</div>
@@ -328,13 +367,40 @@ class tomOptions {
 			      	<label for="tom-default-new-data">
 			          Default :
 			        </label>
-			        <div id="results"></div>
 			        <div class="input">
 			        	<!-- <input type="hidden" id="new-data-hidden-default" value=""> -->
 						<div id="new-data-default">
-						<!--   -->
-						<input name="default" type="text" id="tom-default-new-data" value="">
+						<!-- will dynamic generate by jquery  -->
+						<input class="input-default" name="default" type="text" id="tom-default-new-data" value="">
 				        </div>
+
+				        <?php $defaultOptions = $this->tom_default_options(); ?>
+						<div id="typography-options" class="input-default typography-options" style="display:none;">
+				        	<label>Color :</label>
+							<div class="color-container">
+								<input class="array-default color-picker" type="text" data-name="color" />
+							</div>
+				        	<label>Size :</label>
+							<select class="array-default tom-typography tom-typography-size" data-name="size">
+							    <?php foreach ($defaultOptions['font-size'] as $key => $value) {
+								echo '<option value="'.$value.'px">'.$value.' px</option>';
+								} ?>
+							</select>
+						  	<br>
+				        	<label>Font Face :</label>
+							<select class="array-default tom-typography tom-typography-face" data-name="face">
+								<?php foreach ($defaultOptions['font-face'] as $key => $value) {
+								echo '<option value="'.$key.'">'.$value.'</option>';
+								} ?>
+							</select>
+							<br>
+				        	<label>Font Style :</label>
+							<select class="array-default tom-typography tom-typography-style" data-name="style">
+							    <?php foreach ($defaultOptions['font-style'] as $key => $value) {
+								echo '<option value="'.$key.'">'.$value.'</option>';
+								} ?>
+							</select>
+						</div>
 				        <p>
 				          Default value.
 				        </p>

@@ -100,28 +100,9 @@ jQuery(document).ready(function($) {
 		//     }
 		// });
 	}
-	// var xxx = $('.nav-tab-active').attr('href');
-	// alert(xxx);
 
-	// $('.container-body').each(function() {
-	// 	var emptyOptions = '<div class="empty-options">';
-	// 		emptyOptions +=		'<h1>There is no option here..</h1>';
-	// 		if (tomMode == 'full') {
-	// 			emptyOptions +=		'<h4>please create the option <a href="'+tomCreatePage+'#tom-id-new-data">first</a></h4>';
-	// 		}
-	// 		emptyOptions +=	'</div>';
-	// 		// alert(xxx);
-	// 	if ($.trim ($(this).text()) == "") {
-	// 		/* Append empty message */
-	// 		$(this).append(emptyOptions);
-	// 		/* Hide submit button */
-	// 		// alert(activeDiv);
-	// 		$('#tonjoo-tom-submit').hide();
-	// 	}
-	// });
-
-	// Loads the color pickers
-	$('.tom-color').wpColorPicker();
+	/* Initialize color picker on document ready */
+    $('.tom-color').wpColorPicker();	
 
 	// Image Options
 	$('.tom-radio-img-img').click(function(){
@@ -170,12 +151,6 @@ jQuery(document).ready(function($) {
 	    return false;
 	});
 
-	/* Trigger cek display options on document ready */
-	// $('.tom-type').each(function(index,element){
-		// displayOptions(element);/* DIsplay default form */
-	  	// showDefault(element);
-	// });
-
 	/* Trigger cek display options if select type change */
 	$(document).delegate( ".tom-type", "change", function(event) { 
 		event.preventDefault();
@@ -221,6 +196,18 @@ jQuery(document).ready(function($) {
 
 		  	case "select-image":
 		  		showOptions = true;
+		  		var templateRepeatable 	= '<div data-order="1" class="input-options-group">';
+				templateRepeatable		+= 	'<div class="tom_media_upload repeatable_upload">';
+				// templateRepeatable		+= 	'	<img class="tom_media_image tom-default-image" src="" style="display:none;"/>';
+				templateRepeatable		+= 	'	<div class="tom_media_button">';
+				templateRepeatable		+= 	'		<img class="tom_media_image_thumb tom-default-image" src="" style="display:none; width: 30px;"/>';
+				templateRepeatable 		+= 	'		<input class="input-opt input-key" name="'+arrayName+'[options][opt-key][]" data-key="key" value="" placeholder="Key">';
+				templateRepeatable		+= 	'		<input class="input-opt input-val tom_media_url" type="hidden" name="'+arrayName+'[options][opt-val][]" data-key="val" value="">';
+				templateRepeatable		+= 	'		<a href="#" class="tom_button_upload button-secondary">Choose</a>';
+				templateRepeatable 		+= 	'		<a class="btn-remove dashicons dashicons-dismiss"></a>';
+				templateRepeatable		+= 	'	</div>';
+				templateRepeatable		+= 	'</div>';
+				templateRepeatable 		+= '</div>';
 		  		break;
 
 		  	default:
@@ -259,31 +246,31 @@ jQuery(document).ready(function($) {
 
 		switch (type){
 		  	case "select":
-		  		inputDefault = 	'<select name="'+arrayName+'[default]" id="tom-default-'+containerId+'">';
+		  		inputDefault = 	'<select class="input-default" name="'+arrayName+'[default]" id="tom-default-'+containerId+'">';
 		  		inputDefault += '<option value="">Select default option</option>';
 		  		inputDefault += '</select>';
 		  		updateDefaultOption(containerId);
 		  		break;
 
 		  	case "textarea":
-		  		inputDefault = '<textarea name="'+arrayName+'[default]" id="tom-default-'+containerId+'"></textarea>';
+		  		inputDefault = '<textarea class="input-default" name="'+arrayName+'[default]" id="tom-default-'+containerId+'"></textarea>';
 		  		break;
 
 		  	case "radio":
-		  		inputDefault = 	'<select name="'+arrayName+'[default]" id="tom-default-'+containerId+'">';
+		  		inputDefault = 	'<select class="input-default" name="'+arrayName+'[default]" id="tom-default-'+containerId+'">';
 		  		inputDefault += '<option value="">Select default option</option>';
 		  		inputDefault += '</select>';
 		  		updateDefaultOption(containerId);
 		  		break;
 
 		  	case "checkbox":
-		  		inputDefault = 	'<div id="tom-default-'+containerId+'" class="tom-checkbox-default"><input type="checkbox" name="'+arrayName+'[default]" value="1"><span class="status">( Not Checked )</span></div>';
+		  		inputDefault = 	'<div id="tom-default-'+containerId+'" class="tom-checkbox-default"><input class="input-default" type="checkbox" name="'+arrayName+'[default]" value="1"><span class="status">( Not Checked )</span></div>';
 		  		break;
 
 		  	case "multicheck":
 		  		inputDefault =  '<div id="tom-default-'+containerId+'" class="tom-checkbox-default">';
 		  		inputDefault += '<div class="input-group-multicheck">';
-				inputDefault +=		'<input class="input-multicheck" type="checkbox" disabled="disabled"><span class="status">Please create field options</span><br>';
+				inputDefault +=		'<input class="input-default input-multicheck" type="checkbox" disabled="disabled"><span class="status">Please create field options</span><br>';
 				inputDefault +=	'</div>';
 				inputDefault +=	'</div>';
 				updateDefaultOption(containerId);
@@ -293,7 +280,7 @@ jQuery(document).ready(function($) {
 		  		inputDefault = '<div id="tom-default-'+containerId+'" class="tom_media_upload">';
 				inputDefault += '	<img class="tom_media_image tom-default-image" src="" style="display:none;"/>';
 				inputDefault += '	<div class="tom_media_button">';
-				inputDefault += '		<input class="tom_media_url" type="hidden" name="'+arrayName+'[default]" value="">';
+				inputDefault += '		<input class="tom_media_url input-default" type="hidden" name="'+arrayName+'[default]" value="">';
 				inputDefault += '		<a href="#" class="tom_button_upload button-secondary">Choose</a>';
 				inputDefault += '		<a href="#" class="tom_remove_image button-primary" style="display:none;">Remove</a>';
 				inputDefault += '	</div>';
@@ -301,11 +288,40 @@ jQuery(document).ready(function($) {
 
 		  		break;
 
+		  	case "select-image":
+		  		inputDefault = 	'<select class="input-default" name="'+arrayName+'[default]" id="tom-default-'+containerId+'">';
+		  		inputDefault += '<option value="">Select default option</option>';
+		  		inputDefault += '</select>';
+		  		updateDefaultOption(containerId);
+		  		break;
+
+		  	case "color":
+		  		inputDefault = 	'<input name="'+arrayName+'[default]" id="tom-default-'+containerId+'" type="text" value="" class="tom-color input-default" />';
+		  		updateDefaultOption(containerId);
+		  		break;
+
+		  	case "editor":
+		  		inputDefault = '<textarea class="input-default" name="'+arrayName+'[default]" id="tom-default-'+containerId+'"></textarea>';
+		  		break;
+
+		  	case "typography":
+		  		/* Clone to get typography options */
+		  		var elem = $('#typography-options').clone().attr('id', 'tom-default-'+containerId).show();
+		  			/* Change input name to match the option id */
+		  			elem.find('.array-default').each(function(i, elemArray) {
+		  				var dataName = $(this).attr('data-name');
+					    $(elemArray).attr('name', arrayName+'[default]['+dataName+']');
+					    $(elemArray).filter('.color-picker').attr( 'class', 'array-default tom-color' ).attr('name', arrayName+'[default]['+dataName+']');
+					});
+		  		inputDefault = elem;
+		  		break;
+
 		  	default:
-		  		inputDefault = '<input name="'+arrayName+'[default]" id="tom-default-'+containerId+'" type="text" value="">';
+		  		inputDefault = '<input class="input-default" name="'+arrayName+'[default]" id="tom-default-'+containerId+'" type="text" value="">';
 	  	}
 
 	  	$('#'+containerId+'-default').html(inputDefault);
+	  	$('.tom-color').wpColorPicker();
 	}
 
 	/* Display checkbox status */
@@ -341,6 +357,7 @@ jQuery(document).ready(function($) {
 				    arr3[key[i]] = val[i];
 				}
 
+			// console.log(arr3);
 			switch (type){
 			  	case "multicheck":
 			  		$.each( arr3, function( key, name ) {
@@ -355,6 +372,17 @@ jQuery(document).ready(function($) {
 							optionDefault += '</div>';
 					    }
 				  	});	
+				  	// alert(containerId);
+			  		break;
+
+			  	case "select-image":
+			  		$.each( arr3, function( key, name ) {
+						if (input.val().length) {
+					    	optionDefault += '<option value="'+key+'">'+key+'</option>';
+					    } else {
+					    	optionDefault += '<option value="">Select default option</option>';
+					    }
+				  	});
 				  	// alert(containerId);
 			  		break;
 
@@ -393,6 +421,8 @@ jQuery(document).ready(function($) {
 	    cloneInput.attr('data-order', newOrder);
 	    // cloneInput.find('.label-opt').html( newOrder+' : ');
 	    cloneInput.find('input.input-opt').val('');
+	    /* Remove image for repeatable image */
+	    cloneInput.find('.tom-default-image').attr('src','');
 	    cloneInput.appendTo( '#'+idToAppend );
 
 	    return false;
@@ -410,6 +440,8 @@ jQuery(document).ready(function($) {
 	    /* if the input remaining one, disable the delete and just emptied */
 	    if (repeatableInput.length <= '1' ) {
 	    	$(this).closest('.input-options-group').find('.input-opt').val('');
+	    	/* Clear image on repeatable */
+	    	$(this).closest('.input-options-group').find('.tom_media_image_thumb').attr('src', '');
 	    	updateDefaultOption(idDefaultForm);
 	    	showDefault();
 	    	return false;
@@ -567,12 +599,27 @@ jQuery(document).ready(function($) {
 		var orgDef = $('#tom-default-new-data');
 		var def = orgDef.clone();
 		def.each(function(index, item) {
-			/* Use .find('*').andSelf().filter(':input') because some input type wrapped by div */
-			$(item).find('*').andSelf().filter(':input').attr( 'name', arrayName+'[default]' );
-			$(item).find('*').andSelf().filter(':input').attr( 'id', 'tom-default-'+id );
-			$(item).val( orgDef.eq(index).val() );
+			/* Use .find('*').andSelf().filter('.input-default') because some input type wrapped by div */
+			$(item).find('*').andSelf().filter('.input-default').attr( 'name', arrayName+'[default]' );
+			$(item).find('*').andSelf().filter('.input-default').attr( 'id', 'tom-default-'+id );
+			$(item).find('*').andSelf().filter('.input-default').val( orgDef.eq(index).val() );
+
+			/* Get color value (use for recreate input color */
+			var colorValue = $(item).find('input.tom-color').val();
+			/* Loop trough array default */
+			$(item).find('.array-default').each(function(i, elemArray) {
+			    var dataName = $(this).attr('data-name');
+			    $(elemArray).attr('name', arrayName+'[default]['+dataName+']');
+			    /* Pass value to new element */
+			 	$(elemArray).val( orgDef.find('.array-default').eq(i).val() );
+			});
+		    
+		    /* recreate input color to prevent error */
+		    $(item).find('.color-container').html('<input class="array-default tom-color" name="'+arrayName+'[default][color]" type="text" value="'+colorValue+'" data-name="color">');
+
 		});
 		$('#'+id+'-default').html(def);
+		$('.tom-color').wpColorPicker();
 	}
 
 	/* Delete group */
@@ -610,12 +657,20 @@ jQuery(document).ready(function($) {
 	    })
 	    .on('select', function() {
 	        var attachment = custom_uploader.state().get('selection').first().toJSON();
+	        console.log(attachment);
 	        $(div).find('.tom_media_image').attr('src', attachment.url);
 	        $(div).find('.tom_media_image').show();
+
 	        $(div).find('.tom_button_upload').html('Change');
 	        $(div).find('.tom_media_url').val(attachment.url);
 	        $(div).find('.tom_media_id').val(attachment.id);
         	$(div).find('.tom_remove_image').show();
+	        
+	        /* Thumbnail for repeatable image */
+	        $(div).find('.tom_media_image_thumb').attr('src', attachment.url);
+	        $(div).find('.tom_media_image_thumb').show();
+	        var idDefaultForm = $(div).closest('.options-container').attr('data-default');
+			updateDefaultOption(idDefaultForm);
 	    })
 	    .open();
 	});
@@ -642,7 +697,7 @@ jQuery(document).ready(function($) {
         $(this).clipboard({
             path: pluginDir+'/tonjoo-tom/assets/js/jquery.clipboard.swf',
             copy: function() {
-	            var shortcode = $(this).find('.shortcodeValue').text();
+	            var shortcode = $(this).find('.tooltipValue').text();
 	            $(this).find('.tooltip-body').html('Copied to clipboard');
 	            // Hide "Copy" and show "Copied, copy again?" message in link
 	            // this_sel.find('.code-copy-first').hide();
@@ -659,8 +714,8 @@ jQuery(document).ready(function($) {
 	var showTooltip = function(event) {
 		// alert('ok');
 	  	$('div.tooltip').remove();
-	  	var title 	= $(this).find('.shortcodeValue').attr('data-title');
-	  	var shortcode 	= $(this).find('.shortcodeValue').text();
+	  	var title 	= $(this).find('.tooltipValue').attr('data-title');
+	  	var shortcode 	= $(this).find('.tooltipValue').text();
 	  	var	elementDiv 	=  '<div class="tooltip">';
 	  		elementDiv 	+= '	<div class="tooltip-head">'+title+'</div>';
 	  		elementDiv 	+= '	<div class="tooltip-body">'+shortcode+'</div>';
@@ -714,4 +769,21 @@ jQuery(document).ready(function($) {
 
 	return false;
 	}
+});
+
+/* Iklan */
+jQuery(function(){  
+var url = 'http://tonjoo.com/about/?ttom-jsonp=promo';
+
+jQuery.ajax({url: url, dataType:'jsonp'}).done(function(data){  
+//promo_1
+if(typeof data =='object'){  
+jQuery("#promo_1 a").attr("href",data.permalink_promo_1);  
+jQuery("#promo_1 img").attr("src",data.img_promo_1);
+
+//promo_2
+jQuery("#promo_2 a").attr("href",data.permalink_promo_2);  
+jQuery("#promo_2 img").attr("src",data.img_promo_2);  
+}
+});
 });
