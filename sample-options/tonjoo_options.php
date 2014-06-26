@@ -20,16 +20,50 @@ function tonjoo_tom_config($config) {
 	return $config;
 }
 
+function tonjoo_tom_default($default) {
+
+	$default = array(
+		'font-size' => range( 9, 71 ),
+		'font-face' => array(
+			'arial'     => 'Arial',
+			'verdana'   => 'Verdana, Geneva',
+		),
+		'font-style' => array(
+			'normal'      => 'Normal',
+			'italic'      => 'Italic',
+			'bold'        => 'Bold',
+			'bold italic' => 'Bold Italic',
+		),
+		/*********************************************************
+		* @ http://codex.wordpress.org/Function_Reference/wp_editor
+		**********************************************************/
+		'editor-settings' => array(
+			'media_buttons' => false, /* Set true to display media button */
+			'textarea_rows' => 5,
+			'tinymce' => array( 'plugins' => 'wordpress' )
+		)
+	);
+
+	return $default;
+}
+
 function tonjoo_tom_options() {
 
-	// Test data
-	$test_array = array(
+	/* Sample Array for options */
+	$sample_array = array(
 		'satu'	=> 'Satu',
 		'dua' 	=> 'Dua',
 		'tiga' 	=> 'Tiga',
 		'empat' => 'Empat',
 		'lima' 	=> 'Lima',
 	);
+
+	/* Sample default value for typography */
+	$typography_defaults = array(
+	 	'size' => '15px',
+	 	'face' => 'georgia',
+	 	'style' => 'bold',
+	 	'color' => '#bada55' );
 
 	
 	$options_categories = array();
@@ -61,26 +95,26 @@ function tonjoo_tom_options() {
 	$options['homepage'] = array(
 		'name' => 'Homepage',
 		'type' => 'heading',
-		'desc' => 'Test description');
+		'desc' => 'Test description homepage'); 
 	
 	$options['sample-text'] = array(
 		'name' => 'Input Text',
 		'desc' => 'Sample input text',
-		'default' => 'Default Value',
-		'type' => 'text');
+		'type' => 'text',
+		'default' => 'Sample default value for text');
 
 	$options['sample-textarea'] = array(
 		'name' => 'Textarea',
 		'desc' => 'Sample textarea',
-		'default' => 'Default Text',
-		'type' => 'textarea');
+		'type' => 'textarea',
+		'default' => 'Sample default value for textarea');
 	
-	$options['sample-select-db'] = array(
-		'name' => 'Input Select From DB',
+	$options['sample-select'] = array(
+		'name' => 'Select',
 		'desc' => 'Sample Select',
-		'default' => 'dua',
 		'type' => 'select',
-		'options' => $test_array);
+		'options' => $sample_array,
+		'default' => 'dua');
 
 	$options['sample-select-page'] = array(
 		'name' => 'Select Page',
@@ -105,15 +139,15 @@ function tonjoo_tom_options() {
 	$options['sample-radio'] = array(
 		'name' => 'Input Radio',
 		'desc' => 'Sample input radio',
-		'default' => 'dua',
 		'type' => 'radio',
-		'options' => $test_array);
+		'options' => $sample_array,
+		'default' => 'dua' );
 
 	$options['sample-checkbox'] = array(
 		'name' => 'Input Checkbox',
 		'desc' => 'Sample input checkbox',
-		'default' => 'true',
-		'type' => 'checkbox');
+		'type' => 'checkbox',
+		'default' => '1' ); /* 1 = Checked */
 
 
 	/**********
@@ -121,97 +155,58 @@ function tonjoo_tom_options() {
 	***********/
 	 $options['about'] = array(
 	 	'name' => 'About',
-	 	'type' => 'heading');
+	 	'type' => 'heading',
+	 	// if desc not set, the name of heading will be use
+	 	);
 
 	 $options['sample-upload'] = array(
 	 	'name' => 'Image',
-	 	'desc' => 'Sample image',
+	 	'desc' => 'Sample image upload',
 	 	'type' => 'upload');
 
 	 $options['sample-select-image'] = array(
 	 	'name' => "Example Image Select",
 	 	'desc' => "Images for layout.",
-	 	'default' => "2",
 	 	'type' => "select-image",
 	 	'options' => array(
 	 		'1' => $imagepath . '1col.png',
 	 		'2' => $imagepath . '2cl.png',
-	 		'3' => $imagepath . '2cr.png')
+	 		'3' => $imagepath . '2cr.png'
+	 		),
+	 	'default' => "2"
 	 );
 
 	 $options['sample-multicheck'] = array(
 	 	'name' => 'Multicheck',
 	 	'desc' => 'Sample multicheck',
-	 	'default' => '', // These items get checked by default
 	 	'type' => 'multicheck',
-	 	'options' => $test_array);
+	 	'options' => $sample_array,
+	 	'default' => '');
 
 	 $options['sample-color'] = array(
 	 	'name' => 'Color picker',
 	 	'desc' => 'Sample color picker',
-	 	'default' => '',
-	 	'type' => 'color' );
+	 	'type' => 'color',
+	 	'default' => '' );
 
-	 // /* text */
+	/*********************
+	Tab Sample Text Editor
+	*********************/
 	 $options['sample-text-tab'] = array(
 	 	'name' => 'Sample Text Editor',
-	 	'type' => 'heading');
-
-
-	 $editor_settings = array(
-	 	'wpautop' => true, // Default
-	 	'textarea_rows' => 5,
-	 	'group' => '3',
-	 	'tinymce' => array( 'plugins' => 'wordpress' )
-	 );
+	 	'type' => 'heading',
+	 	'desc' => 'Media button can be configure from file');
 
 	 $options['sample-text-editor'] = array(
 	 	'name' => 'Text editor',
 	 	'desc' => 'Sample text editor',
-	 	'type' => 'editor',
-	 	'settings' => $editor_settings );
-
-	 $with_media = array(
-	 	'wpautop' => true, // Default
-	 	'textarea_rows' => 5,
-	 	'group' => '3',
-	 	'media_buttons' => true
-	 );
-
-	 $options['sample-editor-media'] = array(
-	 	'name' => 'Text editor with image',
-	 	'desc' => 'Sample text editor with media button enabled',
-	 	'type' => 'editor',
-	 	'settings' => $with_media );
-
-	 /* Typography Defaults */
-	 $typography_defaults = array(
-	 	'size' => '15px',
-	 	'face' => 'georgia',
-	 	'style' => 'bold',
-	 	'color' => '#bada55' );
-
-	 /*Typography Options*/
-	 $typography_options = array(
-	 	'sizes' => array( '6','12','14','16','20' ),
-	 	'faces' => array( 'Helvetica Neue' => 'Helvetica Neue','Arial' => 'Arial' ),
-	 	'styles' => array( 'normal' => 'Normal','bold' => 'Bold' ),
-	 	'color' => false
-	 );
+	 	'type' => 'editor');
 
 	 $options['sample-typography'] = array( 
 	 	'name' => 'Typography',
 	 	'desc' => 'Sample typography',
-	 	// 'default' => $typography_defaults,
-	 	'type' => 'typography' );
-
-	 // $options[] = array(
-	 // 	'name' => 'Custom Typography',
-	 // 	'desc' => 'Sample Custom Typography',
-	 // 	'id' => "custom_typography",
-	 // 	'default' => $typography_defaults,
-	 // 	'type' => 'typography',
-	 // 	'options' => $typography_options );
+	 	'type' => 'typography',
+	 	'default' => $typography_defaults );
 
 	return $options;
 }
