@@ -38,7 +38,7 @@ function tonjoo_tom_default($default) {
 		* @ http://codex.wordpress.org/Function_Reference/wp_editor
 		**********************************************************/
 		'editor-settings' => array(
-			'media_buttons' => false, /* Set true to display media button */
+			'media_buttons' => true, /* Set true to display media button */
 			'textarea_rows' => 5,
 			'tinymce' => array( 'plugins' => 'wordpress' )
 		)
@@ -99,12 +99,14 @@ function tonjoo_tom_options() {
 	
 	$options['sample-text'] = array(
 		'name' => 'Input Text',
+		'required' => '1', // 1 to set required
 		'desc' => 'Sample input text',
 		'type' => 'text',
 		'default' => 'Sample default value for text');
 
 	$options['sample-textarea'] = array(
 		'name' => 'Textarea',
+		'required' => '1', // 1 to set required
 		'desc' => 'Sample textarea',
 		'type' => 'textarea',
 		'default' => 'Sample default value for textarea');

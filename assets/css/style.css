@@ -810,6 +810,17 @@ td.shortcode a.button-copy-shortcode {
     margin-left: 90px;
     margin-top: 15px;
 }
+.input .input-checkbox {
+    margin-left: 90px;
+    margin-top: 15px;
+}
+.input .required-container {
+    margin-left: 81px;
+    margin-top: 13px;
+}
+.inline-edit-col .input .required-container {
+    margin-bottom: 15px;
+}
 #new-data-default .tom-checkbox-default .input-group-multicheck {
     margin-bottom: 5px;
 }
