@@ -1,5 +1,9 @@
 jQuery(document).ready(function($) {	
 
+	setTimeout(function() {
+	    $('.fade').fadeOut('slow');
+	}, 3000); // <-- time in milliseconds
+
 	/* Set Conntent width */
 	sizeContent();
 	$(window).resize(sizeContent);
@@ -36,9 +40,8 @@ jQuery(document).ready(function($) {
 		} else {
 			$('.group:first').fadeIn();
 			$('.nav-tab-wrapper a:first').addClass('nav-tab-active');
+			active_tab = $('.nav-tab-wrapper a:first');
 		}
-
-		checkEmpty(active_tab);
 
 		/* Bind tabs clicks */
 		navtabs.click(function(e) {
@@ -61,8 +64,11 @@ jQuery(document).ready(function($) {
 			checkEmpty(selected);
 		});
 	}
+
+	checkEmpty($('.nav-tab-active').attr('href'));
 	
-	function checkEmpty(activeTab) {
+	function checkEmpty(active_tab) {
+		var activeTab = active_tab || '';
 		var emptyOptions = '<div class="empty-options">';
 			emptyOptions +=		'<h1>There is no option here..</h1>';
 			if (tomMode == 'full') {
@@ -77,8 +83,10 @@ jQuery(document).ready(function($) {
 		} else {
 			if(activeTab == '#new-group') {
 				$('#tom-delete-group').hide();
+				$('#tom-submit-create').val('Create');
 			} else {
 				$('#tom-delete-group').show();
+				$('#tom-submit-create').val('Save');
 			}
 			$('.hide-if-empty').show();
 		}
@@ -107,7 +115,11 @@ jQuery(document).ready(function($) {
 	$(".dd").delegate( "a.delete-nestable", "click", function(event) { 
 	    event.preventDefault();
 	    if (confirm("Are you sure to delete option ?")) {
-		  $(this).closest( "li" ).fadeOut(500, function() { $(this).remove(); });
+		  // $(this).closest( "li" ).fadeOut(500, function() { 
+		  	$(this).closest( "li.dd-item" ).fadeOut('slow').remove(); 
+		  	ajaxSubmit('f_create-options','tom_options','save-group');
+		  // });
+		  // alert('oke');
 			var activeTab = $('.nav-tab-active'),
 		  	    activeDiv = activeTab.attr('href');
 			checkEmpty(activeDiv);
@@ -130,6 +142,53 @@ jQuery(document).ready(function($) {
 
 	    return false;
 	});
+	
+	/************************************************
+	* Trigger ajax submit if nestable list reordered
+	************************************************/
+	var idList = getIdList();
+
+	$('.dd').on('change', function (event) {
+	    var newIDList = getIdList();
+
+	    if (newIDList != idList) {
+	        // alert("Order has been changed");
+	        ajaxSubmit('f_create-options','tom_options','save-group');
+	        idList = newIDList;
+	    }
+	});
+
+	function getIdList() {
+	    var idList = '';
+	    $('.dd-item').each(function () {
+	        idList += $(this).data('id');
+	    });
+
+	    return idList;
+	}
+
+	/* Delete group */
+	$(document).delegate( "#tom-delete-group", "click", function(event) {
+		event.preventDefault();
+		if (confirm("Are you sure to delete options group ?")) {			
+			var activeTab = $('.nav-tab-active');
+			var activeDiv = activeTab.attr('href');
+			var prev = activeTab.prev();
+			// alert(activeDiv);
+			activeTab.fadeOut().remove();
+			$(activeDiv).fadeOut().remove();
+			ajaxSubmit('f_create-options','tom_options','delete-group');
+
+			prev.addClass('nav-tab-active');
+			tom_tabs();
+			var activeTab = $('.nav-tab-active'),
+		  	    activeDiv = activeTab.attr('href');
+			checkEmpty(activeDiv);
+		 }
+
+	    return false;
+	});
+
 
 	/* Trigger cek display options if select type change */
 	$(document).delegate( ".tom-type", "change", function(event) { 
@@ -295,9 +354,15 @@ jQuery(document).ready(function($) {
 	}
 
 	/* Display checkbox status */
-  	$(document).delegate( ".input input:checkbox", "change", function(event) { 
+  	$(document).delegate( ".tom-checkbox-default input:checkbox", "change", function(event) { 
 		event.preventDefault();
 		var status = this.checked ? '( Checked )' : '( Not Checked )';
+		$(this).siblings('.status').html(status);
+	});
+
+	$(document).delegate( ".input .input-required", "change", function(event) { 
+		event.preventDefault();
+		var status = this.checked ? '( Required )' : '( Not Required )';
 		$(this).siblings('.status').html(status);
 	});
 	
@@ -421,14 +486,22 @@ jQuery(document).ready(function($) {
     		alert('Option ID is required!');
     		return;
     	}
+
+    	/* If active tab new group return */
+		if ( $('.nav-tab-active').attr('href') == '#new-group' )  {
+			alert('Please create options group first.');
+			return;
+		}
+
 		var arrayName = 'tom_options['+id+']';
 
-        var name = $("#add-tom-options input[id=tom-name-new-data]").val();
-        var desc = $("#add-tom-options textarea#tom-desc-new-data").val();
-        var type = $("#add-tom-options select#tom-type-new-data").val();
-        var defaultValue = $("#add-tom-options input[id=tom-default-new-data]").val();
-
-		var activeDiv = $('.nav-tab-active').attr('href');
+        var name = $("#add-tom-options input[id=tom-name-new-data]").val(),
+        	reqChecked = $('#add-tom-options input[id=tom-required-new-data]').attr('checked'),
+        	reqStatus = (reqChecked == 'checked') ? 'Required' : 'Not Required',
+        	desc = $("#add-tom-options textarea#tom-desc-new-data").val(),
+        	type = $("#add-tom-options select#tom-type-new-data").val(),
+        	defaultValue = $("#add-tom-options input[id=tom-default-new-data]").val(),
+        	activeDiv = $('.nav-tab-active').attr('href');
 
 		template ='<li class="dd-item tom-item" data-id="'+id+'">';
 		template +='  <div class="dd-handle">'+name+'';
@@ -453,6 +526,15 @@ jQuery(document).ready(function($) {
 		template +='              </span>';
 		template +='            </label>';
 		template +='            <label>';
+		template +='              <span class="title">Required</span>';
+		template +='              <span class="input">';
+		template +='              	<div class="required-container">';
+		template +='              		<input id="'+id+'-required" class="input-required" type="checkbox" name="'+arrayName+'[required]" value="1" '+reqChecked+'>';
+		template +='              		<span class="status">( '+reqStatus+' )</span>';
+		template +='              	</div>';
+		template +='              </span>';
+		template +='            </label>';
+		template +='            <label>';
 		template +='              <span class="title">Description</span>';
 		template +='              <span class="input-text-wrap input">';
 		template +='                <textarea name="'+arrayName+'[desc]">'+desc+'</textarea>';
@@ -460,6 +542,10 @@ jQuery(document).ready(function($) {
 		template +='            </label>';
 		template +='          </div>';
 		template +='        </div>';
+		template +='	    <div class="save-button">';
+		template +='	    	<a href="#" class="btn button-primary save-nestable">Save</a>';
+		template +='	  	  	<span id="loading-'+id+'" class="tom-loading" style="display:none;"><img src="'+adminUrl+'images/spinner.gif" alt=""></span>';
+		template +='	  	</div>';
 		template +='      </fieldset>';
 		template +='        <fieldset class="inline-edit-col-right">';
 		template +='          <div class="inline-edit-col">';
@@ -507,6 +593,7 @@ jQuery(document).ready(function($) {
 		cloneNewData(id);
 		/* Clear input */
 		$('#add-tom-options').find('option:first').attr('selected', 'selected');
+		$('#add-tom-options').find('input:checkbox').removeAttr('checked');
 		$('#new-data-options').hide();
 		$('#add-opt-new-data').html('');
 		$('#add-tom-options').find('input, textarea').val(''); 
@@ -514,6 +601,7 @@ jQuery(document).ready(function($) {
 		$('.empty-options').remove();
 		$('.hide-if-empty').show();
 		ajaxSubmit('f_create-options','tom_options','new-data');
+		checkEmpty();
 	});
 
 
@@ -542,7 +630,7 @@ jQuery(document).ready(function($) {
 			});
 		opt.prependTo('#opt-container-'+id);
 
-		/* Clone attribute display to hide or show */
+		/* Clone attribute display on options to hide or show */
 		var display = $('#new-data-options').css('display');
 		$('#'+id+'-options').css('display', display);
 		// alert(display);
@@ -573,25 +661,6 @@ jQuery(document).ready(function($) {
 		$('#'+id+'-default').html(def);
 		$('.tom-color').wpColorPicker();
 	}
-
-	/* Delete group */
-	$(document).delegate( "#tom-delete-group", "click", function(event) {
-		event.preventDefault();
-		if (confirm("Are you sure to delete options group ?")) {			
-			var activeTab = $('.nav-tab-active');
-			var activeDiv = activeTab.attr('href');
-			var prev = activeTab.prev();
-			// alert(activeDiv);
-			activeTab.fadeOut().remove();
-			$(activeDiv).fadeOut().remove();
-			ajaxSubmit('f_create-options','tom_options','delete-group');
-
-			prev.addClass('nav-tab-active');
-			tom_tabs();
-		 }
-
-	    return false;
-	});
 
 	/* Media upload */
 	$(document).delegate( ".tom_button_upload", "click", function(event) {
@@ -633,20 +702,25 @@ jQuery(document).ready(function($) {
         $(div).find('.tom_remove_image').hide();
 	});
 
-	/* Copy to clipboard */
-	$("a.button-copy-shortcode").on('mouseover', function(event){
-		event.preventDefault();
 
-        /* initialize clipboard */
-        $(this).clipboard({
-            path: pluginDir+'/tonjoo-tom/assets/js/jquery.clipboard.swf',
-            copy: function() {
-	            var shortcode = $(this).find('.tooltipValue').text();
-	            $(this).find('.tooltip-body').html('Copied to clipboard');
-	            return shortcode;
-	        }
-         });
-     });
+	/* Copy Shortcode */
+	var client = new ZeroClipboard( $("a.button-copy-shortcode") );
+
+	client.on( "ready", function( readyEvent ) {
+	  // alert( "ZeroClipboard SWF is ready!" );
+
+	  	client.on( 'copy', function(event) {
+	  		var shortcode = $(event.target).find('.tooltipValue');
+          	event.clipboardData.setData('text/plain', shortcode.text());
+          	shortcode.hide();
+        } );
+	  
+	  	client.on( "aftercopy", function( event ) {
+	  		$(event.target).find('.tooltip-body').html('Copied to clipboard');
+		    // alert("Shortcode copied to clipboard: " + event.data["text/plain"] );
+	  	} );
+
+	} );
 
 
 	/* Tooltip */
@@ -686,18 +760,13 @@ jQuery(document).ready(function($) {
 		};
 		/* Post data*/
 		$.post(ajaxurl, data, function(response) {
-	       	$("#loading-"+buttonId).show();	       	
+	       	$("#loading-"+buttonId).show();	
+			/* Remove notification if exist */
+			$('.settings-error').fadeOut('slow').remove();       	
 			setTimeout( function() {
-				/* Remove notification if exist */
-				$('#setting-error-save_options').fadeOut('slow').remove();
-				if (response == 'success') {
 					$("#loading-"+buttonId).hide();
-					$('#tom-notification').html('<div id="setting-error-save_options" class="updated fade settings-error below-h2"><p><strong>Options saved.</strong></p></div>').hide().fadeIn('slow');
-				} else {
-					$("#loading-"+buttonId).hide();
-					$('#tom-notification').html('<div id="setting-error-save_options" class="error fade settings-error below-h2"><p><strong>Update failed.</strong></p></div>').hide().fadeIn('slow');
-				}
-				// console.log(response);
+					// $('#tom-notification').html(response);
+					$('#tom-notification').html(response).fadeIn('slow').delay(1000).fadeOut('slow');
 		    },1000);
 		});
 
