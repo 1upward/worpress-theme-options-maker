@@ -15,8 +15,6 @@ class tomOptions {
 
 		/* Ajax */
 		add_action( 'wp_ajax_tom_options', array( $this, 'tom_options_callback' ) );
-
-
 	}
 
 	function tom_options_callback() {
@@ -28,11 +26,18 @@ class tomOptions {
  		parse_str($_POST['form_data'], $formData);
 
  		/* Update database */
-		if (update_option( $optionsId, $formData['tom_options'] ) ) {
-			echo "success";
-		} else {
-			echo "failed";
-		}
+		// if (update_option( $optionsId, $formData['tom_options'] ) ) {
+		// 	echo "success";
+		// } else {
+		// 	echo "failed";
+		// }
+ 		// echo "<pre>";
+ 		// print_r( $formData['tom_options']);
+ 		// echo "</pre>";
+
+		update_option( $optionsId, $formData['tom_options'] );
+		echo '<div id="setting-error-save_options" class="updated fade settings-error below-h2"> 
+				<p><strong>Options saved.</strong></p></div>';
 		die();
 	}
 
@@ -53,7 +58,7 @@ class tomOptions {
 	function enqueue_admin_scripts() {
 		// Enqueue custom option panel JS
 		wp_enqueue_script( 'nestable', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/jquery.nestable.js', array('jquery'));
-		wp_enqueue_script( 'zclip', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/jquery.clipboard.js', array( 'jquery' ) );
+		wp_enqueue_script( 'zclip', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/ZeroClipboard.min.js', array( 'jquery' ) );
 		wp_enqueue_script( 'tonjoo-script', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/script.js', array( 'jquery','wp-color-picker' ) );
 		
 		/* Media Uploader */
@@ -67,11 +72,12 @@ class tomOptions {
 		
 		/* Custom variable TTOM */
 		$config = $this->tom_configs();
-		$dir = plugins_url();
+		$dir = plugin_dir_url( dirname(__FILE__) );
 		echo '<script type="text/javascript">
 				var tomMode = "'.$config['mode'].'",
-					tomCreatePage = "' . get_admin_url( null, 'admin.php?page=' . $config['sub_menu_slug'] ) .'";
-					pluginDir = "' . $dir .'";
+					tomCreatePage = "' . get_admin_url( null, 'admin.php?page=' . $config['sub_menu_slug'] ) .'",
+					pluginDir = "' . $dir .'",
+					adminUrl = "' . get_admin_url() . '";
 			  </script>';
 	}
 
@@ -115,6 +121,8 @@ class tomOptions {
 			'sub_menu_slug' => 'create-options',
 			'type-options' => array(
 								'text' => 'Text',
+								'url' => 'URL',
+								'number' => 'Number',
 								'textarea' => 'Textarea',
 								'select' => 'Select',
 								'radio' => 'Radio',
@@ -203,8 +211,11 @@ class tomOptions {
 			<?php $config = $this->tom_configs(); ?>
 			<h2><?php echo esc_html( $config['page_title'] ); ?></h2>
 			<p><?php echo esc_html( $config['page_desc'] ); ?></p>
-
-		    <p id="tom-notification"><?php settings_errors( 'tonjoo-tom' ); ?></p>
+			<?php 
+			$updateNotice = '<div id="setting-error-save_options" class="updated fade settings-error below-h2"> 
+				<p><strong>Options saved.</strong></p></div>';
+			?>
+		    <p id="tom-notification"><?php echo (isset($_GET['settings-updated'])) ? $updateNotice : ''; ?></p>
 
 		    <h2 class="nav-tab-wrapper">
 		        <?php echo tomGenerate::tom_tabs(); ?>
@@ -244,9 +255,11 @@ class tomOptions {
 		<?php $config = $this->tom_configs(); ?>
 		<h2><?php echo esc_html( $config['sub_page_title'] ); ?></h2>
 		<p><?php echo esc_html( $config['sub_page_desc'] ); ?></p>
-
-	    <p id="tom-notification"><?php settings_errors( 'tom_options' ); ?></p>
-
+		<?php 
+		$updateNotice = '<div id="setting-error-save_options" class="updated fade settings-error below-h2"> 
+			<p><strong>Options saved.</strong></p></div>';
+		?>
+	    <p id="tom-notification"><?php echo (isset($_GET['settings-updated'])) ? $updateNotice : ''; ?></p>
 	    <h2 class="nav-tab-wrapper">
 	        <?php echo tomGenerate::create_tom_tabs(); ?>
 	    </h2>
@@ -284,6 +297,21 @@ class tomOptions {
 				          The name of option.
 				        </p>
 			        </div>
+			      	<label for="tom-required-new-data">
+			          Required :
+			        </label>
+			        <div class="input">
+						<div id="new-data-required">
+							<div class="required-container">
+								<input id="tom-required-new-data" class="input-required" type="checkbox" name="tom_options[new-data][required]" value="1">
+								<span class="status">( Not Required )</span>
+							</div>
+						</div>
+				        <p>
+				          Is required ?
+				        </p>
+			        </div>
+
 			        <label for="tom-desc-new-data">
 			          Desription :
 			        </label>
@@ -415,8 +443,6 @@ class tomOptions {
     	/* Merge with main input */
     	$input = array_merge($input,$haveoptions);
 
-		add_settings_error( 'tonjoo-tom', 'save_options', 'Options saved.', 'updated fade' );
-
 		return $input;
 	}
 
@@ -434,10 +460,10 @@ class tomOptions {
 	  	} else {
 	  		unset($input['new-group']);
 	  	}
-
+	  	
+		$haveoptions = array();
     	/* Parse input options */
     	foreach ($input as $key => $value) {
-    		$haveoptions = array();
     		if(!empty($value['options'])) {
     			/* combine input value key and input value to one array as key => value */
     			$combine[$key]['options'] = array_combine($value['options']['opt-key'], $value['options']['opt-val']);
@@ -450,8 +476,7 @@ class tomOptions {
     	}
     	/* Merge with main input */
     	$input = array_merge($input,$haveoptions);
-		
-		add_settings_error( 'tom_options', 'save_options', 'Options saved.', 'updated fade' );
+
 		return $input;
 		
 	}

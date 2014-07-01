@@ -48,8 +48,6 @@ class tomGenerate {
 	 */
 	static function generate_options_fields() {
 
-		global $allowedtags;
-
 		$option_name = 'tom_data';
 
 		$settings = get_option($option_name);
@@ -57,10 +55,15 @@ class tomGenerate {
 		$options = tomOptions::tom_options_fields();
 		$counter = 0;
 		$menu = '';
+		// echo "<pre>";
+		// print_r($options);
+		// echo "</pre>";
+		// exit();
 
 		if(!empty($options)) {
 			foreach ( $options as $obj_key =>$key ) {
 				$name = ! empty( $key['name'] ) ? $key['name'] : '';
+				$required  = (! empty( $key['required'] ) && @$key['required'] == '1' ) ? ' required' : '';
 				$desc = ! empty( $key['desc'] ) ? $key['desc'] : '';
 				$type = ! empty( $key['type'] ) ? $key['type'] : '';
 				$options = ! empty( $key['options'] ) ? $key['options'] : array();
@@ -109,7 +112,7 @@ class tomGenerate {
 				case 'textarea':
 					$output .= '<tr class="alternate tom-item">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
-					$output .= '<td><textarea class="tom-input" id="' . esc_attr( $obj_key ) . '" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" placeholder="' . esc_attr( $val ) . '" rows="4" cols="50">' . esc_attr( $val ) . '</textarea></td>' . "\n";
+					$output .= '<td><textarea class="tom-input" id="' . esc_attr( $obj_key ) . '" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" placeholder="' . esc_attr( $val ) . '" rows="4" cols="50" ' . $required . '>' . esc_attr( $val ) . '</textarea></td>' . "\n";
 					$output .= '<td class="shortcode">
 									<span><a class="button-copy-shortcode" title="Copy Shortcode" href="#"><i class="dashicons dashicons-nametag"></i><span class="tooltipValue" data-title="'. esc_attr( $name ) .'" style="display:none;">'.$shortcode.'</span></a></span>
 								</td>' . "\n";
@@ -119,7 +122,7 @@ class tomGenerate {
 				case 'select':
 					$output .= '<tr class="alternate tom-item">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
-					$output .= '<td><select class="tom-input" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" id="' . esc_attr( $obj_key ) . '">' . "\n";
+					$output .= '<td><select class="tom-input" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" id="' . esc_attr( $obj_key ) . '" ' . $required . '>' . "\n";
 								foreach ($options as $key => $option ) {
 									/* function selected dr wp @http://codex.wordpress.org/Function_Reference/selected */
 									$output .= '<option '. selected( $val, $key, false ) .' value="' . esc_attr( $key ) . '">' . esc_html( $option ) . '</option>';
@@ -137,7 +140,7 @@ class tomGenerate {
 					$output .= '<td>' . "\n";
 								foreach ($options as $key => $option ) {
 									/* function selected dr wp @http://codex.wordpress.org/Function_Reference/checked */
-									$output .= '<input type="' . esc_attr( $type ) . '" class="tom-input" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" value="'. esc_attr( $key ) . '" '. checked( $val, $key, false) .'>' . esc_attr( $option ) . "\n";
+									$output .= '<input type="' . esc_attr( $type ) . '" class="tom-input" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" value="'. esc_attr( $key ) . '" '. checked( $val, $key, false) .' ' . $required . '>' . esc_attr( $option ) . "\n";
 								}	
 					$output .= '</td>' . "\n";
 					$output .= '<td class="shortcode">
@@ -149,7 +152,7 @@ class tomGenerate {
 				case "checkbox":
 					$output .= '<tr class="alternate tom-item">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
-					$output .= '<td><input id="' . esc_attr( $obj_key ) . '" class="tom-input" type="' . esc_attr( $type ) . '" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" value="1" '. checked( $val, '1', false) .' /></td>' . "\n";
+					$output .= '<td><input id="' . esc_attr( $obj_key ) . '" class="tom-input" type="' . esc_attr( $type ) . '" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" value="1" '. checked( $val, '1', false) .' ' . $required . '/></td>' . "\n";
 					$output .= '<td class="shortcode">
 									<span><a class="button-copy-shortcode" title="Copy Shortcode" href="#"><i class="dashicons dashicons-nametag"></i><span class="tooltipValue" data-title="'. esc_attr( $name ) .'" style="display:none;">'.$shortcode.'</span></a></span>
 								</td>' . "\n";
@@ -173,7 +176,7 @@ class tomGenerate {
 									<img class="tom_media_image tom-option-image" src="'.$src.'" '. $display .'/>
 									<div>
 										<input class="tom_media_url" type="hidden" value="">
-										<input class="tom_media_id" type="hidden" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" value="' . esc_attr( $val ) . '">
+										<input class="tom_media_id" type="hidden" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" value="' . esc_attr( $val ) . '" ' . $required . '>
 										<a href="#" class="tom_button_upload button-secondary">Choose</a>
 										<a href="#" class="tom_remove_image button-primary" ' . $display . '>Remove</a>
 									</div>
@@ -196,7 +199,7 @@ class tomGenerate {
 									if ( $val != '' && ($val == $key) ) {
 										$selected = ' tom-radio-img-selected';
 									}
-									$output .= '<input type="radio" id="' . esc_attr( $obj_key .'_'. $key) . '" class="tom-radio-img-radio" value="' . esc_attr( $key ) . '" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" '. checked( $val, $key, false ) .' />';
+									$output .= '<input type="radio" id="' . esc_attr( $obj_key .'_'. $key) . '" class="tom-radio-img-radio" value="' . esc_attr( $key ) . '" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" '. checked( $val, $key, false ) .' ' . $required . '/>';
 									$output .= '<div class="tom-radio-img-label">' . esc_html( $key ) . '</div>';
 									$output .= '<img src="' . esc_url( $option ) . '" alt="' . $option .'" class="tom-radio-img-img' . $selected .'" onclick="document.getElementById(\''. esc_attr($obj_key .'_'. $key) .'\').checked=true;" />';
 								}
@@ -223,7 +226,7 @@ class tomGenerate {
 										$checked = checked($val[$option], 1, false);
 									}
 
-									$output .= '<input id="' . esc_attr( $id ) . '" class="tom-input" type="checkbox" name="' . esc_attr( $name ) . '" value="1" ' . $checked . ' />' . esc_html( $label ) . '<br>' . "\n";
+									$output .= '<input id="' . esc_attr( $id ) . '" class="tom-input" type="checkbox" name="' . esc_attr( $name ) . '" value="1" ' . $checked . ' ' . $required . '/>' . esc_html( $label ) . '<br>' . "\n";
 								}
 					$output .= '</td>' . "\n";
 					$output .= '<td class="shortcode">
@@ -241,7 +244,7 @@ class tomGenerate {
 									if ( $val !=  $key['default'] )
 										$default_color = ' data-default-color="' .$key['default'] . '" ';
 								}
-					$output .= '<input name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" id="' . esc_attr( $obj_key ) . '" class="tom-color"  type="text" value="' . esc_attr( $val ) . '"' . $default_color .' />';
+					$output .= '<input name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" id="' . esc_attr( $obj_key ) . '" class="tom-color"  type="text" value="' . esc_attr( $val ) . '"' . $default_color .' ' . $required . '/>';
 					$output .= '</td>' . "\n";
 					$output .= '<td class="shortcode">
 									<span><a class="button-copy-shortcode" title="Copy Shortcode" href="#"><i class="dashicons dashicons-nametag"></i><span class="tooltipValue" data-title="'. esc_attr( $name ) .'" style="display:none;">'.$shortcode.'</span></a></span>
@@ -289,7 +292,7 @@ class tomGenerate {
 									$output .= '<option value="'.$key.'" '. selected( $val['style'], $key, false ) .'>'.$value.'</option>';
 									}
 					$output .= '</select>
-							  	<input name="' . esc_attr( $option_name . '[' . $obj_key . '][color]' ) . '" id="sample-typography_color" class="tom-color tom-typography-color  type="text" value="' . esc_attr( $val['color'] ) . '" />';		
+							  	<input name="' . esc_attr( $option_name . '[' . $obj_key . '][color]' ) . '" id="sample-typography_color" class="tom-color tom-typography-color  type="text" value="' . esc_attr( $val['color'] ) . '"/>';		
 					$output .= '</td>' . "\n";
 					$output .= '<td class="shortcode">
 									<span><a class="button-copy-shortcode" title="Copy Shortcode" href="#"><i class="dashicons dashicons-nametag"></i><span class="tooltipValue" data-title="'. esc_attr( $name ) .'" style="display:none;">'.$shortcode.'</span></a></span>
@@ -302,7 +305,7 @@ class tomGenerate {
 				default:
 					$output .= '<tr class="alternate tom-item">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
-					$output .= '<td><input class="tom-input" type="' . esc_attr( $type ) . '" id="' . esc_attr( $obj_key ) . '" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" placeholder="' . esc_attr( $val ) . '" value="' . esc_attr( $val ) . '"></td>' . "\n";
+					$output .= '<td><input class="tom-input" type="' . esc_attr( $type ) . '" id="' . esc_attr( $obj_key ) . '" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" placeholder="' . esc_attr( $val ) . '" value="' . esc_attr( $val ) . '" ' . $required . '></td>' . "\n";
 					$output .= '<td class="shortcode">
 									<span><a class="button-copy-shortcode" title="Copy Shortcode" href="#"><i class="dashicons dashicons-nametag"></i><span class="tooltipValue" data-title="'. esc_attr( $name ) .'" style="display:none;">'.$shortcode.'</span></a></span>
 								</td>' . "\n";
@@ -361,7 +364,6 @@ class tomGenerate {
 	}
 
 	static function generate_create_options_fields() {
-		// global $allowedtags;
 
 		$option_name = 'tom_options';
 		$options = tomOptions::tom_options_fields();
@@ -369,39 +371,43 @@ class tomGenerate {
 
 		$counter = 0;
 		$initNestable = '';
-		
+		// echo "<pre>";
+		// print_r($options);
+		// echo "</pre>";
+		// exit();
 		if(!empty($options)) {
 			foreach ($options as $obj_key =>$key) {
 				$name = ! empty( $key['name'] ) ? $key['name'] : '';
+				$req = ! empty( $key['required'] ) ? $key['required'] : '';
 				$desc = ! empty( $key['desc'] ) ? $key['desc'] : '';
 				$type = ! empty( $key['type'] ) ? $key['type'] : '';
 				$configs = tomOptions::tom_configs();
 				$types = $configs['type-options'];
 				switch ($type) {
 					case 'select':
-						$how = true;
+						$show = true;
 						break;
 
 					case 'select-image':
-						$how = true;
+						$show = true;
 						break;
 
 					case 'radio':
-						$how = true;
+						$show = true;
 						break;
 
 					case 'typography':
-						$how = true;
+						$show = true;
 						break;
 					
 					default:
-						$how = false;
+						$show = false;
 						break;
 				}
 				$fieldoptions = ! empty( $key['options'] ) ? $key['options'] : array();
 				$val = ! empty( $key['default'] ) ? $key['default'] : '';
-				// $display = (!empty($val) && $how == true) ? '' : 'style="display:none;"';
-				$display = ( $how == true ) ? '' : 'style="display:none;"';
+				// $display = (!empty($val) && $show == true) ? '' : 'style="display:none;"';
+				$display = ( $show == true ) ? '' : 'style="display:none;"';
 
 				$output = '';
 				if ( $key['type'] != "heading" ) {
@@ -435,6 +441,15 @@ class tomGenerate {
 											                <input type="text" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[name]" class="" value="' . esc_attr( $name ) . '">
 											              </span>
 											            </label>
+											            <label>
+														  <span class="title">Required</span>
+														  <span class="input">
+														  	<div class="required-container">
+														  		<input id="'.esc_attr( $obj_key ).'-required" class="input-required" type="checkbox" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[required]" value="1" '. checked( $req, '1', false) .'>';
+						$output .=			              		'<span class="status">'.($req == '1' ? '( Required )' : '( Not Required )').'</span>';
+						$output .=							'</div>
+														  </span>
+														</label>
 											            <label>
 											              <span class="title">
 											                Description
@@ -498,11 +513,6 @@ class tomGenerate {
 																	default:
 																		$order = 1;
 																		foreach ($fieldoptions as $key => $value ) {
-																			// echo "<pre>";
-																			// print_r($value);
-																			// echo "</pre>";
-																			// exit();
-																			// echo $key;
 						$output .=											'<div data-order="'.$order.'" class="input-options-group">
 																	        	<i class="dashicons dashicons-yes"></i>
 																	        	<input class="input-opt input-key" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '[options][opt-key][]" data-key="key" value="'.$key.'" placeholder="Key">
@@ -523,7 +533,6 @@ class tomGenerate {
 											                Default
 											              </span>
 											              <span class="input-text-wrap input">';
-						// $output .=					     '<input type="hidden" id="'.esc_attr( $obj_key ).'-hidden-default" value="">';
 				        $output .=						 '<div id="'.esc_attr( $obj_key ).'-default">';
 															/***********************
 															* Switch input type
@@ -708,7 +717,8 @@ class tomGenerate {
 
 			/* Submit and Delete Group Button */
 			$submit =  '<div id="tonjoo-tom-submit">
-							<input type="submit" class="button-primary hide-if-empty" name="update" value="Save" />
+							<input id="tom-submit-create" type="submit" class="button-primary hide-if-empty" name="update" value="Save" />
+							<span id="loading-save-group" class="tom-loading" style="float:right;padding:4px;display:none;"><img src="' . admin_url() . 'images/spinner.gif" alt=""></span>
 							<a id="tom-delete-group" class="reset-button button-secondary">Delete Group</a>
 							<span id="loading-delete-group" class="tom-loading" style="display:none;"><img src="' . admin_url() . 'images/spinner.gif" alt=""></span>
 							<div class="clear"></div>
@@ -717,7 +727,7 @@ class tomGenerate {
 
 			/* Create New Group Button */
 			$submit =  '<div id="tonjoo-tom-submit">
-							<input type="submit" class="button-primary" name="update" value="Create" />
+							<input id="tom-submit-create" type="submit" class="button-primary" name="update" value="Create" />
 							<div class="clear"></div>
 						</div>';
 			}
