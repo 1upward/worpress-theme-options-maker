@@ -271,7 +271,6 @@ class tomGenerate {
 					break;
 
 				case 'typography':
-					
 					$defaultOptions = tomOptions::tom_default_options();
 
 					$output .= '<tr class="alternate tom-item">' . "\n";

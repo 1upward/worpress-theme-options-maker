@@ -3,7 +3,7 @@
  *	Plugin Name: Theme Options Maker
  *	Plugin URI: 
  *	Description: Interactive Theme Options Maker
- *	Author: tonjoo
+ *	Author: tonjoo, qutek
  *	Version: 1.0
  *	Author URI: 
  */
@@ -65,7 +65,7 @@ function tom_shortcode( $atts = NULL ) {
 			break;
 
 		case 'upload':
-			$image = wp_get_attachment_image_src( $val );
+			$image = wp_get_attachment_image_src( $val, 'full' );
 			$value = $image[0];
 			break;
 
@@ -82,7 +82,7 @@ function tom_shortcode( $atts = NULL ) {
 	$tom_data = (!empty($value)) ? $value : $default;
 
 	/* If SSL Enabled use https replace */
-	$tom_data = (is_ssl()) ? https_link($tom_data) : $tom_data;
+	$tom_data = (is_ssl()) ? tom_https_link($tom_data) : $tom_data;
 
     return $tom_data;
 }
@@ -90,7 +90,7 @@ function tom_shortcode( $atts = NULL ) {
 add_shortcode( 'tom', 'tom_shortcode' );
 
 /* Replace url to https */
-function https_link($url){
+function tom_https_link($url){
 	/* Validate value is URL */
 	if(filter_var($url, FILTER_VALIDATE_URL)) {
 		// Parse to get domain from url

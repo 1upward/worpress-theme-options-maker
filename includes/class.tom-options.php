@@ -7,11 +7,16 @@ class tomOptions {
 		$this->tom_options_fields();
 		add_action( 'admin_init', array( $this, 'tom_settings_init' ) );
 
-		/* Load Styles and Scripts */
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
+		$page = (isset($_GET['page'])) ? $_GET['page'] : ''; 
+		$config = $this->tom_configs();
 
-		add_action( 'admin_menu', array( $this, 'tom_options_page' ) );
+		if ($page == $config['menu_slug'] || $page == $config['sub_menu_slug']) {
+			/* Load Styles and Scripts */
+			add_action( 'admin_enqueue_scripts', array( $this, 'tom_enqueue_admin_styles' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'tom_enqueue_admin_scripts' ) );
+		}
+
+		add_action( 'admin_menu', array( $this, 'tom_admin_page' ) );
 
 		/* Ajax */
 		add_action( 'wp_ajax_tom_options', array( $this, 'tom_options_callback' ) );
@@ -25,16 +30,6 @@ class tomOptions {
 		$formData = array();
  		parse_str($_POST['form_data'], $formData);
 
- 		/* Update database */
-		// if (update_option( $optionsId, $formData['tom_options'] ) ) {
-		// 	echo "success";
-		// } else {
-		// 	echo "failed";
-		// }
- 		// echo "<pre>";
- 		// print_r( $formData['tom_options']);
- 		// echo "</pre>";
-
 		update_option( $optionsId, $formData['tom_options'] );
 		echo '<div id="setting-error-save_options" class="updated fade settings-error below-h2"> 
 				<p><strong>Options saved.</strong></p></div>';
@@ -44,48 +39,49 @@ class tomOptions {
 	function tom_settings_init() {
 
 		/* Register TOM Settings */
-		register_setting( 'tonjoo-tom', 'tom_data', array ( $this, 'validate_options' ) );
-		register_setting( 'tom_options', 'tom_options', array ( $this, 'validate_create_options' ) );
+		register_setting( 'tonjoo-tom', 'tom_data', array ( $this, 'tom_validate_options' ) );
+		register_setting( 'tom_options', 'tom_options', array ( $this, 'tom_validate_create_options' ) );
     }
 
 
-	function enqueue_admin_styles() {
+	function tom_enqueue_admin_styles() {
 
 		wp_enqueue_style( 'tonjoo-tom', plugin_dir_url( dirname(__FILE__) ) . 'assets/css/style.css', array() );
 		wp_enqueue_style( 'wp-color-picker' );
 	}
 	
-	function enqueue_admin_scripts() {
-		// Enqueue custom option panel JS
-		wp_enqueue_script( 'nestable', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/jquery.nestable.js', array('jquery'));
-		wp_enqueue_script( 'zclip', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/ZeroClipboard.min.js', array( 'jquery' ) );
-		wp_enqueue_script( 'tonjoo-script', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/script.js', array( 'jquery','wp-color-picker' ) );
-		
-		/* Media Uploader */
-		if(function_exists('wp_enqueue_media')) {
-            wp_enqueue_media();
-        } else { /* If user use old wordpress */
-            wp_enqueue_script('media-upload');
-            wp_enqueue_script('thickbox');
-            wp_enqueue_style('thickbox');
-        }
-		
-		/* Custom variable TTOM */
-		$config = $this->tom_configs();
-		$dir = plugin_dir_url( dirname(__FILE__) );
-		echo '<script type="text/javascript">
-				var tomMode = "'.$config['mode'].'",
-					tomCreatePage = "' . get_admin_url( null, 'admin.php?page=' . $config['sub_menu_slug'] ) .'",
-					pluginDir = "' . $dir .'",
-					adminUrl = "' . get_admin_url() . '";
-			  </script>';
+	function tom_enqueue_admin_scripts() {
+
+			// Enqueue custom option panel JS
+			wp_enqueue_script( 'nestable', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/jquery.nestable.js', array('jquery'));
+			wp_enqueue_script( 'zclip', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/ZeroClipboard.min.js', array( 'jquery' ) );
+			wp_enqueue_script( 'tonjoo-script', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/script.js', array( 'jquery','wp-color-picker' ) );
+			
+			/* Media Uploader */
+			if(function_exists('wp_enqueue_media')) {
+	            wp_enqueue_media();
+	        } else { /* If user use old wordpress */
+	            wp_enqueue_script('media-upload');
+	            wp_enqueue_script('thickbox');
+	            wp_enqueue_style('thickbox');
+	        }
+			
+			/* Custom variable TTOM */
+			$config = $this->tom_configs();
+			$dir = plugin_dir_url( dirname(__FILE__) );
+			echo '<script type="text/javascript">
+					var tomMode = "'.$config['mode'].'",
+						tomCreatePage = "' . get_admin_url( null, 'admin.php?page=' . $config['sub_menu_slug'] ) .'",
+						pluginDir = "' . $dir .'",
+						adminUrl = "' . get_admin_url() . '";
+				  </script>';
 	}
 
 
 	static function tom_options_fields() {
-
-		if ( !empty( get_option( 'tom_options' ))) {
-			$options_from_db = get_option( 'tom_options' );
+		$options = get_option( 'tom_options' );
+		if ( !empty( $options )) {
+			$options_from_db = $options;
 		} else {
 			$options_from_db = array();
 		}
@@ -107,6 +103,7 @@ class tomOptions {
 
             'page_title' => 'Tonjoo Theme Options Maker (TTOM)',
             'page_desc' => "Customize your theme options!, you can add, edit, or delete easily here. Don't forget to save your changes or you will lose it",
+            'page_manual' => '<a href="https://tonjoo.com/addons/tonjoo-tom/" target="_blank">Read documentations.</a>  <a href="http://wordpress.org/support/view/plugin-reviews/tonjoo-theme-options-maker?rate=5#postform" target="_blank" style="margin-left:10px;">Enjoy with the plugin?, rate us!</a>',
 			'menu_title' => 'TTOM Options',
 			'capability' => 'edit_theme_options',
 			'menu_slug' => 'tonjoo-tom',
@@ -116,6 +113,7 @@ class tomOptions {
             /* for sub menu */
             'sub_page_title' => 'Tonjoo Theme Options Maker (TTOM) Settings',
             'sub_page_desc' => "Customize your theme options!, you can add, edit, or delete easily here. Don't forget to save your changes or you will lose it",
+            'sub_page_manual' => '<a href="https://tonjoo.com/addons/tonjoo-tom/" target="_blank">Read documentations.</a>  <a href="http://wordpress.org/support/view/plugin-reviews/tonjoo-theme-options-maker?rate=5#postform" target="_blank" style="margin-left:10px;">Enjoy with the plugin?, rate us!</a>',
 			'sub_menu_title' => 'Create Options',
 			'sub_capability' => 'manage_options',
 			'sub_menu_slug' => 'create-options',
@@ -178,7 +176,7 @@ class tomOptions {
 		return $default;
 	}
 
-	function tom_options_page() {
+	function tom_admin_page() {
 
 		$config = $this->tom_configs();
 
@@ -187,7 +185,7 @@ class tomOptions {
         	$config['menu_title'],
         	$config['capability'],
         	$config['menu_slug'],
-        	array( $this, 'options_page' ),
+        	array( $this, 'tom_options_page' ),
         	$config['icon_url'],
         	$config['position']
         );
@@ -200,17 +198,18 @@ class tomOptions {
 		    	$config['sub_menu_title'],
 		    	$config['sub_capability'],
 		    	$config['sub_menu_slug'],
-		    	array( $this, 'create_options_page' ) );
+		    	array( $this, 'tom_create_options_page' ) );
         }
 	}
 
 	/* Options Page */
-	function options_page() { ?>
+	function tom_options_page() { ?>
 
 		<div  class="wrap">
 			<?php $config = $this->tom_configs(); ?>
 			<h2><?php echo esc_html( $config['page_title'] ); ?></h2>
 			<p><?php echo esc_html( $config['page_desc'] ); ?></p>
+			<p><?php echo $config['page_manual']; ?></p>
 			<?php 
 			$updateNotice = '<div id="setting-error-save_options" class="updated fade settings-error below-h2"> 
 				<p><strong>Options saved.</strong></p></div>';
@@ -249,12 +248,13 @@ class tomOptions {
 	<?php
 	}
 
-	function create_options_page() { ?>
+	function tom_create_options_page() { ?>
 
 	<div class="wrap">
 		<?php $config = $this->tom_configs(); ?>
 		<h2><?php echo esc_html( $config['sub_page_title'] ); ?></h2>
 		<p><?php echo esc_html( $config['sub_page_desc'] ); ?></p>
+		<p><?php echo $config['sub_page_manual']; ?></p>
 		<?php 
 		$updateNotice = '<div id="setting-error-save_options" class="updated fade settings-error below-h2"> 
 			<p><strong>Options saved.</strong></p></div>';
@@ -403,7 +403,7 @@ class tomOptions {
 
 	
 
-	function get_default_values() {
+	function tom_get_default_values() {
 		$output = array();
 		$config = $this->tom_options_fields();
 		foreach ( (array) $config as $option ) {
@@ -420,15 +420,16 @@ class tomOptions {
 		return $output;
 	}
 
-	function validate_options( $input ) {
+	function tom_validate_options( $input ) {
 		
 
 		if ( isset( $_POST['reset'] ) ) {
 			add_settings_error( 'tonjoo-tom', 'restore_defaults', 'Default options restored.', 'updated fade' );
-			return $this->get_default_values();
+			return $this->tom_get_default_values();
 		}
 
 		foreach ($input as $key => $value) {
+    		$value = array();
     		$haveoptions = array();
     		if(!empty($value['options'])) {
     			/* combine input value key and input value to one array as key => value */
@@ -446,7 +447,7 @@ class tomOptions {
 		return $input;
 	}
 
-	public function validate_create_options( $input ) {
+	public function tom_validate_create_options( $input ) {
 
 		/* If have value from new group */
 	  	if(!empty($input['new-group']['name'])) {
