@@ -224,7 +224,7 @@ class tomOptions {
 			    <div id="tonjoo-tom" class="postbox">
 					<form action="options.php" method="post">
 					<?php settings_fields( 'tonjoo-tom' ); ?>
-					<?php tomGenerate::generate_options_fields(); /* Settings */ ?>
+					<?php tomGenerate::tom_generate_options_fields(); /* Settings */ ?>
 					</form>
 				</div> <!-- / #container -->
 			</div>
@@ -268,7 +268,7 @@ class tomOptions {
 		    <div id="tonjoo-tom" class="postbox">
 				<form id="f_create-options" action="options.php" method="post">
 				<?php settings_fields( 'tom_options' ); ?>
-				<?php tomGenerate::generate_create_options_fields(); /* Settings */ ?>
+				<?php tomGenerate::tom_generate_create_options_fields(); /* Settings */ ?>
 				</form>
 			</div> <!-- / #container -->
 		</div>
@@ -429,7 +429,7 @@ class tomOptions {
 		}
 
 		foreach ($input as $key => $value) {
-    		$value = array();
+    		$value['options'] = array();
     		$haveoptions = array();
     		if(!empty($value['options'])) {
     			/* combine input value key and input value to one array as key => value */
@@ -462,6 +462,7 @@ class tomOptions {
 	  		unset($input['new-group']);
 	  	}
 	  	
+	  	$value['options'] = array();
 		$haveoptions = array();
     	/* Parse input options */
     	foreach ($input as $key => $value) {

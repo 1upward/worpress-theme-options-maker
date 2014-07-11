@@ -46,7 +46,7 @@ class tomGenerate {
 	/**
 	 * Generates the options fields that are used in the form.
 	 */
-	static function generate_options_fields() {
+	static function tom_generate_options_fields() {
 
 		$option_name = 'tom_data';
 
@@ -55,10 +55,6 @@ class tomGenerate {
 		$options = tomOptions::tom_options_fields();
 		$counter = 0;
 		$menu = '';
-		// echo "<pre>";
-		// print_r($options);
-		// echo "</pre>";
-		// exit();
 
 		if(!empty($options)) {
 			foreach ( $options as $obj_key =>$key ) {
@@ -362,7 +358,7 @@ class tomGenerate {
 		echo $submit;
 	}
 
-	static function generate_create_options_fields() {
+	static function tom_generate_create_options_fields() {
 
 		$option_name = 'tom_options';
 		$options = tomOptions::tom_options_fields();
@@ -370,10 +366,6 @@ class tomGenerate {
 
 		$counter = 0;
 		$initNestable = '';
-		// echo "<pre>";
-		// print_r($options);
-		// echo "</pre>";
-		// exit();
 		if(!empty($options)) {
 			foreach ($options as $obj_key =>$key) {
 				$name = ! empty( $key['name'] ) ? $key['name'] : '';
