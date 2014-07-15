@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== Tonjoo Tom ===
 Contributors: Todi.Adiatmo
 Tags: excerpt, home, search, archive, automatic, auto, justify
 Requires at least: 3.0.3
