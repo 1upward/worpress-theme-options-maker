@@ -2,6 +2,10 @@
 
 function tonjoo_tom_config($config) {
 
+/*
+ * $config['mode'] = 'lite' or 'full'
+ * lite : User cannot create new options from the wp-admin
+ */
 #	$config['mode'] 			= 'lite';
 #   $config['page_title'] 		= 'Your Theme Option';
 #   $config['page_desc'] 		= 'Your custom descriptions';

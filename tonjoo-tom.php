@@ -2,8 +2,8 @@
 /*
  *	Plugin Name: Theme Options Maker
  *	Plugin URI: 
- *	Description: Interactive Theme Options Maker
- *	Author: tonjoo, qutek
+ *	Description: Theme options framework and generator for WordPress Theme. Available as a plugin or library
+ *	Author:  haristonjoo,qutek,todiadiyatmo
  *	Version: 1.0
  *	Author URI: 
  */
