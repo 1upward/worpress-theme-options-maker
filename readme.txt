@@ -44,7 +44,8 @@ Please support this plugin by [donate](http://www.tonjoo.com/donate/ "donate") :
 == Screenshots ==
 
 1. Create your theme options easily
-2. Theme Integration
+2. Theme options front-end
+3. Theme integration
 
 == Changelog ==
 
