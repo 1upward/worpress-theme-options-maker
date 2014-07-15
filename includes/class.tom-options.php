@@ -103,7 +103,7 @@ class tomOptions {
 
             'page_title' => 'Tonjoo Theme Options Maker (TTOM)',
             'page_desc' => "Customize your theme options!, you can add, edit, or delete easily here. Don't forget to save your changes or you will lose it",
-            'page_manual' => '<a href="https://tonjoo.com/addons/tonjoo-tom/#manual" target="_blank">Read documentations</a> |<a href="http://wordpress.org/support/view/plugin-reviews/tonjoo-theme-options-maker?rate=5#postform" target="_blank" style="margin-left:10px;">Enjoy with the plugin?, rate us!</a>',
+            'page_manual' => '<a href="https://forum.tonjoo.com/thread-category/tonjoo-tom/" target="_blank">Support Forum</a> |<a href="https://tonjoo.com/addons/tonjoo-tom/#manual" target="_blank">Read documentations</a> |<a href="http://wordpress.org/support/view/plugin-reviews/tonjoo-theme-options-maker?rate=5#postform" target="_blank" style="margin-left:10px;">Enjoy with the plugin?, rate us!</a>',
 			'menu_title' => 'TTOM Options',
 			'capability' => 'edit_theme_options',
 			'menu_slug' => 'tonjoo-tom',
@@ -113,7 +113,7 @@ class tomOptions {
             /* for sub menu */
             'sub_page_title' => 'Tonjoo Theme Options Maker (TTOM) Settings',
             'sub_page_desc' => "Customize your theme options!, you can add, edit, or delete easily here. Don't forget to save your changes or you will lose it",
-            'sub_page_manual' => '<a href="https://tonjoo.com/addons/tonjoo-tom/#manual" target="_blank">Read documentations</a> |<a href="http://wordpress.org/support/view/plugin-reviews/tonjoo-theme-options-maker?rate=5#postform" target="_blank" style="margin-left:10px;">Enjoy with the plugin?, rate us!</a>',
+            'sub_page_manual' => '<a href="https://forum.tonjoo.com/thread-category/tonjoo-tom/" target="_blank">Support Forum</a> <a href="https://tonjoo.com/addons/tonjoo-tom/#manual" target="_blank">Read documentations</a> |<a href="http://wordpress.org/support/view/plugin-reviews/tonjoo-theme-options-maker?rate=5#postform" target="_blank" style="margin-left:10px;">Enjoy with the plugin?, rate us!</a>',
 			'sub_menu_title' => 'Create Options',
 			'sub_capability' => 'manage_options',
 			'sub_menu_slug' => 'create-options',
