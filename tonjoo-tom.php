@@ -1,11 +1,11 @@
 <?php
 /*
  *	Plugin Name: Theme Options Maker
- *	Plugin URI: 
+ *	Plugin URI: https://tonjoo.com/addons/hide-show-comment
  *	Description: Theme options framework and generator for WordPress Theme. Available as a plugin or library
- *	Author:  haristonjoo,qutek,todiadiyatmo
+ *	Author:  tonjoo
  *	Version: 1.0
- *	Author URI: 
+ *	Author URI: https://tonjoo.com
  */
 
 function tonjoo_tom_init() {
