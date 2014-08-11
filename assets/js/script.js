@@ -4,16 +4,17 @@ jQuery(document).ready(function($) {
 	    $('.fade').fadeOut('slow');
 	}, 3000); // <-- time in milliseconds
 
-	/* Set Conntent width */
-	sizeContent();
-	$(window).resize(sizeContent);
+	if(tomAdsEnabled == '1') {
+		/* Set Conntent width */
+		sizeContent();
+		$(window).resize(sizeContent);
 
-	function sizeContent() {
-		var windowSize = $('#wpbody-content').width();
-		var main = windowSize - 380;
-		$('.metabox-main').width(main+'px');
+		function sizeContent() {
+			var windowSize = $('#wpbody-content').width();
+			var main = windowSize - 380;
+			$('.metabox-main').width(main+'px');
+		}
 	}
-
 	/* Handle Tab Active */
 	if ( $('.nav-tab-wrapper').length > 0 ) {
 		tom_tabs();
@@ -776,7 +777,7 @@ jQuery(document).ready(function($) {
 
 /* Iklan */
 jQuery(function(){  
-	var url = 'http://tonjoo.com/about/?ttom-jsonp=promo';
+	var url = tomAdsEndpoint;
 	jQuery.ajax({url: url, dataType:'jsonp'}).done(function(data){  
 		//promo_1
 		if(typeof data =='object'){  

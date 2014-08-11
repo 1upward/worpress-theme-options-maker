@@ -19,7 +19,8 @@ function tonjoo_tom_config($config) {
 #	$config['sub_menu_title'] 	= 'Your Sub Page Title';
 #	$config['sub_capability'] 	= '';
 #	$config['sub_menu_slug'] 	= '';
-
+#	$config['ads-enabled']	= true;
+#	$config['ads-endpoint']	= 'http://tonjoo.com/about/?ttom-jsonp=promo';
 
 	return $config;
 }

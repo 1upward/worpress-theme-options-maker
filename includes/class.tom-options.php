@@ -73,6 +73,8 @@ class tomOptions {
 					var tomMode = "'.$config['mode'].'",
 						tomCreatePage = "' . get_admin_url( null, 'admin.php?page=' . $config['sub_menu_slug'] ) .'",
 						pluginDir = "' . $dir .'",
+						tomAdsEnabled = "' . $config['ads-enabled'] . '",
+						tomAdsEndpoint = "' . $config['ads-endpoint'] . '",
 						adminUrl = "' . get_admin_url() . '";
 				  </script>';
 	}
@@ -131,8 +133,9 @@ class tomOptions {
 								'color' => 'Color Picker',
 								'editor' => 'Text Editor',
 								'typography' => 'Typography'
-								)
-
+								),
+			'ads-enabled' => false,
+			'ads-endpoint' => '',
 		);
 
 		/* Get configurations from file if exist */
@@ -228,6 +231,8 @@ class tomOptions {
 					</form>
 				</div> <!-- / #container -->
 			</div>
+			<?php if ($config['ads-enabled'] == true) { ?>
+			<!-- ADS -->
 			<div id="tom-adds-panel" class="metabox-holder metabox-side">
 			  <div class="form-wrap postbox">
 			    <h3>
@@ -243,6 +248,7 @@ class tomOptions {
 			 	</div>
 			  </div>
 			</div>
+			<?php } ?>
 		</div> 
 
 	<?php
