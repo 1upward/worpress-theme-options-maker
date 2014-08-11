@@ -407,7 +407,7 @@ class tomGenerate {
 					$obj_key = sanitize_title_with_dashes( $obj_key );
 
 					$output .= '<li class="dd-item tom-item" data-id="'.esc_attr( $obj_key ).'">'."\n";
-						$output .= '<div class="dd-handle">' . $key['name'] ."\n";
+						$output .= '<div class="dd-handle"><span id="'.esc_attr( $obj_key ).'_name">' . $key['name'] ."</span>\n";
 						/* button action */
 						$output .= '<span class="tom-action-buttons">
 										<a class="blue edit-nestable" href="#">

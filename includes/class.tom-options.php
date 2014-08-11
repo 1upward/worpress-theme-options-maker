@@ -25,14 +25,21 @@ class tomOptions {
 	function tom_options_callback() {
 		global $wpdb;
 		$optionsId = $_POST['options'];
+		$id = $_POST['id'];
 
 		/* parse form data */
 		$formData = array();
  		parse_str($_POST['form_data'], $formData);
 
 		update_option( $optionsId, $formData['tom_options'] );
-		echo '<div id="setting-error-save_options" class="updated fade settings-error below-h2"> 
-				<p><strong>Options saved.</strong></p></div>';
+		$data = get_option( 'tom_options' );
+
+		$data = array(
+			'data' => $data[$id] , 
+			'message' => '<div id="setting-error-save_options" class="updated fade settings-error below-h2"> 
+							<p><strong>Options saved.</strong></p></div>'
+			);
+		echo json_encode($data);
 		die();
 	}
 
@@ -223,7 +230,7 @@ class tomOptions {
 		        <?php echo tomGenerate::tom_tabs(); ?>
 		    </h2>
 
-		    <div id="tom-options-panel" class="metabox-holder metabox-main">
+		    <div id="tom-options-panel" class="metabox-holder metabox-main metabox-options">
 			    <div id="tonjoo-tom" class="postbox">
 					<form action="options.php" method="post">
 					<?php settings_fields( 'tonjoo-tom' ); ?>
