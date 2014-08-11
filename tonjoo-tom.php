@@ -51,13 +51,18 @@ function tom_shortcode( $atts = NULL ) {
     ), $atts );
 
    	$id = $param['id'];
-   	$default = $param['default'];
 
     $data = get_option( 'tom_data' );
     $options = tomOptions::tom_options_fields();
-	$type = (!empty($options[$id]['type'])) ? $options[$id]['type'] : '';
-	$val = (!empty($data[$id])) ? $data[$id] : '';
 
+	$type = @$options[$id]['type'];
+	$val = @$data[$id];
+	$default = @$param['default'];
+
+	$type = (!empty($type)) ? $type : '';
+	$val = (!empty($val)) ? $val : '';
+   	$default = (!empty($default)) ? $default : @$options[$id]['default'];
+   	
 	/* Switch option type for special handling */
 	switch ($type) {
 		case 'multicheck':
@@ -66,7 +71,7 @@ function tom_shortcode( $atts = NULL ) {
 
 		case 'upload':
 			$image = wp_get_attachment_image_src( $val, 'full' );
-			$value = $image[0];
+			$value = (is_numeric($val)) ? $image[0] : $val;
 			break;
 
 		case 'typography':
@@ -77,7 +82,8 @@ function tom_shortcode( $atts = NULL ) {
 			$value =  $val;
 			break;
 	}
-    
+	// print_r($value); exit();
+
     /* If value empty try to get default value from shortcode */
 	$tom_data = (!empty($value)) ? $value : $default;
 
