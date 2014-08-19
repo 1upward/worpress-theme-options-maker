@@ -1,7 +1,7 @@
 <?php
 /*
  *	Plugin Name: Theme Options Maker
- *	Plugin URI: https://tonjoo.com/addons/hide-show-comment
+ *	Plugin URI: 
  *	Description: Theme options framework and generator for WordPress Theme. Available as a plugin or library
  *	Author:  tonjoo
  *	Version: 1.0.1
@@ -9,37 +9,54 @@
  *  Contributor: Todi Adiyatmo Wijoyo, Lafif Astahdziq
  */
 
-function tonjoo_tom_init() {
+define("TONJOO_HSCOMMENT", 'show-hide-comment');
+define('TOM_VERSION','1.0.0');
+define('HSCOMMENT_BASE_PATH',__DIR__);
+define('HSCOMMENT_DIR_NAME', str_replace("/hide-show-comment.php", "", plugin_basename(__FILE__)));
 
-	/* Load Core Files */
-	require plugin_dir_path( __FILE__ ) . 'includes/class.tom-options.php';
-	require plugin_dir_path( __FILE__ ) . 'includes/class.tom-generate.php';
+// require_once( plugin_dir_path( __FILE__ ) . 'src/ajax.php');
 
-	/* If file config exist */
-	if ( file_exists( get_template_directory() . "/tonjoo_options.php" ) ) {
-	    require_once( get_template_directory() . "/tonjoo_options.php" );
-		
-		/* Insert value through filter */
-		if ( function_exists('tonjoo_tom_config') ) {
-			add_filter( 'tom_config', 'tonjoo_tom_config');
-		}
-
-		if ( function_exists('tonjoo_tom_default') ) {
-			add_filter( 'tom_default', 'tonjoo_tom_default');
-		}
-
-		if ( function_exists( 'tonjoo_tom_options' ) ) {
-			add_filter( 'tom_options', 'tonjoo_tom_options');
-		}
-	} 
+//Included Files
+include __DIR__.'/vendor/autoload.php';
 
 
-	// Instantiate plugin core.
-	$tom = new tomOptions;
-	$tom->init();
+// Plugin loaded
+add_action('plugins_loaded', 'tom_generate_init');
+
+function tom_generate_init()
+{
+	$tom = new Lotus\Almari\Container();
+	$tom_option =  new Tonjoo\TOM\TOMOption($tom);	
+	$tom_generate =  new Tonjoo\TOM\TOMGenerate($tom,$tom_option);
+	// $tom_notice =  new Tonjoo\TOM\TOMNotice($tom,$tom_option);
+
+	$tom->register('tom',$tom);
+	$tom->register('tom_generate',function(){});
+	$tom->register('tom_option',$tom_option);
+	$tom->register('tom_generate',$tom_generate);	
+	// $tom->register('tom_notice',$tom_notice);	
+
+	// Load the alias mapper
+	$aliasMapper = Lotus\Almari\AliasMapper::getInstance();
+
+	// Create facade for TOM
+	$alias['TOM'] = 'Tonjoo\TOM\Facade\TOMFacade';
+	$alias['TOMOption'] = 'Tonjoo\TOM\Facade\TOMOptionFacade';
+	$alias['TOMGenerate'] = 'Tonjoo\TOM\Facade\TOMGenerateFacade';
+	// $alias['TOMNotice'] = 'Tonjoo\TOM\Facade\TOMNoticeFacade';
+	
+	$aliasMapper->facadeClassAlias($alias);
+
+	//Register container to facade
+	Tonjoo\TOM\Facade\TOMFacade::setFacadeContainer($tom);
+	Tonjoo\TOM\Facade\TOMOptionFacade::setFacadeContainer($tom);
+	Tonjoo\TOM\Facade\TOMGenerateFacade::setFacadeContainer($tom);
+	// Tonjoo\TOM\Facade\TOMNoticeFacade::setFacadeContainer($tom);
 
 }
-add_action( 'init', 'tonjoo_tom_init', 20 );
+include __DIR__.'/hooks/tom-back-end.php';
+// include __DIR__.'/hooks/hsc-front-end.php';
+
 
 
 /**************
@@ -110,4 +127,3 @@ function tom_https_link($url){
 	}
 	return $url;
 }
-?>
