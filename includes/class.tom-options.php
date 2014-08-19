@@ -80,8 +80,8 @@ class tomOptions {
 					var tomMode = "'.$config['mode'].'",
 						tomCreatePage = "' . get_admin_url( null, 'admin.php?page=' . $config['sub_menu_slug'] ) .'",
 						pluginDir = "' . $dir .'",
-						tomAdsEnabled = "' . $config['ads-enabled'] . '",
-						tomAdsEndpoint = "' . $config['ads-endpoint'] . '",
+						tomAdsEnabled = "' . $config['ads_enabled'] . '",
+						tomAdsEndpoint = "' . $config['ads_endpoint'] . '",
 						adminUrl = "' . get_admin_url() . '";
 				  </script>';
 	}
@@ -141,8 +141,9 @@ class tomOptions {
 								'editor' => 'Text Editor',
 								'typography' => 'Typography'
 								),
-			'ads-enabled' => false,
-			'ads-endpoint' => '',
+			'ads_enabled' => false,
+			'ads_title' => '',
+			'ads_endpoint' => '',
 		);
 
 		/* Get configurations from file if exist */
@@ -238,12 +239,12 @@ class tomOptions {
 					</form>
 				</div> <!-- / #container -->
 			</div>
-			<?php if ($config['ads-enabled'] == true) { ?>
+			<?php if ($config['ads_enabled'] == true) { ?>
 			<!-- ADS -->
 			<div id="tom-adds-panel" class="metabox-holder metabox-side">
 			  <div class="form-wrap postbox">
 			    <h3>
-			      Another Awesome Plugins
+			      <?php echo (!empty($config['ads_title'])) ? esc_html( $config['ads_title'] ) : '&nbsp;'; ?>
 			    </h3>
 			 	<div style="text-align: center; padding: 20px;">
 			 		<div id="promo_1" class="tom_banner">

@@ -4,8 +4,9 @@
  *	Plugin URI: https://tonjoo.com/addons/hide-show-comment
  *	Description: Theme options framework and generator for WordPress Theme. Available as a plugin or library
  *	Author:  tonjoo
- *	Version: 1.0.0
+ *	Version: 1.0.1
  *	Author URI: https://tonjoo.com
+ *  Contributor: Todi Adiyatmo Wijoyo, Lafif Astahdziq
  */
 
 function tonjoo_tom_init() {
