@@ -12,7 +12,7 @@ function tom_shortcode( $atts = NULL ) {
    	$id = $param['id'];
 
     $data = get_option( 'tom_data' );
-    $options = tomOptions::tom_options_fields();
+    $options = TOMOption::tom_options_fields();
 
 	$type = @$options[$id]['type'];
 	$val = @$data[$id];
