@@ -13,14 +13,9 @@ class TOMGenerate
 		$this->app = $container;
 		
 		$this->options = $tom->tom_options_fields();
-
-		// print_r($tom);
-		
 	}
 
 	function tom_tabs() {
-		// print_r($this->options);
-		// exit();
 		$counter = 0;
 		$options = $this->options;
 		$menu = '';

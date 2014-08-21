@@ -24,15 +24,9 @@ class TOMOption
 
 			if ( function_exists( 'tonjoo_tom_options' ) ) {
 				add_filter( 'tom_options', 'tonjoo_tom_options');
-
-				// $x = apply_filters( 'tom_optionsx', '' );
-				// echo "<pre>";
-				// print_r($x);
 			}
 		} 
-
-		// $this->app = $container;
-		// $this->options = get_option('tonjoo_hsc_options');
+		
 		$this->tom_options_fields();
 		// add_action( 'admin_init', array( $this, 'tom_settings_init' ) );
 

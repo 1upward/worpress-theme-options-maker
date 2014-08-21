@@ -10,7 +10,7 @@
  */
 
 define('TOM_VERSION','1.0.0');
-define('HSCOMMENT_BASE_PATH',__DIR__);
+define('TOM_BASE_PATH',__DIR__);
 
 // require_once( plugin_dir_path( __FILE__ ) . 'src/ajax.php');
 
@@ -49,5 +49,5 @@ function tom_generate_init()
 if( is_admin() ) {
 	include __DIR__.'/hooks/tom-back-end.php';
 } else {
-	include __DIR__.'/hooks/tom-shortcode.php';
+	new Tonjoo\TOM\TOMShortcode;
 }
