@@ -55,6 +55,7 @@ class TOMOption
  		parse_str($_POST['form_data'], $formData);
 
 		update_option( $optionsId, $formData['tom_options'] );
+		
 		$data = get_option( 'tom_options' );
 
 		$data = array(
@@ -188,6 +189,10 @@ class TOMOption
 
 	function tom_options_fields() {
 		$options = get_option( 'tom_options' );
+
+		$options  = is_string($options) && is_object(json_decode($options )) ? json_decode($options,true ) : $options ;
+		
+
 		if ( !empty( $options )) {
 			$options_from_db = $options;
 		} else {
