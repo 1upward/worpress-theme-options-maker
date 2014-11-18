@@ -1,6 +1,6 @@
 === Tonjoo Theme Options Maker ===
 Contributors: Todi.Adiatmo, qutek
-Tags: excerpt, home, search, archive, automatic, auto, justify
+Tags: theme options, admin, options, framework, generator, theme
 Requires at least: 3.0.3
 Tested up to: 3.6
 Stable tag: trunk
@@ -10,7 +10,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Theme options framework and generator for WordPress Theme. Available as a plugin or library.
 == Description ==
 
-Tonjo Theme Options Maker (TTOM) is a theme options framework and generator for WordPress Theme. TTOM enable you to generate theme option easy and fast. You can also integrate TTOM with your newly created themes, so you can focus on theme usability and design. Moreover TTOM supports custom ads so you can add your own ads on theme options page, TTOM is available in plugin or library.
+Tonjo Theme Options Maker (TTOM) is a theme options framework and generator for WordPress Theme, it requires at least php 5.3. TTOM enable you to generate theme option easy and fast. You can also integrate TTOM with your newly created themes, so you can focus on theme usability and design. Moreover TTOM supports custom ads so you can add your own ads on theme options page.
 
 **Features :**
 
@@ -52,6 +52,9 @@ Please support this plugin by [donate](http://www.tonjoo.com/donate/ "donate") :
 4. Custom ads on options page
 
 == Changelog ==
+**1.0.2**
+- Used almari ioc framework
+- Fix some bug 
 
 **1.0.1** 
 - Add feature custom ads
