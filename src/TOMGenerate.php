@@ -200,6 +200,22 @@ class TOMGenerate
 					$output .= '</tr>' . "\n";
 					break;
 
+				case 'select-icon':
+					$defaultOptions = TOMOptionFacade::tom_default_options();
+					$output .= '<tr class="alternate tom-item">' . "\n";
+					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
+					$output .= '<td><select class="tom-input" name="' . esc_attr( $option_name . '[' . $obj_key . ']' ) . '" id="' . esc_attr( $obj_key ) . '" ' . $required . '>' . "\n";
+								foreach ($defaultOptions['icon'] as $key => $icon ) {
+									/* function selected dr wp @http://codex.wordpress.org/Function_Reference/selected */
+									$output .= '<option class="fa fa-'.$key.'" '. selected( $val, $key, false ) .' value="' . esc_attr( $key ) . '">' . esc_html( $icon ) . '</option>';
+								}	
+					$output .= '</td>' . "\n";
+					$output .= '<td class="shortcode">
+									<span><a class="button-copy-shortcode" title="Copy Shortcode" href="javascript:;"><i class="dashicons dashicons-nametag"></i><span class="tooltipValue" data-title="'. esc_attr( $name ) .'" style="display:none;">'.$shortcode.'</span></a></span>
+								</td>' . "\n";
+					$output .= '</tr>' . "\n";
+					break;
+
 				case "multicheck":
 					$output .= '<tr class="alternate tom-item">' . "\n";
 					$output .= '<th scope="row"><label for="' . esc_attr( $obj_key ) . '">' . esc_attr( $name ) . '</label><br><span class="description">' . esc_attr( $desc ) . '</span></th>' . "\n";
