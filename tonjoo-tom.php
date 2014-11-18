@@ -10,7 +10,13 @@
  */
 
 if (!function_exists(tom_generate_init)) {
-	
+
+	function tom_get_relative_url($filepath) {
+		// get relative tom directory url
+		$url = str_replace( WP_CONTENT_DIR , WP_CONTENT_URL, $filepath);
+		return $url;
+	}
+
 	define('TOM_VERSION','1.0.0');
 	define('TOM_BASE_PATH',__DIR__);
 	define('TOM_EMBED_MODE', '');
@@ -21,12 +27,6 @@ if (!function_exists(tom_generate_init)) {
 
 	//Included Files
 	include __DIR__.'/vendor/autoload.php';
-
-	function tom_get_relative_url($filepath) {
-		// get relative tom directory url
-		$url = str_replace( WP_CONTENT_DIR , WP_CONTENT_URL, $filepath);
-		return $url;
-	}
 
 	// Plugin loaded
 	add_action('init', 'tom_generate_init');

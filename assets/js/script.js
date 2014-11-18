@@ -283,6 +283,13 @@ jQuery(document).ready(function($) {
 		  		updateDefaultOption(containerId);
 		  		break;
 
+		  	// case "select-icon":
+		  	// 	inputDefault = 	'<select class="input-default" name="'+arrayName+'[default]" id="tom-default-'+containerId+'">';
+		  	// 	inputDefault += '<option value="">Select default option</option>';
+		  	// 	inputDefault += '</select>';
+		  	// 	updateDefaultOption(containerId);
+		  	// 	break;
+
 		  	case "textarea":
 		  		inputDefault = '<textarea class="input-default" name="'+arrayName+'[default]" id="tom-default-'+containerId+'"></textarea>';
 		  		break;
