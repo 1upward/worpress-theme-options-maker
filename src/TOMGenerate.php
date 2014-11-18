@@ -19,15 +19,16 @@ class TOMGenerate
 		$counter = 0;
 		$options = $this->options;
 		$menu = '';
-
-		foreach ( $options as $obj_key =>$key ) {
-			// Heading for Navigation
-			if ( $key['type'] == "heading" ) {
-				$counter++;
-				$class = '';
-				$class = ! empty( $obj_key ) ? $obj_key : $key['name'];
-				$class = sanitize_title_with_dashes( $class ) . '-tab';
-				$menu .= '<a id="options-group-'.  $counter . '-tab" class="nav-tab ' . $class .'" title="' . esc_attr( $key['name'] ) . '" href="' . esc_attr( '#options-group-'.  $counter ) . '">' . esc_html( $key['name'] ) . '</a>';
+		if (!empty($options)) {
+			foreach ( $options as $obj_key =>$key ) {
+				// Heading for Navigation
+				if ( $key['type'] == "heading" ) {
+					$counter++;
+					$class = '';
+					$class = ! empty( $obj_key ) ? $obj_key : $key['name'];
+					$class = sanitize_title_with_dashes( $class ) . '-tab';
+					$menu .= '<a id="options-group-'.  $counter . '-tab" class="nav-tab ' . $class .'" title="' . esc_attr( $key['name'] ) . '" href="' . esc_attr( '#options-group-'.  $counter ) . '">' . esc_html( $key['name'] ) . '</a>';
+				}
 			}
 		}
 

@@ -68,7 +68,6 @@ function tom_validate_options( $input ) {
 }
 
 function tom_validate_create_options( $input ) {
-
 	/* If have value from new group */
   	if(!empty($input['new-group']['name'])) {
   		$idFromName = sanitize_title_with_dashes( $input['new-group']['name'] );
@@ -79,6 +78,7 @@ function tom_validate_create_options( $input ) {
 
   		unset($input['new-group']);
   	} else {
+
   		unset($input['new-group']);
   	}
   	

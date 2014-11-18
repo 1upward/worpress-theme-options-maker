@@ -6,8 +6,7 @@ class TOMOption
 {
 	public $options; 
 
-	public function __construct($container)
-	{		
+	public function __construct($container){		
 
 		/* If file config exist */
 		if ( file_exists( get_template_directory() . "/tonjoo_options.php" ) ) {
@@ -23,7 +22,7 @@ class TOMOption
 			}
 
 			if ( function_exists( 'tonjoo_tom_options' ) ) {
-				add_filter( 'tom_options', 'tonjoo_tom_options');
+				add_filter( 'tom_options', array($this, 'add_options_from_file' ), 10, 1);
 			}
 		} 
 		
@@ -43,6 +42,12 @@ class TOMOption
 
 		/* Ajax */
 		add_action( 'wp_ajax_tom_options', array( $this, 'tom_options_callback' ) );
+	}
+
+	function add_options_from_file($options){
+		$options = array_merge(tonjoo_tom_options($options), $options);
+
+		return $options;
 	}
 
 	function tom_options_callback() {
@@ -69,16 +74,15 @@ class TOMOption
 
 	function tom_enqueue_admin_styles() {
 
-		wp_enqueue_style( 'tonjoo-tom', plugin_dir_url( dirname(__FILE__) ) . 'assets/css/style.css', array() );
+		wp_enqueue_style( 'tonjoo-tom', TOM_ABS_URL . 'assets/css/style.css', array() );
 		wp_enqueue_style( 'wp-color-picker' );
 	}
 	
 	function tom_enqueue_admin_scripts() {
-
 			// Enqueue custom option panel JS
-			wp_enqueue_script( 'nestable', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/jquery.nestable.js', array('jquery'));
-			wp_enqueue_script( 'zclip', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/ZeroClipboard.min.js', array( 'jquery' ) );
-			wp_enqueue_script( 'tonjoo-script', plugin_dir_url( dirname(__FILE__) ) . 'assets/js/script.js', array( 'jquery','wp-color-picker' ) );
+			wp_enqueue_script( 'nestable', TOM_ABS_URL . 'assets/js/jquery.nestable.js', array('jquery'));
+			wp_enqueue_script( 'zclip', TOM_ABS_URL . 'assets/js/ZeroClipboard.min.js', array( 'jquery' ) );
+			wp_enqueue_script( 'tonjoo-script', TOM_ABS_URL . 'assets/js/script.js', array( 'jquery','wp-color-picker' ) );
 			
 			/* Media Uploader */
 			if(function_exists('wp_enqueue_media')) {
@@ -91,7 +95,7 @@ class TOMOption
 			
 			/* Custom variable TTOM */
 			$config = $this->tom_configs();
-			$dir = plugin_dir_url( dirname(__FILE__) );
+			$dir = TOM_ABS_URL;
 			echo '<script type="text/javascript">
 					var tomMode = "'.$config['mode'].'",
 						tomCreatePage = "' . get_admin_url( null, 'admin.php?page=' . $config['sub_menu_slug'] ) .'",
@@ -193,18 +197,21 @@ class TOMOption
 		$options  = is_string($options) && is_object(json_decode($options )) ? json_decode($options,true ) : $options ;
 		
 
-		if ( !empty( $options )) {
+		if ( !empty( $options ) ) {
 			$options_from_db = $options;
 		} else {
 			$options_from_db = array();
 		}
+
+		/**
+		 * [fixing warning]
+		 * convert to array if empty object
+		 */
+		if ($options_from_db === '[]')
+			$options_from_db = array();
+
 		/* Get options from filter */
 		$options_from_file = apply_filters( 'tom_options', $options_from_db );
-
-		// $xx = apply_filters( 'tom_options','' );
-		// echo "<pre>";
-		// print_r($xx);
-		// exit();
 		
 		/* Merge filter with options from database */
 		$options = array_merge($options_from_db, $options_from_file);
