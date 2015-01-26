@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "lotus/almari",
-            "version": "0.9.1",
+            "version": "0.9.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tonjoo/almari.git",
-                "reference": "c767d96590cfd08513c90cc2120dd401c39d482c"
+                "reference": "5bb1718ed728161a8334a387688463eeda58b16a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tonjoo/almari/zipball/c767d96590cfd08513c90cc2120dd401c39d482c",
-                "reference": "c767d96590cfd08513c90cc2120dd401c39d482c",
+                "url": "https://api.github.com/repos/tonjoo/almari/zipball/5bb1718ed728161a8334a387688463eeda58b16a",
+                "reference": "5bb1718ed728161a8334a387688463eeda58b16a",
                 "shasum": ""
             },
             "type": "library",
@@ -44,24 +44,14 @@
                 "ioc",
                 "lotus"
             ],
-            "time": "2014-07-14 09:24:43"
+            "time": "2014-08-14 16:24:04"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ],
+    "stability-flags": [],
     "prefer-stable": false,
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    "platform": [],
+    "platform-dev": []
 }

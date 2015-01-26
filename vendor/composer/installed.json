@@ -1,20 +1,20 @@
 [
     {
         "name": "lotus/almari",
-        "version": "0.9.1",
-        "version_normalized": "0.9.1.0",
+        "version": "0.9.2",
+        "version_normalized": "0.9.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/tonjoo/almari.git",
-            "reference": "c767d96590cfd08513c90cc2120dd401c39d482c"
+            "reference": "5bb1718ed728161a8334a387688463eeda58b16a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/tonjoo/almari/zipball/c767d96590cfd08513c90cc2120dd401c39d482c",
-            "reference": "c767d96590cfd08513c90cc2120dd401c39d482c",
+            "url": "https://api.github.com/repos/tonjoo/almari/zipball/5bb1718ed728161a8334a387688463eeda58b16a",
+            "reference": "5bb1718ed728161a8334a387688463eeda58b16a",
             "shasum": ""
         },
-        "time": "2014-07-14 09:24:43",
+        "time": "2014-08-14 16:24:04",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
